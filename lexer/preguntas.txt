@@ -1,0 +1,27 @@
+1 Representación de comentarios
+===============================
+Expresión regular {-.*-}
+
+2 Expresiones write e identificadores
+=====================================
+
+3 Autómata de 2
+===============
+
+4 Autómata de la unión de los lenguajes
+=======================================
+
+5 Pertenencia de un token a un lenguaje
+=======================================
+
+6 Problemas en la selección de 5
+================================
+
+7 Palabras generadoras de fallas e involucrados
+===============================================
+
+8 Solución y justificación
+==========================
+
+9 Relación entre implementación y preg 2/8
+===========================================
