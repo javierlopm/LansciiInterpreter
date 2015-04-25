@@ -1,3 +1,36 @@
+# Javier Lopez 11-10552
+# Patricia Reinoso 11-10851
+
+# Clase para los token encontrados
+class Token
+
+    def initialize(name,value,line,column)
+        @name = name
+        @value = value
+        @line = line
+        @colum = column
+    end
+
+    def to_s
+        "token #{@name} value (#{@value}) at line: #{@line}, column: #{@column}"
+    end
+
+end
+
+class Error
+
+    def initialize (value, line, column)
+        @value = value
+        @line = line
+        @column = column
+    end
+
+    def to_s
+        "Error: Unexpected character: \"#{@value}\" at line: #{@line}, column: #{@column}"
+    end
+
+end
+
 class FindRegex
 
     @regexHash
@@ -11,8 +44,8 @@ class FindRegex
         /@/,
         /=/,
         /;/,
-        /read/,
-        /write/,
+        #/read/,
+        #/write/,
         /\?/,
         /:/,
         /[/,
@@ -22,8 +55,8 @@ class FindRegex
         /\*/,
         /\//,
         /\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
-        /true/,
-        /false/,
+        #/true/,
+        #/false/,
         /\/\\/,
         /\\\//,
         /^/,
@@ -70,8 +103,8 @@ class FindRegex
         "MULTIPLICATION SIGN",  #???
         "SLASH",                #???
         "MODULO",
-        "TRUE",
-        "FALSE",
+        #"TRUE",
+        #"FALSE",
         "AND",
         "OR",
         "NOT",
@@ -94,6 +127,8 @@ class FindRegex
         "RCOMMENT",
         "COMPREHENSION"     #??????
     ]
+
+reserved = %w(read write true false)
 
     def initialize(args)
 =begin  Hash? arreglo de 3 dimesiones?
