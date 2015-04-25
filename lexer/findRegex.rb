@@ -1,6 +1,6 @@
 class FindRegex
 
-    @regexDic
+    @regexHash
 
     @MAYBETOKEN = [ 
         /\{(?!\-)/,
@@ -82,10 +82,10 @@ class FindRegex
         "NOTEQUALS",
         "IDENTIFIER",
         "EMPTY CANVAS",
-        "CANVAS",
-        "CANVAS",
-        "CANVAS",
-        "CANVAS",
+        "CANVAS SLASH",
+        "CANVAS BACKLASH",
+        "CANVAS MINUS",
+        "CANVAS UNDERSCORE",
         "TRANSPOSE",
         "ROTATION",
         "HORIZONTALCAT",    #???????
@@ -96,7 +96,14 @@ class FindRegex
     ]
 
     def initialize(args)
+=begin  Hash? arreglo de 3 dimesiones?
+        regexHash = {}
+        new Array.new(TOKENNAME.length)
         
+        0.upto(TOKENNAME.length) do |i|
+            regexHash[i] = new Array.new(TOKENNAME.length)
+            regexHash[i]
+=end
     end
 
     def findAll(program)
