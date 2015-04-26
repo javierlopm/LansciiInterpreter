@@ -143,7 +143,7 @@ class FindRegex
         @mytokens = []
         @myerrors = []
         @line = 1
-        @column = 0
+        @column = 1
 
     end
 
@@ -152,13 +152,14 @@ class FindRegex
     end
 
     def findTokens
+
         @myfile =~/\A(\s|\n|#.*)*/
         
         # Para cada elemento en la lista de tokens
         for i in 0.. @MAYBETOKEN.length.pred
 
             # Compara lo leido con el posible token
-            @myfile =~ @MAYBETOKEN[i]
+            @myfile =~ @MAYBETOKEN.at(i)
 
             # Si coincide 
             if $&
@@ -166,7 +167,7 @@ class FindRegex
                 word = @input[0..($&.length.pred)]
                 self.skip($&)
                 # Crea el nuevo token
-                newtoken = Token.new(@TOKENNAME[i],@MAYBETOKEN[i],@line,@column)
+                newtoken = Token.new(@TOKENNAME.at(i),@MAYBETOKEN.at(i),@line,@column)
                 # Guardala en la lista de tokens
                 @tokens << newtoken
 
@@ -191,5 +192,23 @@ class FindRegex
 
         return if word.eql?0
 
+        nlines = (word + " ").lines.to_a.length.pred
+
+        @line += nlines
+
+        if nlines.eql?0
+            @column += length
+        else
+            @column = 1
+        end
+
+    end
+
+    def printOutPut
+
+        if @myerrors.length.eql?0
+            @mytokens.each { |tok| puts tok.to_s}
+        else 
+            @myerrors.each { |err| puts err.to_s}
     end
 end
