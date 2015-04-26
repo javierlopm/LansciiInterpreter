@@ -170,21 +170,26 @@ class FindRegex
                     # Guarda en la lista de tokens
                     @tokens << newtoken
 
-                    return newtoken
+                    break
                 end
 
             end
 
-            # Si nunca coincidio, extrae la palabra
-            @input =~ #NEW WORD FALTA EXPRESION REGULAR
-            self.skip($&)
-            # Crea un nuevo error
-            newerror = Error.new($&, @line, @column)
-            # Guarda en la lista de errores
-            @myerrors << newerror
+            if $&
+                next
+            else
+                # Si nunca coincidio, extrae la palabra
+                @input =~ #NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
+                self.skip($&)
+                # Crea un nuevo error
+                newerror = Error.new($&, @line, @column)
+                # Guarda en la lista de errores
+                @myerrors << newerror
 
-            return newtoken
-        end
+                next
+            end
+        end 
+    end
 
         # Metodo para correr el cursor
         def skip(word)
