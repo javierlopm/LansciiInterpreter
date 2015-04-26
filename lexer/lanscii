@@ -6,10 +6,10 @@
 require_relative 'findRegex'
 
 def main
-	dfgkhlk
-	print "HOLA"
 	myfile = File::read(ARGV[0])
-	puts "HOLA"
 	lexer = FindRegex::new(myfile)
 	lexer.printOutPut
+	puts "Hola"
 end
+
+main

@@ -191,20 +191,19 @@ class FindRegex
         end 
     end
 
-        # Metodo para correr el cursor
-        def skip(word)
+    # Metodo para correr el cursor
+    def skip(word)
 
-            # Quita la palabra leida
-            @myfile = @myfile[word.length..@myfile.length]
-            
-            # FALTA ACTUALIZAR @line @column con el numero de columna 
-            # y de linea al que se movio
-        end
+        # Quita la palabra leida
+        @myfile = @myfile[word.length..@myfile.length]
+        
+        # FALTA ACTUALIZAR @line @column con el numero de columna 
+        # y de linea al que se movio
     end
 
     def printOutPut
 
-        if @myerrors.length.eql?0
+        if myerrors.length.eql?0
             @mytokens.each { |tok| 
                 puts tok.to_s
             }
