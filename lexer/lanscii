@@ -11,6 +11,5 @@ def main
 	myfile = File::read(ARGV[0])
 	puts "HOLA"
 	lexer = FindRegex::new(myfile)
-	while lexer.findAll do; end
 	lexer.printOutPut
 end

@@ -128,7 +128,6 @@ class FindRegex
         "COMPREHENSION"     #??????
     ]
 
-#reserved = %w(read write true false)
 
     def initialize(myfile)
 =begin  Hash? arreglo de 3 dimesiones?
@@ -149,69 +148,53 @@ class FindRegex
 
     def findAll
 
-        # Expresion para ignorar los espacios en blanco y comentarios
-        # REVISAR
-        @myfile =~/\A(\s|\n|\{\-.*)*/
-        self.skip($&)
+        while @myfile.empty? do
+            # Expresion para ignorar los espacios en blanco y comentarios
+            # REVISAR
+            @myfile =~/\A(\s|\n|\{\-.*)*/
+            self.skip($&)
 
-        return if @myfile.empty?
+            # Para cada elemento en la lista de tokens
+            for i in 0.. @MAYBETOKEN.length.pred
 
-        # Para cada elemento en la lista de tokens
-        for i in 0.. @MAYBETOKEN.length.pred
+                # Compara lo leido con el posible token
+                @myfile =~ @MAYBETOKEN.at(i)
 
-            # Compara lo leido con el posible token
-            @myfile =~ @MAYBETOKEN.at(i)
+                # Si coincide 
+                if $&
+                    # Extrae la palabra
+                    word = @input[0..($&.length.pred)]
+                    self.skip($&)
+                    # Crea el nuevo token
+                    newtoken = Token.new(@TOKENNAME.at(i),@MAYBETOKEN.at(i),@line,@column)
+                    # Guarda en la lista de tokens
+                    @tokens << newtoken
 
-            # Si coincide 
-            if $&
-                # Extrae la palabra
-                word = @input[0..($&.length.pred)]
-                self.skip($&)
-                # Crea el nuevo token
-                newtoken = Token.new(@TOKENNAME.at(i),@MAYBETOKEN.at(i),@line,@column)
-                # Guardala en la lista de tokens
-                @tokens << newtoken
+                    return newtoken
+                end
 
-                return newtoken
             end
 
+            # Si nunca coincidio, extrae la palabra
+            @input =~ #NEW WORD FALTA EXPRESION REGULAR
+            self.skip($&)
+            # Crea un nuevo error
+            newerror = Error.new($&, @line, @column)
+            # Guarda en la lista de errores
+            @myerrors << newerror
+
+            return newtoken
         end
 
-        # Si nunca coincidio, extrae la palabra
-        @input =~ #NEW WORD
-        self.skip($&)
-        # Crea un nuevo error
-        newerror = Error.new($&, @line, @column)
-        # Guardala en la lista de errores
-        @myerrors << newerror
+        # Metodo para correr el cursor
+        def skip(word)
 
-        return newtoken
-    end
-
-
-    def skip(word)
-
-        return if word.eql?0
-
-        # Quita la palabra leida
-        @myfile = @myfile[word.length..@myfile.length]
-        
-        #Si es la ultima palabra de la nlines = 1
-        # Si no es la última palabra de la nlines = 0
-        # REVISAR
-        nlines = (word + " ").lines.to_a.length.pred
-
-        @line += nlines
-
-        # Si es no es la ultima palabra de la linea se le suma la longitud
-        if nlines.eql?0
-            @column += word.length
-        # Si es la ultima palabra de la linea 
-        # REVISAR
-        else
-            @column = 1
+            # Quita la palabra leida
+            @myfile = @myfile[word.length..@myfile.length]
+            
+            # FALTA ACTUALIZAR @line @column con el numero de columna 
+            # y de linea al que se movio
         end
-
     end
 
     def printOutPut
