@@ -48,7 +48,7 @@ class FindRegex
         /write/,
         /\?/,
         /:/,
-        /[/,
+        /\[/,
         /]/,
         /\+/,
         /-/,
@@ -75,7 +75,7 @@ class FindRegex
         /<.*\-.*>/,
         /<.*_.*>/,
         /'/,        #Transposicion              --Operador mas fuerte
-        /$(<[|/\\\-_\ ]*>|#)/,        #Rotacion, no se si aceptar tambien un identificador...
+        /$(<\[|\/\\\-_\ \]*>|#)/,        #Rotacion, no se si aceptar tambien un identificador...
         //,         #Concatenacion horizontal
         //,         #Concatenacion vertical
         /\{\-/,
@@ -147,14 +147,15 @@ class FindRegex
 
     end
 
-    def findAll(program)
+    def findAll
 
-    end
+        # Expresion para ignorar los espacios en blanco y comentarios
+        # REVISAR
+        @myfile =~/\A(\s|\n|\{\-.*)*/
+        self.skip($&)
 
-    def findTokens
+        return if @myfile.empty?
 
-        @myfile =~/\A(\s|\n|#.*)*/
-        
         # Para cada elemento en la lista de tokens
         for i in 0.. @MAYBETOKEN.length.pred
 
@@ -192,12 +193,21 @@ class FindRegex
 
         return if word.eql?0
 
+        # Quita la palabra leida
+        @myfile = @myfile[word.length..@myfile.length]
+        
+        #Si es la ultima palabra de la nlines = 1
+        # Si no es la última palabra de la nlines = 0
+        # REVISAR
         nlines = (word + " ").lines.to_a.length.pred
 
         @line += nlines
 
+        # Si es no es la ultima palabra de la linea se le suma la longitud
         if nlines.eql?0
-            @column += length
+            @column += word.length
+        # Si es la ultima palabra de la linea 
+        # REVISAR
         else
             @column = 1
         end
@@ -207,8 +217,13 @@ class FindRegex
     def printOutPut
 
         if @myerrors.length.eql?0
-            @mytokens.each { |tok| puts tok.to_s}
+            @mytokens.each { |tok| 
+                puts tok.to_s
+            }
         else 
-            @myerrors.each { |err| puts err.to_s}
+            @myerrors.each { |err| 
+                puts err.to_s
+            }
+        end
     end
 end
