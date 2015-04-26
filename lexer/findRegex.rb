@@ -44,8 +44,8 @@ class FindRegex
         /@/,
         /=/,
         /;/,
-        #/read/,
-        #/write/,
+        /read/,
+        /write/,
         /\?/,
         /:/,
         /[/,
@@ -55,8 +55,8 @@ class FindRegex
         /\*/,
         /\//,
         /\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
-        #/true/,
-        #/false/,
+        /true/,
+        /false/,
         /\/\\/,
         /\\\//,
         /^/,
@@ -103,8 +103,8 @@ class FindRegex
         "MULTIPLICATION SIGN",  #???
         "SLASH",                #???
         "MODULO",
-        #"TRUE",
-        #"FALSE",
+        "TRUE",
+        "FALSE",
         "AND",
         "OR",
         "NOT",
@@ -128,9 +128,9 @@ class FindRegex
         "COMPREHENSION"     #??????
     ]
 
-reserved = %w(read write true false)
+#reserved = %w(read write true false)
 
-    def initialize(args)
+    def initialize(myfile)
 =begin  Hash? arreglo de 3 dimesiones?
         regexHash = {}
         new Array.new(TOKENNAME.length)
@@ -139,11 +139,57 @@ reserved = %w(read write true false)
             regexHash[i] = new Array.new(TOKENNAME.length)
             regexHash[i]
 =end
+        @myfile = myfile
+        @mytokens = []
+        @myerrors = []
+        @line = 1
+        @column = 0
+
     end
 
     def findAll(program)
 
     end
-    
-    
+
+    def findTokens
+        @myfile =~/\A(\s|\n|#.*)*/
+        
+        # Para cada elemento en la lista de tokens
+        for i in 0.. @MAYBETOKEN.length.pred
+
+            # Compara lo leido con el posible token
+            @myfile =~ @MAYBETOKEN[i]
+
+            # Si coincide 
+            if $&
+                # Extrae la palabra
+                word = @input[0..($&.length.pred)]
+                self.skip($&)
+                # Crea el nuevo token
+                newtoken = Token.new(@TOKENNAME[i],@MAYBETOKEN[i],@line,@column)
+                # Guardala en la lista de tokens
+                @tokens << newtoken
+
+                return newtoken
+            end
+
+        end
+
+        # Si nunca coincidio, extrae la palabra
+        @input =~ #NEW WORD
+        self.skip($&)
+        # Crea un nuevo error
+        newerror = Error.new($&, @line, @column)
+        # Guardala en la lista de errores
+        @myerrors << newerror
+
+        return newtoken
+    end
+
+
+    def skip(word)
+
+        return if word.eql?0
+
+    end
 end

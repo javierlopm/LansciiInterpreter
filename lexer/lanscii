@@ -1,0 +1,12 @@
+#!/usr/bin/env ruby
+
+# Javier Lopez 11-10552
+# Patricia Reinoso 11-10851
+
+require_relative 'findRegex.rb'
+
+def main
+
+	myfile = File::read(ARGV[0])
+
+end
