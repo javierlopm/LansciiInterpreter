@@ -8,7 +8,7 @@ class Token
         @name = name
         @value = value
         @line = line
-        @colum = column
+        @column = column
     end
 
     def to_s
@@ -36,51 +36,51 @@ class FindRegex
     #@regexHash
     def initialize(myfile)
     @MAYBETOKEN = [ 
-        /\{(?!\-)/,
-        /(?<!\-)\}/,
-        /|/,
-        /%/,            #Esta declaracion no debe tener ajuro un identificador despues?
-        /!/,
-        /@/,
-        /=/,
-        /;/,
-        /read/,
-        /write/,
-        /\?/,
-        /:/,
-        /\[/,
-        /]/,
-        /\+/,
-        /-/,
-        /\*/,
-        /\//,
-        /\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
-        /true/,
-        /false/,
-        /\/\\/,
-        /\\\//,
-        /^/,
-        /</,
-        /<=/,
-        />/,
-        />=/,
-        /\/=/,
-        #/<>/, #Expresion para lienzo
-        #//,#Expresion para entero
-        #//,#Expresion booleana
-        /[a-zA-Z]\w*/, #Identificador
-        /#/,
-        /<.*\/.*>/,
-        /<.*\\.*>/,
-        /<.*\-.*>/,
-        /<.*_.*>/,
-        /'/,        #Transposicion              --Operador mas fuerte
-        /$(<\[|\/\\\-_\ \]*>|#)/,        #Rotacion, no se si aceptar tambien un identificador...
-        //,         #Concatenacion horizontal
-        //,         #Concatenacion vertical
-        /\{\-/,
-        /\-\}/,
-        /\.\./,
+        /\A\{/,
+        /\A\}/,
+        /\A\|/,
+        /\A\%/,            #Esta declaracion no debe tener ajuro un identificador despues?
+        /\A\!/,
+        /\A\@/,
+        /\A\=/,
+        #/\A\;/,
+        ##/\A\read/,
+        ##/\A\write/,
+        #/\A\?/,
+        #/\A\:/,
+        #/\A\[/,
+        #/\A\]/,
+        #/\A\+/,
+        #/\A\-/,
+        #/\A\\*/,
+        #/\A\//,
+        #/\A\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
+        ##/\A\true/,
+        ##/\A\false/,
+        #/\A\/\\/,
+        #/\A\\\//,
+        #/\A\^/,
+        #/\A\</,
+        #/\A\<=/,
+        #/\A\>/,
+        #/\A\>=/,
+        #/\A\/=/,
+        ##/<>/, #Expresion para lienzo
+        ##//,#Expresion para entero
+        ##//,#Expresion booleana
+        #/\A[a-zA-Z]\w*/, #Identificador
+        #/\A\#/,
+        #/\A<.*\/.*>/,
+        #/\A<.*\\.*>/,
+        #/\A<.*\-.*>/,
+        #/\A<.*_.*>/,
+        #/\A\'/,        #Transposicion              --Operador mas fuerte
+        #/\A\$(<\[|\/\\\-_\ \]*>|#)/,        #Rotacion, no se si aceptar tambien un identificador...
+        ##//,         #Concatenacion horizontal
+        ##//,         #Concatenacion vertical
+        #/\{\-/,
+        #/\-\}/,
+        #/\.\./,
     ]
 
     @TOKENNAME = [
@@ -91,41 +91,41 @@ class FindRegex
         "EXCLAMATION MARK",
         "AT",
         "EQUALS",
-        "SEMICOLON",
-        "READ",
-        "WRITE",
-        "QUESTIONMARK",
-        "COLON",
-        "LSQUARE",
-        "RSQUARE",
-        "PLUS",
-        "MINUS",
-        "MULTIPLICATION SIGN",  #???
-        "SLASH",                #???
-        "MODULO",
-        "TRUE",
-        "FALSE",
-        "AND",
-        "OR",
-        "NOT",
-        "LESS",
-        "LESSTHAN",
-        "MORE",
-        "MORETHAN",
-        "NOTEQUALS",
-        "IDENTIFIER",
-        "EMPTY CANVAS",
-        "CANVAS SLASH",
-        "CANVAS BACKLASH",
-        "CANVAS MINUS",
-        "CANVAS UNDERSCORE",
-        "TRANSPOSE",
-        "ROTATION",
-        "HORIZONTALCAT",    #???????
-        "VERTICALCAT",      #???????
-        "LCOMMENT",
-        "RCOMMENT",
-        "COMPREHENSION"     #??????
+        #"SEMICOLON",
+        ##{}"READ",
+        ##{}"WRITE",
+        #"QUESTIONMARK",
+        #"COLON",
+        #"LSQUARE",
+        #"RSQUARE",
+        #"PLUS",
+        #"MINUS",
+        #"MULTIPLICATION SIGN",  #???
+        #"SLASH",                #???
+        #"MODULO",
+        ##{}"TRUE",
+        ##{}"FALSE",
+        #"AND",
+        #"OR",
+        #"NOT",
+        #"LESS",
+        #"LESSTHAN",
+        #"MORE",
+        #"MORETHAN",
+        #"NOTEQUALS",
+        #"IDENTIFIER",
+        #"EMPTY CANVAS",
+        #"CANVAS SLASH",
+        #"CANVAS BACKLASH",
+        #"CANVAS MINUS",
+        #"CANVAS UNDERSCORE",
+        #"TRANSPOSE",
+        #"ROTATION",
+        ##{}"HORIZONTALCAT",    #???????
+        ##{}"VERTICALCAT",      #???????
+        #"LCOMMENT",
+        #"RCOMMENT",
+        #"COMPREHENSION"     #??????
     ]
 
 
@@ -152,12 +152,12 @@ class FindRegex
 
     def findAll
 
-        #while @myfile.length != 0 do
+        while !@myfile.empty? do
             # Expresion para ignorar los espacios en blanco y comentarios
             # REVISAR
+            # puts @myfile.length
             @myfile =~ /\A(\s|\n|#.*)*/ 
-            puts "A"
-            puts $&.length
+    
             self.skip($&)
             
             # Para cada elemento en la lista de tokens
@@ -168,39 +168,38 @@ class FindRegex
                 
                 # Si coincide 
                 if $&
-                    
-
                     # Extrae la palabra
-                    if $&.length != 0
-                        puts $& 
-                    puts $&.length
-                    #word = @input[0..($&.length.pred)]
-               #     self.skip($&)
+                    word = @myfile[0,($&.length)]
+                    self.skip($&)
                     # Crea el nuevo token
-                #    newtoken = Token.new(@TOKENNAME.at(i),@MAYBETOKEN.at(i),@line,@column)
+                    newtoken = Token.new(@TOKENNAME.at(i),word,@line,@column)
                     # Guarda en la lista de tokens
-                 #   @tokens << newtoken
+                    @mytokens << newtoken
 
-                #    break
-                    end
+                    break
                 end
 
-            end
-#
- #           if $&
- #               next
-  #          else
-                # Si nunca coincidio, extrae la palabra
-   #             @input =~ #NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
-    #            self.skip($&)
-                # Crea un nuevo error
-     #           newerror = Error.new($&, @line, @column)
-                # Guarda en la lista de errores
-      #          @myerrors << newerror
 
-       #         next
-      #      end
-      #  end 
+            end
+
+            break if @myfile.empty?
+
+            if $&
+                puts "*"
+            else
+                # Si nunca coincidio, extrae la palabra
+                @myfile =~ /\A(\w|\p{punct})*/#NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
+                
+                word = $&[0,1]
+                # puts "abajo"
+                # puts $&
+                self.skip(word)
+                # Crea un nuevo error
+                newerror = Error.new(word, @line, @column)
+                # Guarda en la lista de errores
+                @myerrors << newerror
+            end
+        end 
     end
 
     # Metodo para correr el cursor
@@ -211,7 +210,7 @@ class FindRegex
         puts "skip"
         
         @myfile = @myfile[word.length..@myfile.length]
-        puts @myfile
+        #puts @myfile
         # FALTA ACTUALIZAR @line @column con el numero de columna 
         # y de linea al que se movio
     end
