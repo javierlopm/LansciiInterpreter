@@ -1,5 +1,3 @@
-{- example program -}
-
 { @cake lie !GLaDOS |
 	read lie;
 	cake = <|>;

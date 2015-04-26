@@ -33,8 +33,8 @@ end
 
 class FindRegex
 
-    @regexHash
-
+    #@regexHash
+    def initialize(myfile)
     @MAYBETOKEN = [ 
         /\{(?!\-)/,
         /(?<!\-)\}/,
@@ -129,7 +129,7 @@ class FindRegex
     ]
 
 
-    def initialize(myfile)
+
 =begin  Hash? arreglo de 3 dimesiones?
         regexHash = {}
         new Array.new(TOKENNAME.length)
@@ -138,6 +138,10 @@ class FindRegex
             regexHash[i] = new Array.new(TOKENNAME.length)
             regexHash[i]
 =end
+        #attr_accessor :line, :column, :mytokens, :myerrors
+
+        #attr_reader :myfile
+        
         @myfile = myfile
         @mytokens = []
         @myerrors = []
@@ -148,62 +152,73 @@ class FindRegex
 
     def findAll
 
-        while @myfile.empty? do
+        #while @myfile.length != 0 do
             # Expresion para ignorar los espacios en blanco y comentarios
             # REVISAR
-            @myfile =~/\A(\s|\n|\{\-.*)*/
+            @myfile =~ /\A(\s|\n|#.*)*/ 
+            puts "A"
+            puts $&.length
             self.skip($&)
-
+            
             # Para cada elemento en la lista de tokens
             for i in 0.. @MAYBETOKEN.length.pred
 
                 # Compara lo leido con el posible token
                 @myfile =~ @MAYBETOKEN.at(i)
-
+                
                 # Si coincide 
                 if $&
-                    # Extrae la palabra
-                    word = @input[0..($&.length.pred)]
-                    self.skip($&)
-                    # Crea el nuevo token
-                    newtoken = Token.new(@TOKENNAME.at(i),@MAYBETOKEN.at(i),@line,@column)
-                    # Guarda en la lista de tokens
-                    @tokens << newtoken
+                    
 
-                    break
+                    # Extrae la palabra
+                    if $&.length != 0
+                        puts $& 
+                    puts $&.length
+                    #word = @input[0..($&.length.pred)]
+               #     self.skip($&)
+                    # Crea el nuevo token
+                #    newtoken = Token.new(@TOKENNAME.at(i),@MAYBETOKEN.at(i),@line,@column)
+                    # Guarda en la lista de tokens
+                 #   @tokens << newtoken
+
+                #    break
+                    end
                 end
 
             end
-
-            if $&
-                next
-            else
+#
+ #           if $&
+ #               next
+  #          else
                 # Si nunca coincidio, extrae la palabra
-                @input =~ #NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
-                self.skip($&)
+   #             @input =~ #NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
+    #            self.skip($&)
                 # Crea un nuevo error
-                newerror = Error.new($&, @line, @column)
+     #           newerror = Error.new($&, @line, @column)
                 # Guarda en la lista de errores
-                @myerrors << newerror
+      #          @myerrors << newerror
 
-                next
-            end
-        end 
+       #         next
+      #      end
+      #  end 
     end
 
     # Metodo para correr el cursor
     def skip(word)
 
         # Quita la palabra leida
-        @myfile = @myfile[word.length..@myfile.length]
         
+        puts "skip"
+        
+        @myfile = @myfile[word.length..@myfile.length]
+        puts @myfile
         # FALTA ACTUALIZAR @line @column con el numero de columna 
         # y de linea al que se movio
     end
 
     def printOutPut
 
-        if myerrors.length.eql?0
+        if @myerrors.length.eql?0
             @mytokens.each { |tok| 
                 puts tok.to_s
             }
