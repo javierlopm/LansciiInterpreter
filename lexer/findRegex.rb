@@ -1,6 +1,9 @@
-# Javier Lopez 11-10552
-# Patricia Reinoso 11-10851
+=begin
+    Implementacion de lexer en ruby para la 
 
+    Javier Lopez     11-10552
+    Patricia Reinoso 11-10851
+=end
 # Clase para los token encontrados
 class Token
 
@@ -35,118 +38,104 @@ class FindRegex
 
     #@regexHash
     def initialize(myfile)
-    @MAYBETOKEN = [ 
-        /\A\{/,
-        /\A\}/,
-        /\A\|/,
-        /\A\%/,            #Esta declaracion no debe tener ajuro un identificador despues?
-        /\A\!/,
-        /\A\@/,
-        /\A\=/,
-        #/\A\;/,
-        ##/\A\read/,
-        ##/\A\write/,
-        #/\A\?/,
-        #/\A\:/,
-        #/\A\[/,
-        #/\A\]/,
-        #/\A\+/,
-        #/\A\-/,
-        #/\A\\*/,
-        #/\A\//,
-        #/\A\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
-        ##/\A\true/,
-        ##/\A\false/,
-        #/\A\/\\/,
-        #/\A\\\//,
-        #/\A\^/,
-        #/\A\</,
-        #/\A\<=/,
-        #/\A\>/,
-        #/\A\>=/,
-        #/\A\/=/,
-        ##/<>/, #Expresion para lienzo
-        ##//,#Expresion para entero
-        ##//,#Expresion booleana
-        #/\A[a-zA-Z]\w*/, #Identificador
-        #/\A\#/,
-        #/\A<.*\/.*>/,
-        #/\A<.*\\.*>/,
-        #/\A<.*\-.*>/,
-        #/\A<.*_.*>/,
-        #/\A\'/,        #Transposicion              --Operador mas fuerte
-        #/\A\$(<\[|\/\\\-_\ \]*>|#)/,        #Rotacion, no se si aceptar tambien un identificador...
-        ##//,         #Concatenacion horizontal
-        ##//,         #Concatenacion vertical
-        #/\{\-/,
-        #/\-\}/,
-        #/\.\./,
-    ]
+        @MAYBETOKEN = [ 
+            /\A\{/,
+            /\A\}/,
+            /\A\|/,
+            /\A\%/,            #Esta declaracion no debe tener ajuro un identificador despues?
+            /\A\!/,
+            /\A\@/,
+            /\A\=/,
+            #/\A\;/,
+            ##/\A\read/,
+            ##/\A\write/,
+            #/\A\?/,
+            #/\A\:/,
+            #/\A\[/,
+            #/\A\]/,
+            #/\A\+/,
+            #/\A\-/,
+            #/\A\\*/,
+            #/\A\//,
+            #/\A\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
+            ##/\A\true/,
+            ##/\A\false/,
+            #/\A\/\\/,
+            #/\A\\\//,
+            #/\A\^/,
+            #/\A\</,
+            #/\A\<=/,
+            #/\A\>/,
+            #/\A\>=/,
+            #/\A\/=/,
+            ##/<>/, #Expresion para lienzo
+            ##//,#Expresion para entero
+            ##//,#Expresion booleana
+            #/\A[a-zA-Z]\w*/, #Identificador
+            #/\A\#/,
+            #/\A<.*\/.*>/,
+            #/\A<.*\\.*>/,
+            #/\A<.*\-.*>/,
+            #/\A<.*_.*>/,
+            #/\A\'/,        #Transposicion              --Operador mas fuerte
+            #/\A\$(<\[|\/\\\-_\ \]*>|#)/,        #Rotacion, no se si aceptar tambien un identificador...
+            ##//,         #Concatenacion horizontal
+            ##//,         #Concatenacion vertical
+            #/\{\-/,
+            #/\-\}/,
+            #/\.\./,
+        ]
 
-    @TOKENNAME = [
-        "LCURLY",
-        "RCURLY",
-        "PIPE",
-        "PERCENT",
-        "EXCLAMATION MARK",
-        "AT",
-        "EQUALS",
-        #"SEMICOLON",
-        ##{}"READ",
-        ##{}"WRITE",
-        #"QUESTIONMARK",
-        #"COLON",
-        #"LSQUARE",
-        #"RSQUARE",
-        #"PLUS",
-        #"MINUS",
-        #"MULTIPLICATION SIGN",  #???
-        #"SLASH",                #???
-        #"MODULO",
-        ##{}"TRUE",
-        ##{}"FALSE",
-        #"AND",
-        #"OR",
-        #"NOT",
-        #"LESS",
-        #"LESSTHAN",
-        #"MORE",
-        #"MORETHAN",
-        #"NOTEQUALS",
-        #"IDENTIFIER",
-        #"EMPTY CANVAS",
-        #"CANVAS SLASH",
-        #"CANVAS BACKLASH",
-        #"CANVAS MINUS",
-        #"CANVAS UNDERSCORE",
-        #"TRANSPOSE",
-        #"ROTATION",
-        ##{}"HORIZONTALCAT",    #???????
-        ##{}"VERTICALCAT",      #???????
-        #"LCOMMENT",
-        #"RCOMMENT",
-        #"COMPREHENSION"     #??????
-    ]
-
-
-
-=begin  Hash? arreglo de 3 dimesiones?
-        regexHash = {}
-        new Array.new(TOKENNAME.length)
+        @TOKENNAME = [
+            "LCURLY",
+            "RCURLY",
+            "PIPE",
+            "PERCENT",
+            "EXCLAMATION MARK",
+            "AT",
+            "EQUALS",
+            #"SEMICOLON",
+            ##{}"READ",
+            ##{}"WRITE",
+            #"QUESTIONMARK",
+            #"COLON",
+            #"LSQUARE",
+            #"RSQUARE",
+            #"PLUS",
+            #"MINUS",
+            #"MULTIPLICATION SIGN",  #???
+            #"SLASH",                #???
+            #"MODULO",
+            ##{}"TRUE",
+            ##{}"FALSE",
+            #"AND",
+            #"OR",
+            #"NOT",
+            #"LESS",
+            #"LESSTHAN",
+            #"MORE",
+            #"MORETHAN",
+            #"NOTEQUALS",
+            #"IDENTIFIER",
+            #"EMPTY CANVAS",
+            #"CANVAS SLASH",
+            #"CANVAS BACKLASH",
+            #"CANVAS MINUS",
+            #"CANVAS UNDERSCORE",
+            #"TRANSPOSE",
+            #"ROTATION",
+            ##{}"HORIZONTALCAT",    #???????
+            ##{}"VERTICALCAT",      #???????
+            #"LCOMMENT",
+            #"RCOMMENT",
+            #"COMPREHENSION"     #??????
+        ]
         
-        0.upto(TOKENNAME.length) do |i|
-            regexHash[i] = new Array.new(TOKENNAME.length)
-            regexHash[i]
-=end
-        #attr_accessor :line, :column, :mytokens, :myerrors
-
-        #attr_reader :myfile
-        
-        @myfile = myfile
+        @myfile     = myfile
         @mytokens = []
         @myerrors = []
-        @line = 1
-        @column = 1
+        @line     = 1
+        @column   = 0
 
     end
 
@@ -156,12 +145,12 @@ class FindRegex
             # Expresion para ignorar los espacios en blanco y comentarios
             # REVISAR
             # puts @myfile.length
-            @myfile =~ /\A(\s|\n|#.*)*/ 
+            @myfile =~ /\A(\s|#.*)*/ #Elimine' |\n 
     
             self.skip($&)
             
             # Para cada elemento en la lista de tokens
-            for i in 0.. @MAYBETOKEN.length.pred
+            for i in 0..@MAYBETOKEN.length.pred
 
                 # Compara lo leido con el posible token
                 @myfile =~ @MAYBETOKEN.at(i)
@@ -207,7 +196,16 @@ class FindRegex
 
         # Quita la palabra leida
         
-        puts "skip"
+        puts "estoy saltando #{word}"
+
+        word.each_byte do |c|
+            if c.eql?"\n"
+                @line    +=1 
+                @column   =1
+            else
+                @column  +=1
+            end
+        end
         
         @myfile = @myfile[word.length..@myfile.length]
         #puts @myfile
