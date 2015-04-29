@@ -145,7 +145,9 @@ class FindRegex
             # Expresion para ignorar los espacios en blanco y comentarios
             # REVISAR
             # puts @myfile.length
-            @myfile =~ /\A(\s|#.*)*/ #Elimine' |\n 
+            
+            # @myfile =~ /(\A(\s|#.*)*)/m #Elimine' |\n 
+            @myfile =~ /\A(\ |\n|{-.*-})*/ #Extraccion de espacios, saltos de linea y comentarios
     
             self.skip($&)
             
@@ -154,12 +156,13 @@ class FindRegex
 
                 # Compara lo leido con el posible token
                 @myfile =~ @MAYBETOKEN.at(i)
+
                 
                 # Si coincide 
                 if $&
                     # Extrae la palabra
                     word = @myfile[0,($&.length)]
-                    self.skip($&)
+                    self.skip(word)
                     # Crea el nuevo token
                     newtoken = Token.new(@TOKENNAME.at(i),word,@line,@column)
                     # Guarda en la lista de tokens
@@ -174,15 +177,15 @@ class FindRegex
             break if @myfile.empty?
 
             if $&
-                puts "*"
+                #puts ""
             else
                 # Si nunca coincidio, extrae la palabra
-                @myfile =~ /\A(\w|\p{punct})*/#NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
+                @myfile =~ /\A(\w|\p{punct})*/m#NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
                 
                 word = $&[0,1]
                 # puts "abajo"
                 # puts $&
-                self.skip(word)
+                #self.skip(word)
                 # Crea un nuevo error
                 newerror = Error.new(word, @line, @column)
                 # Guarda en la lista de errores
@@ -195,19 +198,19 @@ class FindRegex
     def skip(word)
 
         # Quita la palabra leida
-        
-        puts "estoy saltando #{word}"
+        unless word.nil?
 
-        word.each_byte do |c|
-            if c.eql?"\n"
-                @line    +=1 
-                @column   =1
-            else
-                @column  +=1
+            word.each_char do |c|   #Never use .each_byte jejeps
+                if c.eql?"\n"
+                    @line    +=1 
+                    @column   =0
+                else
+                    @column  +=1
+                end
             end
+            
+            @myfile = @myfile[word.length..@myfile.length]
         end
-        
-        @myfile = @myfile[word.length..@myfile.length]
         #puts @myfile
         # FALTA ACTUALIZAR @line @column con el numero de columna 
         # y de linea al que se movio
