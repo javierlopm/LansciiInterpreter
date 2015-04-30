@@ -39,51 +39,52 @@ class FindRegex
     #@regexHash
     def initialize(myfile)
         @MAYBETOKEN = [ 
-            /\A\{/,
-            /\A\}/,
-            /\A\|/,
-            /\A\%/,            #Esta declaracion no debe tener ajuro un identificador despues?
-            /\A\!/,
-            /\A\@/,
-            /\A\=/,
-            #/\A\;/,
-            ##/\A\read/,
-            ##/\A\write/,
-            #/\A\?/,
-            #/\A\:/,
-            #/\A\[/,
-            #/\A\]/,
-            #/\A\+/,
-            #/\A\-/,
-            #/\A\\*/,
-            #/\A\//,
-            #/\A\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
-            ##/\A\true/,
-            ##/\A\false/,
-            #/\A\/\\/,
-            #/\A\\\//,
-            #/\A\^/,
-            #/\A\</,
-            #/\A\<=/,
-            #/\A\>/,
-            #/\A\>=/,
-            #/\A\/=/,
-            ##/<>/, #Expresion para lienzo
-            ##//,#Expresion para entero
-            ##//,#Expresion booleana
-            #/\A[a-zA-Z]\w*/, #Identificador
-            #/\A\#/,
-            #/\A<.*\/.*>/,
-            #/\A<.*\\.*>/,
-            #/\A<.*\-.*>/,
-            #/\A<.*_.*>/,
-            #/\A\'/,        #Transposicion              --Operador mas fuerte
-            #/\A\$(<\[|\/\\\-_\ \]*>|#)/,        #Rotacion, no se si aceptar tambien un identificador...
-            ##//,         #Concatenacion horizontal
-            ##//,         #Concatenacion vertical
-            #/\{\-/,
-            #/\-\}/,
-            #/\.\./,
+            /\{/,
+            /\}/,
+            /\|/,
+            /\%/,            #Esta declaracion no debe tener ajuro un identificador despues?
+            /\!/,
+            /\@/,
+            /\=/,
+            /\;/,
+            /read/,
+            /write/,
+            /\?/,
+            /\:/,
+            /\[/,
+            /\]/,
+            /\+/,
+            /\-/,
+            /\*/,
+            /\//,
+            /\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
+            /true/,
+            /false/,
+            /\/\\/,
+            /\\\//,
+            /\^/,
+            /\</,
+            /\<=/,
+            /\>/,
+            /\>=/,
+            /\/=/,
+            /[a-zA-Z]\w*/, #Identificador
+            # /<>/, #Expresion para lienzo          LOS 3 SIGUIENTES TOKENS NO ESTAN EN LA LISTA DE ABAJO
+            # //,#Expresion para entero
+            # //,#Expresion booleana
+            /\#/,
+            /<.*\/.*>/,
+            /<.*\\.*>/,
+            /<.*\-.*>/,
+            /<.*_.*>/,
+            /\'/,        #Transposicion              --Operador mas fuerte
+            /\$(<\[|\/\\\-_\ \]*>|\#)/,        #Rotacion, no se si aceptar tambien un identificador...
+            # //,         #Concatenacion horizontal
+            # //,         #Concatenacion vertical
+            /\{\-/,
+            /\-\}/,
+            /\.\./,
+            /./    #No se encontro nada, match de un caracter con lo que sea
         ]
 
         @TOKENNAME = [
@@ -94,41 +95,42 @@ class FindRegex
             "EXCLAMATION MARK",
             "AT",
             "EQUALS",
-            #"SEMICOLON",
-            ##{}"READ",
-            ##{}"WRITE",
-            #"QUESTIONMARK",
-            #"COLON",
-            #"LSQUARE",
-            #"RSQUARE",
-            #"PLUS",
-            #"MINUS",
-            #"MULTIPLICATION SIGN",  #???
-            #"SLASH",                #???
-            #"MODULO",
-            ##{}"TRUE",
-            ##{}"FALSE",
-            #"AND",
-            #"OR",
-            #"NOT",
-            #"LESS",
-            #"LESSTHAN",
-            #"MORE",
-            #"MORETHAN",
-            #"NOTEQUALS",
-            #"IDENTIFIER",
-            #"EMPTY CANVAS",
-            #"CANVAS SLASH",
-            #"CANVAS BACKLASH",
-            #"CANVAS MINUS",
-            #"CANVAS UNDERSCORE",
-            #"TRANSPOSE",
-            #"ROTATION",
-            ##{}"HORIZONTALCAT",    #???????
-            ##{}"VERTICALCAT",      #???????
-            #"LCOMMENT",
-            #"RCOMMENT",
-            #"COMPREHENSION"     #??????
+            "SEMICOLON",
+            "READ",
+            "WRITE",
+            "QUESTIONMARK",
+            "COLON",
+            "LSQUARE",
+            "RSQUARE",
+            "PLUS",
+            "MINUS",
+            "MULTIPLICATION SIGN",  #???
+            "SLASH",                #???
+            "MODULO",
+            "TRUE",
+            "FALSE",
+            "AND",
+            "OR",
+            "NOT",
+            "LESS",
+            "LESSTHAN",
+            "MORE",
+            "MORETHAN",
+            "NOTEQUALS",
+            "IDENTIFIER",
+            "EMPTY CANVAS",
+            "CANVAS SLASH",
+            "CANVAS BACKLASH",
+            "CANVAS MINUS",
+            "CANVAS UNDERSCORE",
+            "TRANSPOSE",
+            "ROTATION",
+            # "HORIZONTALCAT",    #??????? Falta definirlos
+            # "VERTICALCAT",      #???????
+            "LCOMMENT",
+            "RCOMMENT",
+            "COMPREHENSION",     #??????
+            "404 TOKEN NOT FOUND"
         ]
         
         @myfile     = myfile
@@ -155,7 +157,7 @@ class FindRegex
             for i in 0..@MAYBETOKEN.length.pred
 
                 # Compara lo leido con el posible token
-                @myfile =~ @MAYBETOKEN.at(i)
+                @myfile =~ /\A#{@MAYBETOKEN.at(i)}/
 
                 
                 # Si coincide 
@@ -177,7 +179,7 @@ class FindRegex
             break if @myfile.empty?
 
             if $&
-                #puts ""
+                puts ""
             else
                 # Si nunca coincidio, extrae la palabra
                 @myfile =~ /\A(\w|\p{punct})*/m#NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
@@ -199,7 +201,6 @@ class FindRegex
 
         # Quita la palabra leida
         unless word.nil?
-
             word.each_char do |c|   #Never use .each_byte jejeps
                 if c.eql?"\n"
                     @line    +=1 
