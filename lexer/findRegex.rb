@@ -8,17 +8,32 @@
 class Token
 
     def initialize(name,value,line,column)
-        @name = name
-        @value = value
-        @line = line
+        @name   = name
+        @line   = line
         @column = column
+
+        if mustStrip?value
+            @value = value[1..(palabra.length-2)]
+        else
+            @value = value
+        end
+
     end
+
+    #Funcion para verificar si el token encontrado puede ser divido
+    def mustStrip?(word)
+        # res = (word ~= /\(.*\)/).eql?0 No se si hay que repetir mismo caso con los parentesis
+        res = (word =~ /<.*>/).eql?0
+    end
+
 
     def to_s
         "token #{@name} value (#{@value}) at line: #{@line}, column: #{@column}"
     end
 
 end
+
+
 
 class Error
 
@@ -36,7 +51,6 @@ end
 
 class FindRegex
 
-    #@regexHash
     def initialize(myfile)
         @MAYBETOKEN = [ 
             /\{/,
@@ -69,14 +83,10 @@ class FindRegex
             /\>=/,
             /\/=/,
             /[a-zA-Z]\w*/, #Identificador
-            # /<>/, #Expresion para lienzo          LOS 3 SIGUIENTES TOKENS NO ESTAN EN LA LISTA DE ABAJO
-            # //,#Expresion para entero
-            # //,#Expresion booleana
             /\#/,
-            /<.*\/.*>/,
-            /<.*\\.*>/,
-            /<.*\-.*>/,
-            /<.*_.*>/,
+            /<([\/\\\|\_\-\ ])*>/,         
+            # //,#Expresion para entero          LOS 2 SIGUIENTES TOKENS NO ESTAN EN LA LISTA DE ABAJO
+            # //,#Expresion booleana
             /\'/,        #Transposicion              --Operador mas fuerte
             /\$(<\[|\/\\\-_\ \]*>|\#)/,        #Rotacion, no se si aceptar tambien un identificador...
             # //,         #Concatenacion horizontal
@@ -119,10 +129,7 @@ class FindRegex
             "NOTEQUALS",
             "IDENTIFIER",
             "EMPTY CANVAS",
-            "CANVAS SLASH",
-            "CANVAS BACKLASH",
-            "CANVAS MINUS",
-            "CANVAS UNDERSCORE",
+            "CANVAS",
             "TRANSPOSE",
             "ROTATION",
             # "HORIZONTALCAT",    #??????? Falta definirlos
@@ -137,7 +144,7 @@ class FindRegex
         @mytokens = []
         @myerrors = []
         @line     = 1
-        @column   = 0
+        @column   = 1
 
     end
 
@@ -164,9 +171,11 @@ class FindRegex
                 if $&
                     # Extrae la palabra
                     word = @myfile[0,($&.length)]
-                    self.skip(word)
+                    
                     # Crea el nuevo token
                     newtoken = Token.new(@TOKENNAME.at(i),word,@line,@column)
+
+                    self.skip(word)
                     # Guarda en la lista de tokens
                     @mytokens << newtoken
 
@@ -196,7 +205,7 @@ class FindRegex
         end 
     end
 
-    # Metodo para correr el cursor
+    # Metodo para correr el cursor 
     def skip(word)
 
         # Quita la palabra leida
@@ -204,7 +213,7 @@ class FindRegex
             word.each_char do |c|   #Never use .each_byte jejeps
                 if c.eql?"\n"
                     @line    +=1 
-                    @column   =0
+                    @column   =1
                 else
                     @column  +=1
                 end
