@@ -1,14 +1,28 @@
 1 Representación de comentarios
 ===============================
-Expresión regular {-.*-}
+Expresión regular para los comentarios: /{-.*-}/m 
+
+Para construir esta expresión regular fijamos el inicio y el final del comenario,
+esto asegura que sin importar el contenido intermedio .* (que podría contener 
+aperturas falsas de comentario), debe haber un único cierre final. Decidimos 
+agregar el modificador /m a la expresión para que los comentarios puedan ser 
+multilínea.
+
 
 2 Expresiones write e identificadores
 =====================================
 
-Identificador: /[a-zA-Z]\w*/
+El token write es reconocido simplemente por la concatenación de los caracteres
+lo representan, así /write/ reconocerá la expresión y /\Awrite/ lo reconocerá
+únicamente al inicio de un string.
+
+Un identificador es reconocido con la siguiente expresión regular /[a-zA-Z]\w*/,
+igualmente con \A al inicio, solo se reconoce como prefijo.
 
 3 Autómata de 2
 ===============
+Automatas representados de forma gráfica en los archivos identifier.png y 
+write.png
 
 4 Autómata de la unión de los lenguajes
 =======================================
