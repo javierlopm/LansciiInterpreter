@@ -1,0 +1,4 @@
+{ %bad sym |
+    & = bad+sym;
+    write \;
+}

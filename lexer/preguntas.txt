@@ -5,6 +5,8 @@ Expresión regular {-.*-}
 2 Expresiones write e identificadores
 =====================================
 
+Identificador: /[a-zA-Z]\w*/
+
 3 Autómata de 2
 ===============
 

@@ -34,7 +34,6 @@ class Token
 end
 
 
-
 class Error
 
     def initialize (value, line, column)
@@ -51,7 +50,7 @@ end
 
 class FindRegex
 
-    def initialize(myfile)
+    def initialize(myFile)
         @MAYBETOKEN = [ 
             /\{/,
             /\}/,
@@ -67,6 +66,8 @@ class FindRegex
             /\:/,
             /\[/,
             /\]/,
+            /\(/,
+            /\)/,
             /\+/,
             /\-/,
             /\*/,
@@ -83,14 +84,13 @@ class FindRegex
             /\>=/,
             /\/=/,
             /[a-zA-Z]\w*/, #Identificador
+            /\d{1,10}/,    #Cambiar por expresion real
             /\#/,
             /<([\/\\\|\_\-\ ])*>/,         
-            # //,#Expresion para entero          LOS 2 SIGUIENTES TOKENS NO ESTAN EN LA LISTA DE ABAJO
-            # //,#Expresion booleana
             /\'/,        #Transposicion              --Operador mas fuerte
-            /\$(<\[|\/\\\-_\ \]*>|\#)/,        #Rotacion, no se si aceptar tambien un identificador...
-            # //,         #Concatenacion horizontal
-            # //,         #Concatenacion vertical
+            /\$/,        #Rotacion, no se si aceptar tambien un identificador...
+            # /:/,         #Concatenacion horizontal hay que diferenciarlas de pipe y colon
+            # /\|/,        #Concatenacion vertical
             /\{\-/,
             /\-\}/,
             /\.\./,
@@ -112,6 +112,8 @@ class FindRegex
             "COLON",
             "LSQUARE",
             "RSQUARE",
+            "LPARENTHESIS",
+            "RPARENTHESIS",
             "PLUS",
             "MINUS",
             "MULTIPLICATION SIGN",  #???
@@ -128,6 +130,7 @@ class FindRegex
             "MORETHAN",
             "NOTEQUALS",
             "IDENTIFIER",
+            "NUMBER",
             "EMPTY CANVAS",
             "CANVAS",
             "TRANSPOSE",
@@ -137,12 +140,12 @@ class FindRegex
             "LCOMMENT",
             "RCOMMENT",
             "COMPREHENSION",     #??????
-            "404 TOKEN NOT FOUND"
+            "404"
         ]
         
-        @myfile     = myfile
-        @mytokens = []
-        @myerrors = []
+        @myFile     = myFile
+        @myTokens = []
+        @myErrors = []
         @line     = 1
         @column   = 1
 
@@ -150,13 +153,13 @@ class FindRegex
 
     def findAll
 
-        while !@myfile.empty? do
+        while !@myFile.empty? do
             # Expresion para ignorar los espacios en blanco y comentarios
             # REVISAR
-            # puts @myfile.length
+            # puts @myFile.length
             
-            # @myfile =~ /(\A(\s|#.*)*)/m #Elimine' |\n 
-            @myfile =~ /\A(\ |\n|{-.*-})*/ #Extraccion de espacios, saltos de linea y comentarios
+            # @myFile =~ /(\A(\s|#.*)*)/m #Elimine' |\n 
+            @myFile =~ /\A(\ |\s|{-.*-})*/ #Extraccion de espacios, saltos de linea y comentarios
     
             self.skip($&)
             
@@ -164,34 +167,42 @@ class FindRegex
             for i in 0..@MAYBETOKEN.length.pred
 
                 # Compara lo leido con el posible token
-                @myfile =~ /\A#{@MAYBETOKEN.at(i)}/
+                @myFile =~ /\A#{@MAYBETOKEN.at(i)}/
 
                 
-                # Si coincide 
+                # Si coincide
                 if $&
                     # Extrae la palabra
-                    word = @myfile[0,($&.length)]
+                    word = @myFile[0,($&.length)]
                     
-                    # Crea el nuevo token
-                    newtoken = Token.new(@TOKENNAME.at(i),word,@line,@column)
-
+                    # Verifica si el elemento encotrado era valido
+                    if @TOKENNAME.at(i).eql?"404"
+                        # Crea error en caso de haber llegado al final
+                        errorFound = Error.new(word,@line,@column)
+                        @myErrors << errorFound
+                    else
+                        # Crea un token en caso valido
+                        newtoken = Token.new(@TOKENNAME.at(i),word,@line,@column)
+                        @myTokens << newtoken
+                    end
+                    
                     self.skip(word)
-                    # Guarda en la lista de tokens
-                    @mytokens << newtoken
+
+                    
 
                     break
                 end
 
-
             end
 
-            break if @myfile.empty?
+            break if @myFile.empty?
 
+=begin
             if $&
                 puts ""
             else
                 # Si nunca coincidio, extrae la palabra
-                @myfile =~ /\A(\w|\p{punct})*/m#NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
+                @myFile =~ /\A(\w|\p{punct})*/m#NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
                 
                 word = $&[0,1]
                 # puts "abajo"
@@ -200,8 +211,9 @@ class FindRegex
                 # Crea un nuevo error
                 newerror = Error.new(word, @line, @column)
                 # Guarda en la lista de errores
-                @myerrors << newerror
+                @myErrors << newerror
             end
+=end
         end 
     end
 
@@ -219,21 +231,21 @@ class FindRegex
                 end
             end
             
-            @myfile = @myfile[word.length..@myfile.length]
+            @myFile = @myFile[word.length..@myFile.length]
         end
-        #puts @myfile
+        #puts @myFile
         # FALTA ACTUALIZAR @line @column con el numero de columna 
         # y de linea al que se movio
     end
 
     def printOutPut
 
-        if @myerrors.length.eql?0
-            @mytokens.each { |tok| 
+        if @myErrors.length.eql?0
+            @myTokens.each { |tok| 
                 puts tok.to_s
             }
         else 
-            @myerrors.each { |err| 
+            @myErrors.each { |err| 
                 puts err.to_s
             }
         end
