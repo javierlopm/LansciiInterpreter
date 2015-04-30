@@ -1,4 +1,6 @@
-"{ @cake lie !GLaDOS |
+{- example program-}
+
+{ @cake lie !GLaDOS |
 	read lie;
 	cake = <|>;
 	(cake = lie ? GLaDOS = true : glaDos = false);
