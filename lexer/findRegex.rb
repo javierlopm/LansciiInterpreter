@@ -222,31 +222,6 @@ class FindRegex
 
     # Metodo para eliminar comentarios y encontrar errores en su formacion
     def extractComments
-        #puts "INICIO\n#{@myFile}FIN\n"
-=begin
-        @COMMENTS.each do |c|
-            #puts "#{c}"
-            res = (@myfile =~ c[:regex])
-
-            puts "#{res}"
-
-            if $&
-                puts "Marico, pase "
-                unless c[:type].eql?"GOODCOMMENT"
-                    errorFound = Error.new(word,@line,@column,c[:type])
-                    @myErrors << errorFound
-                end
-                self.skip($&)
-                break
-            end
-        end
-=end
-    # (@myFile =~ /\{\-/)
-    #puts "#{@NEWCOMMENTS.at(0)}"
-    #puts "#{@COMMENTS.at(3)[:regex]}"
-    #(@myFile =~ @NEWCOMMENTS.at(0))
-        #(@myFile =~ @COMMENTS.at(3)[:regex])
-        #puts "#{$&}"
 
         @COMMENTS.each do |c|
             @myFile =~ c[:regex]
