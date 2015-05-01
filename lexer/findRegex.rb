@@ -158,10 +158,10 @@ class FindRegex
         ]
 
         @COMMENTS = [
-            {:regex=>/\A\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
-            {:regex=>/\A\{\-(.*\-\}){1}/m , :type=>"GOODCOMMENT"},
-            {:regex=>/\A\{\-/             , :type=>"BADOPEN"    },
-            {:regex=>/\A\-\}/             , :type=>"BADCLOSE"   },
+            {:regex=>/\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
+            {:regex=>/\{\-(.*\-\}){1}/m , :type=>"GOODCOMMENT"},
+            {:regex=>/\{\-/             , :type=>"BADOPEN"    },
+            {:regex=>/\-\}/             , :type=>"BADCLOSE"   },
         ]
 
         @NEWCOMMENTS = [/\A\{\-/]
@@ -179,10 +179,12 @@ class FindRegex
         while !@myFile.empty? do
             # Expresion para ignorar los espacios en blanco y comentarios
             @myFile =~ /\A(\ |\s)*/ #Extraccion de espacios y saltos de linea
-    
             self.skip($&)
 
             self.extractComments 
+
+            @myFile =~ /\A(\ |\s)*/ #Anter y despues
+            self.skip($&)
             
             # Para cada elemento en la lista de tokens
             for i in 0..@MAYBETOKEN.length.pred
@@ -224,7 +226,7 @@ class FindRegex
     def extractComments
 
         @COMMENTS.each do |c|
-            @myFile =~ c[:regex]
+            @myFile =~ /\A#{c[:regex]}/
             word = $&
             if word
                 unless c[:type].eql?"GOODCOMMENT"
