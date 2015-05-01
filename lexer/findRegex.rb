@@ -158,11 +158,13 @@ class FindRegex
         ]
 
         @COMMENTS = [
-            {:regex=>/\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
-            {:regex=>/\{\-(.*\-\}){1}/m , :type=>"GOODCOMMENT"},
-            {:regex=>/\{\-/             , :type=>"BADOPEN"    },
-            {:regex=>/\-\}/             , :type=>"BADCLOSE"   },
+            {:regex=>/\A\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
+            {:regex=>/\A\{\-(.*\-\}){1}/m , :type=>"GOODCOMMENT"},
+            {:regex=>/\A\{\-/             , :type=>"BADOPEN"    },
+            {:regex=>/\A\-\}/             , :type=>"BADCLOSE"   },
         ]
+
+        @NEWCOMMENTS = [/\A\{\-/]
         
         @myFile   = myFile
         @myTokens = []
@@ -187,7 +189,6 @@ class FindRegex
 
                 # Compara lo leido con el posible token
                 @myFile =~ /\A#{@MAYBETOKEN.at(i)}/
-                
                 
                 # Si coincide
                 if $&
@@ -221,22 +222,46 @@ class FindRegex
 
     # Metodo para eliminar comentarios y encontrar errores en su formacion
     def extractComments
-
-        puts "INICIO\n#{@myFile}FIN\n"
-
+        #puts "INICIO\n#{@myFile}FIN\n"
+=begin
         @COMMENTS.each do |c|
-            @myfile =~ /\A#{c[:regex]}/
+            #puts "#{c}"
+            res = (@myfile =~ c[:regex])
 
-            word = $&
+            puts "#{res}"
 
-            if word
+            if $&
+                puts "Marico, pase "
                 unless c[:type].eql?"GOODCOMMENT"
                     errorFound = Error.new(word,@line,@column,c[:type])
                     @myErrors << errorFound
                 end
-                self.skip(word)
+                self.skip($&)
                 break
             end
+        end
+=end
+    # (@myFile =~ /\{\-/)
+    #puts "#{@NEWCOMMENTS.at(0)}"
+    #puts "#{@COMMENTS.at(3)[:regex]}"
+    #(@myFile =~ @NEWCOMMENTS.at(0))
+        #(@myFile =~ @COMMENTS.at(3)[:regex])
+        #puts "#{$&}"
+
+        @COMMENTS.each do |c|
+            @myFile =~ c[:regex]
+            word = $&
+            if word
+                unless c[:type].eql?"GOODCOMMENT"
+                    errorFound = Error.new("",@line,@column,c[:type])
+                    @myErrors << errorFound
+                end
+
+                self.skip(word)
+
+                break
+            end
+            
         end
     end
 
