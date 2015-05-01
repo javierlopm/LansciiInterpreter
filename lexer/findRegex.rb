@@ -66,96 +66,49 @@ class FindRegex
 
     def initialize(myFile)
         @MAYBETOKEN = [ 
-            /\{/,
-            /\}/,
-            /\|/,
-            /\%/,            #Esta declaracion no debe tener ajuro un identificador despues?
-            /\!/,
-            /\@/,
-            /\=/,
-            /\;/,
-            /read/,
-            /write/,
-            /\?/,
-            /\:/,
-            /\[/,
-            /\]/,
-            /\(/,
-            /\)/,
-            /\+/,
-            /\-/,
-            /\*/,
-            /\//,
-            /\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
-            /true/,
-            /false/,
-            /\/\\/,
-            /\\\//,
-            /\^/,
-            /\</,
-            /\<=/,
-            /\>/,
-            /\>=/,
-            /\/=/,
-            /[a-zA-Z]\w*/, #Identificador
-            /\d{1,10}/,    #Cambiar por expresion real
-            /\#/,
-            /<([\/\\\|\_\-\ ])*>/,         
-            /\'/,        #Transposicion              --Operador mas fuerte
-            /\$/,        #Rotacion, no se si aceptar tambien un identificador...
-            # /:/,         #Concatenacion horizontal hay que diferenciarlas de pipe y colon
-            # /\|/,        #Concatenacion vertical
-            /\{\-/,
-            /\-\}/,
-            /\.\./,
-            /./    #No se encontro nada, match de un caracter con lo que sea
+            {:regex=>/\{/,          :name=>"LCURLY"             },
+            {:regex=>/\}/,          :name=>"RCURLY"             },
+            {:regex=>/\|/,          :name=>"PIPE"               },
+            {:regex=>/\%/,          :name=>"PIPE"               },
+            {:regex=>/\!/,          :name=>"EXCLAMATION MARK"   },
+            {:regex=>/\@/,          :name=>"AT"                 },
+            {:regex=>/\=/,          :name=>"EQUALS"             },
+            {:regex=>/\;/,          :name=>"SEMICOLON"          },
+            {:regex=>/read/,        :name=>"READ"               },
+            {:regex=>/write/,       :name=>"WRITE"              },
+            {:regex=>/\?/,          :name=>"QUESTIONMARK"       },
+            {:regex=>/\:/,          :name=>"COLON"              },
+            {:regex=>/\[/,          :name=>"LSQUARE"            },
+            {:regex=>/\]/,          :name=>"RSQUARE"            },
+            {:regex=>/\(/,          :name=>"LPARENTHESIS"       },
+            {:regex=>/\)/,          :name=>"RPARENTHESIS"       },
+            {:regex=>/\+/,          :name=>"PLUS"               },
+            {:regex=>/\-/,          :name=>"MINUS"              },
+            {:regex=>/\*/,          :name=>"MULTIPLICATION SIGN"},
+            {:regex=>/\//,          :name=>"SLASH"              },
+            {:regex=>/\d+%\d+/,     :name=>"MODULO"             },
+            {:regex=>/true/,        :name=>"TRUE"               },
+            {:regex=>/false/,       :name=>"FALSE"              },
+            {:regex=>/\/\\/,        :name=>"AND"                },
+            {:regex=>/\\\//,        :name=>"OR"                 },
+            {:regex=>/\^/,          :name=>"NOT"                },
+            {:regex=>/\</,          :name=>"LESS"               },
+            {:regex=>/\<=/,         :name=>"LESSTHAN"           },
+            {:regex=>/\>/,          :name=>"MORE"               },
+            {:regex=>/\>=/,         :name=>"MORETHAN"           },
+            {:regex=>/\/=/,         :name=>"NOTEQUALS"          },
+            {:regex=>/[a-zA-Z]\w*/, :name=>"IDENTIFIER"         },
+            {:regex=>/\d{1,10}/,    :name=>"NUMBER"             },
+            {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
+            {:regex=>/<([\/\\\|\_\-\ ])*>/,:name=>"CANVAS"      },
+            {:regex=>/\'/,          :name=>"TRANSPOSE"          },
+            {:regex=>/\$/,          :name=>"ROTATION"           },
+            {:regex=>/:/,           :name=> "HORIZONTALCAT"     },
+            {:regex=>/\|/,          :name=> "VERTICALCAT"       },
+            {:regex=>/\.\./,        :name=>"COMPREHENSION"      },
+            {:regex=>/./,           :name=>"404"                }   
         ]
 
-        @TOKENNAME = [
-            "LCURLY",
-            "RCURLY",
-            "PIPE",
-            "PERCENT",
-            "EXCLAMATION MARK",
-            "AT",
-            "EQUALS",
-            "SEMICOLON",
-            "READ",
-            "WRITE",
-            "QUESTIONMARK",
-            "COLON",
-            "LSQUARE",
-            "RSQUARE",
-            "LPARENTHESIS",
-            "RPARENTHESIS",
-            "PLUS",
-            "MINUS",
-            "MULTIPLICATION SIGN",  #???
-            "SLASH",                #???
-            "MODULO",
-            "TRUE",
-            "FALSE",
-            "AND",
-            "OR",
-            "NOT",
-            "LESS",
-            "LESSTHAN",
-            "MORE",
-            "MORETHAN",
-            "NOTEQUALS",
-            "IDENTIFIER",
-            "NUMBER",
-            "EMPTY CANVAS",
-            "CANVAS",
-            "TRANSPOSE",
-            "ROTATION",
-            # "HORIZONTALCAT",    #??????? Falta definirlos
-            # "VERTICALCAT",      #???????
-            "LCOMMENT",
-            "RCOMMENT",
-            "COMPREHENSION",     #??????
-            "404"
-        ]
 
         @COMMENTS = [
             {:regex=>/\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
@@ -187,10 +140,10 @@ class FindRegex
             self.skip($&)
             
             # Para cada elemento en la lista de tokens
-            for i in 0..@MAYBETOKEN.length.pred
+            @MAYBETOKEN.each do |mb|
 
                 # Compara lo leido con el posible token
-                @myFile =~ /\A#{@MAYBETOKEN.at(i)}/
+                @myFile =~ /\A#{mb[:regex]}/
                 
                 # Si coincide
                 if $&
@@ -198,13 +151,13 @@ class FindRegex
                     word = @myFile[0,($&.length)]
                     
                     # Verifica si el elemento encotrado era valido
-                    if @TOKENNAME.at(i).eql?"404"
+                    if mb[:name].eql?"404"
                         # Crea error en caso de haber llegado al final
                         errorFound = Error.new(word,@line,@column,"UNEXPECTED")
                         @myErrors << errorFound
                     else
                         # Crea un token en caso valido
-                        newtoken = Token.new(@TOKENNAME.at(i),word,@line,@column)
+                        newtoken = Token.new(mb[:name],word,@line,@column)
                         @myTokens << newtoken
                     end
                     
