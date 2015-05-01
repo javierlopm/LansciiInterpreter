@@ -103,8 +103,6 @@ class FindRegex
             {:regex=>/<([\/\\\|\_\-\ ])*>/,:name=>"CANVAS"      },
             {:regex=>/\'/,          :name=>"TRANSPOSE"          },
             {:regex=>/\$/,          :name=>"ROTATION"           },
-            {:regex=>/:/,           :name=> "HORIZONTALCAT"     },
-            {:regex=>/\|/,          :name=> "VERTICALCAT"       },
             {:regex=>/\.\./,        :name=>"COMPREHENSION"      },
             {:regex=>/./,           :name=>"404"                }   
         ]
