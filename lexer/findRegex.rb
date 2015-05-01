@@ -4,6 +4,7 @@
     Javier Lopez     11-10552
     Patricia Reinoso 11-10851
 =end
+
 # Clase para los token encontrados
 class Token
 
@@ -20,9 +21,8 @@ class Token
 
     end
 
-    #Funcion para verificar si el token encontrado puede ser divido
+    #Funcion para verificar si el token encontrado debe ser divido
     def mustStrip?(word)
-        # res = (word ~= /\(.*\)/).eql?0 No se si hay que repetir mismo caso con los parentesis
         res = (word =~ /<.*>/).eql?0
     end
 
@@ -57,6 +57,7 @@ class Error
         when "BADCLOSE"
             msg += "Comment section closed but not opened"
         end
+
         msg  += " at line: #{@line}, column: #{@column}"
     end
 
@@ -65,6 +66,8 @@ end
 class FindRegex
 
     def initialize(myFile)
+
+        #Arreglo de hashes con expr. regulares y nombres de token asociados
         @MAYBETOKEN = [ 
             {:regex=>/\{/,          :name=>"LCURLY"             },
             {:regex=>/\}/,          :name=>"RCURLY"             },
@@ -107,15 +110,13 @@ class FindRegex
             {:regex=>/./,           :name=>"404"                }   
         ]
 
-
+        #Arreglo de expresiones para comentarios y posibles malformaciones
         @COMMENTS = [
             {:regex=>/\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
             {:regex=>/\{\-(.*\-\}){1}/m , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/             , :type=>"BADOPEN"    },
             {:regex=>/\-\}/             , :type=>"BADCLOSE"   },
         ]
-
-        @NEWCOMMENTS = [/\A\{\-/]
         
         @myFile   = myFile
         @myTokens = []
@@ -128,14 +129,11 @@ class FindRegex
     def findAll
 
         while !@myFile.empty? do
-            # Expresion para ignorar los espacios en blanco y comentarios
-            @myFile =~ /\A(\ |\s)*/ #Extraccion de espacios y saltos de linea
-            self.skip($&)
-
+            
+            #Extraccion de cadenas de caracteres ignorables
+            self.ignoreWhiteSpace
             self.extractComments 
-
-            @myFile =~ /\A(\ |\s)*/ #Anter y despues
-            self.skip($&)
+            self.ignoreWhiteSpace
             
             # Para cada elemento en la lista de tokens
             @MAYBETOKEN.each do |mb|
@@ -161,8 +159,6 @@ class FindRegex
                     
                     self.skip(word)
 
-                    
-
                     break
                 end
 
@@ -179,18 +175,29 @@ class FindRegex
         @COMMENTS.each do |c|
             @myFile =~ /\A#{c[:regex]}/
             word = $&
+
+            #Si se encuentra un match
             if word
+
+                #Se crea error en caso de no ser comentario bien formado
                 unless c[:type].eql?"GOODCOMMENT"
                     errorFound = Error.new("",@line,@column,c[:type])
                     @myErrors << errorFound
                 end
 
+                #Se ignora toda la cadena encontrada
                 self.skip(word)
-
                 break
             end
             
         end
+    end
+
+    #Metodo que elimina caracteres en blanco
+    def ignoreWhiteSpace
+        #Extraccion de espacios, saltos de linea y tabuladores
+        @myFile =~ /\A(\ |\s)*/ 
+        self.skip($&)
     end
 
     # Metodo para correr el cursor 
@@ -198,7 +205,7 @@ class FindRegex
 
         # Quita la palabra leida
         unless word.nil?
-            word.each_char do |c|   #Never use .each_byte jejeps
+            word.each_char do |c|  
                 if c.eql?"\n"
                     @line +=1 
                 end
@@ -207,9 +214,6 @@ class FindRegex
             
             @myFile = @myFile[word.length..@myFile.length]
         end
-        #puts @myFile
-        # FALTA ACTUALIZAR @line @column con el numero de columna 
-        # y de linea al que se movio
     end
 
     def printOutPut
