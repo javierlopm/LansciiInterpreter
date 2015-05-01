@@ -36,14 +36,28 @@ end
 
 class Error
 
-    def initialize (value, line, column)
-        @value = value
-        @line = line
+    def initialize (value, line, column, type)
+        @value  = value
+        @line   = line
         @column = column
+        @type   = type
     end
 
     def to_s
-        "Error: Unexpected character: \"#{@value}\" at line: #{@line}, column: #{@column}"
+
+        msg = "Error: "
+
+        case @type
+        when "UNEXPECTED"
+            msg += "Unexpected character: \"#{@value}\""
+        when "MULTICLOSE"
+            msg += "Comment section closed more than once"
+        when "BADOPEN"
+            msg += "Comment section opened but not closed"
+        when "BADCLOSE"
+            msg += "Comment section closed but not opened"
+        end
+        msg  += " at line: #{@line}, column: #{@column}"
     end
 
 end
@@ -142,8 +156,15 @@ class FindRegex
             "COMPREHENSION",     #??????
             "404"
         ]
+
+        @COMMENTS = [
+            {:regex=>/\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
+            {:regex=>/\{\-(.*\-\}){1}/m , :type=>"GOODCOMMENT"},
+            {:regex=>/\{\-/             , :type=>"BADOPEN"    },
+            {:regex=>/\-\}/             , :type=>"BADCLOSE"   },
+        ]
         
-        @myFile     = myFile
+        @myFile   = myFile
         @myTokens = []
         @myErrors = []
         @line     = 1
@@ -155,20 +176,18 @@ class FindRegex
 
         while !@myFile.empty? do
             # Expresion para ignorar los espacios en blanco y comentarios
-            # REVISAR
-            # puts @myFile.length
-            
-            # @myFile =~ /(\A(\s|#.*)*)/m #Elimine' |\n 
-            @myFile =~ /\A(\ |\s|{-.*-})*/ #Extraccion de espacios, saltos de linea y comentarios
+            @myFile =~ /\A(\ |\s)*/ #Extraccion de espacios y saltos de linea
     
             self.skip($&)
+
+            self.extractComments 
             
             # Para cada elemento en la lista de tokens
             for i in 0..@MAYBETOKEN.length.pred
 
                 # Compara lo leido con el posible token
                 @myFile =~ /\A#{@MAYBETOKEN.at(i)}/
-
+                
                 
                 # Si coincide
                 if $&
@@ -178,7 +197,7 @@ class FindRegex
                     # Verifica si el elemento encotrado era valido
                     if @TOKENNAME.at(i).eql?"404"
                         # Crea error en caso de haber llegado al final
-                        errorFound = Error.new(word,@line,@column)
+                        errorFound = Error.new(word,@line,@column,"UNEXPECTED")
                         @myErrors << errorFound
                     else
                         # Crea un token en caso valido
@@ -197,24 +216,28 @@ class FindRegex
 
             break if @myFile.empty?
 
-=begin
-            if $&
-                puts ""
-            else
-                # Si nunca coincidio, extrae la palabra
-                @myFile =~ /\A(\w|\p{punct})*/m#NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
-                
-                word = $&[0,1]
-                # puts "abajo"
-                # puts $&
-                #self.skip(word)
-                # Crea un nuevo error
-                newerror = Error.new(word, @line, @column)
-                # Guarda en la lista de errores
-                @myErrors << newerror
-            end
-=end
         end 
+    end
+
+    # Metodo para eliminar comentarios y encontrar errores en su formacion
+    def extractComments
+
+        puts "INICIO\n#{@myFile}FIN\n"
+
+        @COMMENTS.each do |c|
+            @myfile =~ /\A#{c[:regex]}/
+
+            word = $&
+
+            if word
+                unless c[:type].eql?"GOODCOMMENT"
+                    errorFound = Error.new(word,@line,@column,c[:type])
+                    @myErrors << errorFound
+                end
+                self.skip(word)
+                break
+            end
+        end
     end
 
     # Metodo para correr el cursor 
@@ -224,11 +247,9 @@ class FindRegex
         unless word.nil?
             word.each_char do |c|   #Never use .each_byte jejeps
                 if c.eql?"\n"
-                    @line    +=1 
-                    @column   =1
-                else
-                    @column  +=1
+                    @line +=1 
                 end
+                @column +=1
             end
             
             @myFile = @myFile[word.length..@myFile.length]
