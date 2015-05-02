@@ -19,9 +19,9 @@ de varialbes del lenguaje y el estado final q1 reconoce la palabra reservada wri
 6 Problemas en la selección de 5
 ================================
 
-Se generan conflictos, debido a que al llegar
-al estado final q1, se puede elegir entre reconocer el token en ese punto o continuar hacia el estado final q0. Esto puede generar que se reconozca un 
-token incompleto.
+Se generan conflictos, debido a que un token puede hacer match con 2 estados finales. Al llegar
+al estado final q1, se puede elegir entre reconocer el token en ese punto o continuar hacia el
+ estado final q0. Esto puede generar que se reconozca un token incompleto.
 
 
 7 Palabras generadoras de fallas y nodos involucrados
