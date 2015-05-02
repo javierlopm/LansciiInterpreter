@@ -18,17 +18,29 @@ de varialbes del lenguaje y el estado final q1 reconoce la palabra reservada wri
 
 6 Problemas en la selección de 5
 ================================
-Dentro del lanscii está permitido crear identificadores de variables que comiencen
-con "write", por ejemplo el identificador "writesomething", por la manera en la 
-que está planteado el autómata, puede suceder que se reconozca "write" y "something"
-por separado.
+
+Se generan conflictos, debido a que al llegar
+al estado final q1, se puede elegir entre reconocer el token en ese punto o continuar hacia el estado final q0. Esto puede generar que se reconozca un 
+token incompleto.
 
 
-7 Palabras generadoras de fallas e involucrados
+7 Palabras generadoras de fallas y nodos involucrados
 ===============================================
+
+Dentro del lanscii está permitido crear identificadores de variables que comiencen
+con "write", por ejemplo el identificador "writesomething" es válido. Por la manera en la 
+que está planteado el autómata, puede suceder que se reconozca "write" en el nodo final q1, dejando "something" como un identificador a parte.
 
 8 Solución y justificación
 ==========================
 
+La solución empleada para el conflicto de reconocimiento fue agregar un espacio al final
+de la expresión regular que corresponde la palabra 
+reservada write. De esta manera se puede hacer la 
+diferencia entre la palabra reservada y los 
+identificadores de variables que comiencen por write.
+
+
 9 Relación entre implementación y preg 2/8
 ===========================================
+
