@@ -20,7 +20,7 @@ de varialbes del lenguaje y el estado final q1 reconoce la palabra reservada wri
 ================================
 Dentro del lanscii está permitido crear identificadores de variables que comiencen
 con "write", por ejemplo el identificador "writesomething", por la manera en la 
-que está planteado el autómata, puede suceder que se reconozca "write" y something"
+que está planteado el autómata, puede suceder que se reconozca "write" y "something"
 por separado.
 
 
