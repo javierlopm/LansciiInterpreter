@@ -44,3 +44,4 @@ identificadores de variables que comiencen por write.
 9 Relación entre implementación y preg 2/8
 ===========================================
 
+En el proyecto se realiza el lexer de nuestro interpretador, usando las expresiones regulares, se genera implícitamente un Autómata, tuvimos que generar expresiones regulares de modo tal que no se generen conflictos (es decir, una palabra haga match con dos expresiones regulares). En las preguntas 2-8 tenemos que desarrollar un autómata y resolver conflictos de reconocimiento, análogo a lo que hicimos con las expresiones regulares del proyecto.
