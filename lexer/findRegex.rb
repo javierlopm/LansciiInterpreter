@@ -61,7 +61,9 @@ class Error
         when "BADOPEN"
             msg += "Comment section opened but not closed"
         when "BADCLOSE"
-            msg += "Comment section closed but not opened"
+            msg += "Comment section closed but not opened"        
+        when "OVERFLOW"
+            msg += "Integer constant overflow"
         end
 
         msg  += " at line: #{@line}, column: #{@column}"
@@ -106,7 +108,7 @@ class FindRegex
             {:regex=>/\*/,          :name=>"MULTIPLICATION SIGN"},
             {:regex=>/\//,          :name=>"SLASH"              },
             {:regex=>/[a-zA-Z]\w*/, :name=>"IDENTIFIER"         },
-            {:regex=>/\d{1,10}/,    :name=>"NUMBER"             },
+            {:regex=>/\d{1,}/,      :name=>"NUMBER"             },
             {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
             {:regex=>/<([\/\\\|\_\-\ ])*>/,:name=>"CANVAS"      },
             {:regex=>/\'/,          :name=>"TRANSPOSE"          },
@@ -156,6 +158,14 @@ class FindRegex
                         # Crea error en caso de haber llegado al final
                         errorFound = Error.new(word,@line,@column,"UNEXPECTED")
                         @myErrors << errorFound
+                    elsif mb[:name].eql?"NUMBER"
+                        if self.is32bits?word
+                            newtoken = Token.new(mb[:name],word,@line,@column)
+                            @myTokens << newtoken
+                        else
+                            errorFound = Error.new(word,@line,@column,"OVERFLOW")
+                            @myErrors << errorFound
+                        end
                     else
                         # Crea un token en caso valido
                         newtoken = Token.new(mb[:name],word,@line,@column)
@@ -172,6 +182,11 @@ class FindRegex
             break if @myFile.empty?
 
         end 
+    end
+
+
+    def is32bits?(word)
+        return word.to_i <= 2**31
     end
 
     # Metodo para eliminar comentarios y encontrar errores en su formacion
