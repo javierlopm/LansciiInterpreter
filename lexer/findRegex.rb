@@ -95,9 +95,9 @@ class FindRegex
             {:regex=>/\)/,          :name=>"RPARENTHESIS"       },
             {:regex=>/true/,        :name=>"TRUE"               },
             {:regex=>/false/,       :name=>"FALSE"              },
-            {:regex=>/\/\\backslash{}/, :name=>"AND"            },
-            {:regex=>/\\backslash{}\//, :name=>"OR"             },
-            {:regex=>/<(\/|\\|\||\_|\-|\ )*>/,:name=>"CANVAS"      },
+            {:regex=>/\/\\backslash{}/,       :name=>"AND"      },
+            {:regex=>/\\backslash{}\//,       :name=>"OR"       },
+            {:regex=>/<(\/|\\|\||\_|\-|\ )*>/,:name=>"CANVAS"   },
             {:regex=>/\^/,          :name=>"NOT"                },
             {:regex=>/\<=/,         :name=>"LESSTHAN"           },
             {:regex=>/\>=/,         :name=>"MORETHAN"           },
@@ -158,7 +158,6 @@ class FindRegex
                         # Crea error en caso de haber llegado al final
                         errorFound = Error.new(word,@line,@column,"UNEXPECTED")
                         @myErrors << errorFound
-                        puts "La palabra que recibi fue #{word}"
                     elsif mb[:name].eql?"NUMBER"
                         if self.is32bits?word
                             newtoken = Token.new(mb[:name],word,@line,@column)
