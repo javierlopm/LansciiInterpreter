@@ -1,0 +1,34 @@
+{ % hola ! vale @ kease |
+    =;
+    read hola
+    write kease
+    (thisReal ? blah : justFantaSea)
+    +
+    -
+    *
+    /
+    true
+    false
+    ^
+    <
+    >
+    <= 
+    >=
+    /=
+    '
+    $
+    ..
+    456548454 
+    #
+    {- Esta explotando terriblemente todos estos canvas creo que es culpa de \
+    <   /|\   >
+    <  / | \  >
+    < /  |  \ >
+    </   |   \>
+    <---| |--->
+    <   | |   >
+    <   | |   > 
+    <   ---   >
+    -}
+
+}
