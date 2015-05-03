@@ -118,10 +118,17 @@ class FindRegex
         ]
 
         #Arreglo de expresiones para comentarios y posibles malformaciones
+
+        @doesntOpen  = /^((?!\{\-).)*$/ 
+        @doesntOpen  = /^((?!\-\}).)*$/
+
+
+
         @COMMENTS = [
-            {:regex=>/\{\-[^(\-\})]*\-\}/ , :type=>"AY" }, 
-            {:regex=>/\{\-(([a-zA-Z\d\-\ ])(\-\})){2,}/m , :type=>"MULTICLOSE" },
-            {:regex=>/\{\-(.*\-\}){1}/m  , :type=>"GOODCOMMENT"},
+            #{:regex=>/\{\-(([a-zA-Z\d\-\ ][^(\{\-)])(\-\})){2,}/m , :type=>"MULTICLOSE" },
+            #{:regex=>/\{\-((((?!\{\-).)*)\-\}(((?!\{\-).)*)){1,}\-\}/m,:type=>"MULTICLOSE"},
+            {:regex=>/\{\-(((?!\-\}|\{\-).{0,1})*)\-\}/m , :type=>"GOODCOMMENT" }, 
+            #{:regex=>/\{\-(.*\-\}){1}/m  , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/              , :type=>"BADOPEN"    },
             {:regex=>/\-\}/              , :type=>"BADCLOSE"   },
 
