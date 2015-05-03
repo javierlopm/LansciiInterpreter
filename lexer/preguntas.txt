@@ -28,25 +28,27 @@ El match  multilínea  solo afecta, en este caso a .*, así que no existen cierr
 ni aperturas de comentarios mal formados.
 
 El automata  no  determinista  de esta pregunta emula el resultado final de usar
-las dos expresiones regulares.
+las dos expresiones regulares. (comment.png)
 
 2 Expresiones write e identificadores
 =====================================
 
 El token write es reconocido simplemente por la concatenación de los caracteres
-lo representan, así /write/ reconocerá la expresión y /\Awrite/ lo reconocerá
-únicamente al inicio de un string.
+lo representan, así /write / reconocerá la expresión y /\Awrite / lo reconocerá
+únicamente al inicio de un string. Nótese que este token es seguido por un 
+espacio.
 
 Un identificador es reconocido con la siguiente expresión regular /[a-zA-Z]\w*/,
 igualmente con \A al inicio, solo se reconoce como prefijo.
 
 3 Autómata de 2
 ===============
-Automatas representados de forma gráfica en los archivos identifier.png y 
+Autómatas representados de forma gráfica en los archivos identifier.png y 
 write.png
 
 4 Autómata de la unión de los lenguajes
 =======================================
+Autómata representado en union.png
 
 5 Pertenencia de un token a un lenguaje
 =======================================
