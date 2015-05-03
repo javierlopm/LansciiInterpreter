@@ -119,9 +119,13 @@ class FindRegex
 
         #Arreglo de expresiones para comentarios y posibles malformaciones
         @COMMENTS = [
-            {:regex=>/\{\-[^(\-\})]*\-\}/ , :type=>"AY" }, 
-            {:regex=>/\{\-(([a-zA-Z\d\-\ ])(\-\})){2,}/m , :type=>"MULTICLOSE" },
-            {:regex=>/\{\-(.*\-\}){1}/m  , :type=>"GOODCOMMENT"},
+            #{:regex=>/\{\-([^(\-\})]|[\r\n])\-\}/ , :type=>"AY" }, 
+            #/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*/
+            #{:regex=>/\{\-.*[^(\-\})]*.*\-\}/ , :type=>"AY" }, 
+            
+            #{:regex=>/\{\-(([a-zA-Z\d\-\ ])(\-\})){2,}/m , :type=>"MULTICLOSE" },
+            #{:regex=>/\{\-.*(\-\}){1}/m , :type=>"GOODCOMMENT"},
+            {:regex=>/\{\-.*?\-\}/  , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/              , :type=>"BADOPEN"    },
             {:regex=>/\-\}/              , :type=>"BADCLOSE"   },
 
@@ -141,8 +145,9 @@ class FindRegex
             
             #Extraccion de cadenas de caracteres ignorables
             self.ignoreWhiteSpace
-            self.extractComments 
-            self.ignoreWhiteSpace
+            while self.extractComments do
+                
+            end
             
             # Para cada elemento en la lista de tokens
             @MAYBETOKEN.each do |mb|
@@ -209,10 +214,12 @@ class FindRegex
 
                 #Se ignora toda la cadena encontrada
                 self.skip(word)
-                break
+                #break
+                return true
             end
             
         end
+        return false
     end
 
     #Metodo que elimina caracteres en blanco
