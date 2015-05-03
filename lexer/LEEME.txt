@@ -1,0 +1,52 @@
+    Javier Lopez     11-10552
+    Patricia Reinoso 11-10851
+
+
+La implementación del lenguaje Lanscii está hecho en ruby 2.1
+
+Para la ejecución del interpretador se debe ejecutar lanscii que recibe como
+primer argumento el nombre del archivo con la cadena de caracteresa analizar.
+
+Por ejemplo:
+
+./lanscii archivo
+
+
+Actualmente, solo está implementado el analizador lexicográfico del interpretador 
+de Lanscii. Éste permite la identificación de los tokens relevantes dentro de 
+lenguaje. 
+
+Es capaz de identificar la línea y columna en la que se encuentra cada token, en caso
+de encontrar caracteres que no correspondan a algún token relevante dentro de Lanscii 
+imprime un mensaje de error.
+
+Para la implementación del lexer se crearon 3 clases, la primera corresponde a los tokens
+la segunda a los posibles errores que se encuentren y la tercera llamada FindRegex permite
+encontrar los tokens dentro del archivo.
+
+Las expresiones regulares se almacenaron en un arreglo de hashes de expresiones regulares
+con sus respectivos nombres.
+
+Para el reconocimiento, inicialmente se descartan los espacios en blanco, saltos de línea,
+comentarios y tabuladores.
+
+Luego se hace un match entre las expresiones regulares y el texto sobrante, identificando
+tokens, caracteres no reconocidos por el lenguaje, o errores como números con tamaño mayor
+a 32 bits.
+
+Finalmente si no existe ningun error dentro del archivo, se imprime cada token seguido de
+su ubicación.
+En caso contrario se imprime la lista de errores.
+
+
+ Decisiones de implementación
+– Estado actual del proyecto
+– Problemas presentes
+– Cualquier comentario respecto al proyecto que consideren necesario
+– Este archivo debe estar identificado con los nombres, apellidos y carné
+de cada miembro del equipo de trabajo.
+
+
+
+
+

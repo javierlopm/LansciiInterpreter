@@ -85,16 +85,16 @@ class FindRegex
             {:regex=>/\@/,          :name=>"AT"                 },
             {:regex=>/\=/,          :name=>"EQUALS"             },
             {:regex=>/\;/,          :name=>"SEMICOLON"          },
-            {:regex=>/read\b/,       :name=>"READ"               },
-            {:regex=>/write\b/,      :name=>"WRITE"              },
+            {:regex=>/read\b/,      :name=>"READ"               },
+            {:regex=>/write\b/,     :name=>"WRITE"              },
             {:regex=>/\?/,          :name=>"QUESTIONMARK"       },
             {:regex=>/\:/,          :name=>"COLON"              },
             {:regex=>/\[/,          :name=>"LSQUARE"            },
             {:regex=>/\]/,          :name=>"RSQUARE"            },
             {:regex=>/\(/,          :name=>"LPARENTHESIS"       },
             {:regex=>/\)/,          :name=>"RPARENTHESIS"       },
-            {:regex=>/true\b/,        :name=>"TRUE"               },
-            {:regex=>/false\b/,       :name=>"FALSE"              },
+            {:regex=>/true\b/,      :name=>"TRUE"               },
+            {:regex=>/false\b/,     :name=>"FALSE"              },
             {:regex=>/\/\\backslash{}/,       :name=>"AND"      },
             {:regex=>/\\backslash{}\//,       :name=>"OR"       },
             {:regex=>/<(\/|\\|\||\_|\-|\ )*>/,:name=>"CANVAS"   },
@@ -121,8 +121,9 @@ class FindRegex
         @COMMENTS = [
             {:regex=>/\{\-(([a-zA-Z\d\-\ ])(\-\})){2,}/m , :type=>"MULTICLOSE" },
             {:regex=>/\{\-(.*\-\}){1}/m  , :type=>"GOODCOMMENT"},
-            {:regex=>/\{\-/             , :type=>"BADOPEN"    },
-            {:regex=>/\-\}/             , :type=>"BADCLOSE"   },
+            {:regex=>/\{\-/              , :type=>"BADOPEN"    },
+            {:regex=>/\-\}/              , :type=>"BADCLOSE"   },
+
         ]
         
         @myFile   = myFile

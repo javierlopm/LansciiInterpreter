@@ -1,3 +1,6 @@
+Javier Lopez     11-10552
+Patricia Reinoso 11-10851
+
 1 Representación de comentarios
 ===============================
 Para el reconocimientos de  los comentarios en  nuestro analizador lexicográfico
