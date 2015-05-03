@@ -119,7 +119,7 @@ class FindRegex
 
         #Arreglo de expresiones para comentarios y posibles malformaciones
         @COMMENTS = [
-            {:regex=>/\{\-(.*\-\}){2,}/m , :type=>"MULTICLOSE" },
+            {:regex=>/\{\-(([a-zA-Z\d\-\ ])(\-\})){2,}/m , :type=>"MULTICLOSE" },
             {:regex=>/\{\-(.*\-\}){1}/m  , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/             , :type=>"BADOPEN"    },
             {:regex=>/\-\}/             , :type=>"BADCLOSE"   },
@@ -227,9 +227,12 @@ class FindRegex
         unless word.nil?
             word.each_char do |c|  
                 if c.eql?"\n"
-                    @line +=1 
+                    @line   +=1 
+                    @column  =1
+                else
+                    @column +=1
                 end
-                @column +=1
+                
             end
             
             @myFile = @myFile[word.length..@myFile.length]
