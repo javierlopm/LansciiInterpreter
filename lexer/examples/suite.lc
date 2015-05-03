@@ -8,14 +8,20 @@
     *
     /\backslash{}
     \backslash{}/
-    
+    {-Esto es un comentario-}
     true
     false
+    {-Esto es otro comentario-}
     ^
     <
     >
     <= 
     >=
+    {-Un tecero multilinea
+        yes it works pero no se
+        pueden usar corchetes -} no se queja del multicierre -}-}
+
+    -}
     /=
     '
     $
