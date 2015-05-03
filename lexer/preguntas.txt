@@ -79,18 +79,19 @@ a parte. Esto puede ocurrir con cualquier palabra reservada del lenguaje como
 8 Solución y justificación
 ==========================
 
-La solución empleada para el conflicto de reconocimiento fue agregar un espacio 
-al final de la expresión regular que corresponde la palabra reservada write. De 
-esta  manera se puede hacer la  diferencia  entre  la  palabra  reservada y los 
-identificadores de variables que comiencen por write.
+La solución empleada para el conflicto de reconocimiento fue cambiar la expresión
+regular que reconoce la palabra reservada write. Se agregó "\b" al final, quedando
+de la siguiente manera /write\b/ . Esto permite reconocer la palabra reservada solamente
+si es una palabra entera, si está seguido de algo, será reconocida como un identificador.
+Se utilizó lo mismo para las demás palabras reservadas del sistema.
 
 
 9 Relación entre implementación y preg 2/8
 ===========================================
 
-En  el  proyecto se realiza  el  lexer  de  nuestro  interpretador,  usando  las 
-expresiones regulares, se genera implícitamente un Autómata, tuvimos que generar 
-expresiones regulares de  modo tal  que no se generen  conflictos (es decir, una 
-palabra haga match con dos expresiones  regulares). En las preguntas 2-8 tenemos 
-que  desarrollar un autómata y resolver  conflictos de reconocimiento, análogo a 
-lo que hicimos con las expresiones regulares del proyecto.
+Al implementar el analizador lexicográfico de Lanscii, se logra separar en tokens cada una de
+las palabras válidas para el lenguaje. Al hacer esto, se genera implícitamente un autómata. 
+Lo que se puede relacionar con las preguntas 2-8 ya que en éstas se definió explícitamente
+parte del autómata que define el lenguaje. Al responder estas preguntas, se pudo visualizar
+mejor los posibles conflictos de reconocimiento que luego fueron solucionados en el lexer
+creado.
