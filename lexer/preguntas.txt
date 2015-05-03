@@ -33,26 +33,30 @@ las dos expresiones regulares. (comment.png)
 2 Expresiones write e identificadores
 =====================================
 
+E0 es la expresión regular que corresponde a la palabra reservada write.
 El token write es reconocido simplemente por la concatenación de los caracteres
-lo representan, así /write / reconocerá la expresión y /\Awrite / lo reconocerá
-únicamente al inicio de un string. Nótese que este token es seguido por un 
-espacio.
+lo representan, así /write/ reconocerá la expresión y /\Awrite/ lo reconocerá
+únicamente al inicio de un string.
 
+E1 es la expresión regular que corresponde a los identificadores de variables
 Un identificador es reconocido con la siguiente expresión regular /[a-zA-Z]\w*/,
 igualmente con \A al inicio, solo se reconoce como prefijo.
 
 3 Autómata de 2
 ===============
-Autómatas representados de forma gráfica en los archivos identifier.png y 
-write.png
+El lenguaje L0 denotado por E0 que corresponde a la palabra reservada write 
+se encuentra representado por el autómata M0 en el archivo write.png
+
+El lenguaje L1 denotado por E1 que corresponde a los identificadores de 
+variables se encuentra representado por el autómata M1 en el archivo identifier.png
 
 4 Autómata de la unión de los lenguajes
 =======================================
-Autómata representado en union.png
+El autómata M2 que reconoce la unión de L(M0) y L(M1) se encuentra en union.png
 
 5 Pertenencia de un token a un lenguaje
 =======================================
-Según el  autómata en  union.png, el  estado  final  q0  reconoce a los 
+Según el  autómata M2  en  union.png, el  estado  final  q0  reconoce a los 
 identificadores de varialbes del lenguaje y el estado final q1 reconoce 
 la palabra reservada write.
 
