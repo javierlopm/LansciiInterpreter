@@ -227,9 +227,12 @@ class FindRegex
         unless word.nil?
             word.each_char do |c|  
                 if c.eql?"\n"
-                    @line +=1 
+                    @line   +=1 
+                    @column  =1
+                else
+                    @column +=1
                 end
-                @column +=1
+                
             end
             
             @myFile = @myFile[word.length..@myFile.length]
