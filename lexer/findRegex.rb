@@ -1,15 +1,31 @@
-# Javier Lopez 11-10552
-# Patricia Reinoso 11-10851
+=begin
+    Implementacion de lexer en ruby para la 
+
+    Javier Lopez     11-10552
+    Patricia Reinoso 11-10851
+=end
 
 # Clase para los token encontrados
 class Token
 
     def initialize(name,value,line,column)
-        @name = name
-        @value = value
-        @line = line
+        @name   = name
+        @line   = line
         @column = column
+
+        if mustStrip?value
+            @value = value[1..(palabra.length-2)]
+        else
+            @value = value
+        end
+
     end
+
+    #Funcion para verificar si el token encontrado debe ser divido
+    def mustStrip?(word)
+        res = (word =~ /<.*>/).eql?0
+    end
+
 
     def to_s
         "token #{@name} value (#{@value}) at line: #{@line}, column: #{@column}"
@@ -17,212 +33,197 @@ class Token
 
 end
 
+
 class Error
 
-    def initialize (value, line, column)
-        @value = value
-        @line = line
+    def initialize (value, line, column, type)
+        @value  = value
+        @line   = line
         @column = column
+        @type   = type
     end
 
     def to_s
-        "Error: Unexpected character: \"#{@value}\" at line: #{@line}, column: #{@column}"
+
+        msg = "Error: "
+
+        case @type
+        when "UNEXPECTED"
+            msg += "Unexpected character: \"#{@value}\""
+        when "MULTICLOSE"
+            msg += "Comment section closed more than once"
+        when "BADOPEN"
+            msg += "Comment section opened but not closed"
+        when "BADCLOSE"
+            msg += "Comment section closed but not opened"
+        end
+
+        msg  += " at line: #{@line}, column: #{@column}"
     end
 
 end
 
 class FindRegex
 
-    #@regexHash
-    def initialize(myfile)
-    @MAYBETOKEN = [ 
-        /\A\{/,
-        /\A\}/,
-        /\A\|/,
-        /\A\%/,            #Esta declaracion no debe tener ajuro un identificador despues?
-        /\A\!/,
-        /\A\@/,
-        /\A\=/,
-        #/\A\;/,
-        ##/\A\read/,
-        ##/\A\write/,
-        #/\A\?/,
-        #/\A\:/,
-        #/\A\[/,
-        #/\A\]/,
-        #/\A\+/,
-        #/\A\-/,
-        #/\A\\*/,
-        #/\A\//,
-        #/\A\d+%\d+/,        #Creo que para que sea modulo debe tener digito antes y despues
-        ##/\A\true/,
-        ##/\A\false/,
-        #/\A\/\\/,
-        #/\A\\\//,
-        #/\A\^/,
-        #/\A\</,
-        #/\A\<=/,
-        #/\A\>/,
-        #/\A\>=/,
-        #/\A\/=/,
-        ##/<>/, #Expresion para lienzo
-        ##//,#Expresion para entero
-        ##//,#Expresion booleana
-        #/\A[a-zA-Z]\w*/, #Identificador
-        #/\A\#/,
-        #/\A<.*\/.*>/,
-        #/\A<.*\\.*>/,
-        #/\A<.*\-.*>/,
-        #/\A<.*_.*>/,
-        #/\A\'/,        #Transposicion              --Operador mas fuerte
-        #/\A\$(<\[|\/\\\-_\ \]*>|#)/,        #Rotacion, no se si aceptar tambien un identificador...
-        ##//,         #Concatenacion horizontal
-        ##//,         #Concatenacion vertical
-        #/\{\-/,
-        #/\-\}/,
-        #/\.\./,
-    ]
+    def initialize(myFile)
 
-    @TOKENNAME = [
-        "LCURLY",
-        "RCURLY",
-        "PIPE",
-        "PERCENT",
-        "EXCLAMATION MARK",
-        "AT",
-        "EQUALS",
-        #"SEMICOLON",
-        ##{}"READ",
-        ##{}"WRITE",
-        #"QUESTIONMARK",
-        #"COLON",
-        #"LSQUARE",
-        #"RSQUARE",
-        #"PLUS",
-        #"MINUS",
-        #"MULTIPLICATION SIGN",  #???
-        #"SLASH",                #???
-        #"MODULO",
-        ##{}"TRUE",
-        ##{}"FALSE",
-        #"AND",
-        #"OR",
-        #"NOT",
-        #"LESS",
-        #"LESSTHAN",
-        #"MORE",
-        #"MORETHAN",
-        #"NOTEQUALS",
-        #"IDENTIFIER",
-        #"EMPTY CANVAS",
-        #"CANVAS SLASH",
-        #"CANVAS BACKLASH",
-        #"CANVAS MINUS",
-        #"CANVAS UNDERSCORE",
-        #"TRANSPOSE",
-        #"ROTATION",
-        ##{}"HORIZONTALCAT",    #???????
-        ##{}"VERTICALCAT",      #???????
-        #"LCOMMENT",
-        #"RCOMMENT",
-        #"COMPREHENSION"     #??????
-    ]
+        #Arreglo de hashes con expr. regulares y nombres de token asociados
+        @MAYBETOKEN = [ 
+            {:regex=>/\{/,          :name=>"LCURLY"             },
+            {:regex=>/\}/,          :name=>"RCURLY"             },
+            {:regex=>/\|/,          :name=>"PIPE"               },
+            {:regex=>/\%/,          :name=>"PIPE"               },
+            {:regex=>/\!/,          :name=>"EXCLAMATION MARK"   },
+            {:regex=>/\@/,          :name=>"AT"                 },
+            {:regex=>/\=/,          :name=>"EQUALS"             },
+            {:regex=>/\;/,          :name=>"SEMICOLON"          },
+            {:regex=>/read /,       :name=>"READ"               },
+            {:regex=>/write /,      :name=>"WRITE"              },
+            {:regex=>/\?/,          :name=>"QUESTIONMARK"       },
+            {:regex=>/\:/,          :name=>"COLON"              },
+            {:regex=>/\[/,          :name=>"LSQUARE"            },
+            {:regex=>/\]/,          :name=>"RSQUARE"            },
+            {:regex=>/\(/,          :name=>"LPARENTHESIS"       },
+            {:regex=>/\)/,          :name=>"RPARENTHESIS"       },
+            {:regex=>/\+/,          :name=>"PLUS"               },
+            {:regex=>/\-/,          :name=>"MINUS"              },
+            {:regex=>/\*/,          :name=>"MULTIPLICATION SIGN"},
+            {:regex=>/\//,          :name=>"SLASH"              },
+            {:regex=>/\d+%\d+/,     :name=>"MODULO"             },
+            {:regex=>/true/,        :name=>"TRUE"               },
+            {:regex=>/false/,       :name=>"FALSE"              },
+            {:regex=>/\/\\/,        :name=>"AND"                },
+            {:regex=>/\\\//,        :name=>"OR"                 },
+            {:regex=>/\^/,          :name=>"NOT"                },
+            {:regex=>/\</,          :name=>"LESS"               },
+            {:regex=>/\<=/,         :name=>"LESSTHAN"           },
+            {:regex=>/\>/,          :name=>"MORE"               },
+            {:regex=>/\>=/,         :name=>"MORETHAN"           },
+            {:regex=>/\/=/,         :name=>"NOTEQUALS"          },
+            {:regex=>/[a-zA-Z]\w*/, :name=>"IDENTIFIER"         },
+            {:regex=>/\d{1,10}/,    :name=>"NUMBER"             },
+            {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
+            {:regex=>/<([\/\\\|\_\-\ ])*>/,:name=>"CANVAS"      },
+            {:regex=>/\'/,          :name=>"TRANSPOSE"          },
+            {:regex=>/\$/,          :name=>"ROTATION"           },
+            {:regex=>/\.\./,        :name=>"COMPREHENSION"      },
+            {:regex=>/./,           :name=>"404"                }   
+        ]
 
-
-
-=begin  Hash? arreglo de 3 dimesiones?
-        regexHash = {}
-        new Array.new(TOKENNAME.length)
+        #Arreglo de expresiones para comentarios y posibles malformaciones
+        @COMMENTS = [
+            {:regex=>/\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
+            {:regex=>/\{\-(.*\-\}){1}/m , :type=>"GOODCOMMENT"},
+            {:regex=>/\{\-/             , :type=>"BADOPEN"    },
+            {:regex=>/\-\}/             , :type=>"BADCLOSE"   },
+        ]
         
-        0.upto(TOKENNAME.length) do |i|
-            regexHash[i] = new Array.new(TOKENNAME.length)
-            regexHash[i]
-=end
-        #attr_accessor :line, :column, :mytokens, :myerrors
-
-        #attr_reader :myfile
-        
-        @myfile = myfile
-        @mytokens = []
-        @myerrors = []
-        @line = 1
-        @column = 1
+        @myFile   = myFile
+        @myTokens = []
+        @myErrors = []
+        @line     = 1
+        @column   = 1
 
     end
 
     def findAll
 
-        while !@myfile.empty? do
-            # Expresion para ignorar los espacios en blanco y comentarios
-            # REVISAR
-            # puts @myfile.length
-            @myfile =~ /\A(\s|\n|#.*)*/ 
-    
-            self.skip($&)
+        while !@myFile.empty? do
+            
+            #Extraccion de cadenas de caracteres ignorables
+            self.ignoreWhiteSpace
+            self.extractComments 
+            self.ignoreWhiteSpace
             
             # Para cada elemento en la lista de tokens
-            for i in 0.. @MAYBETOKEN.length.pred
+            @MAYBETOKEN.each do |mb|
 
                 # Compara lo leido con el posible token
-                @myfile =~ @MAYBETOKEN.at(i)
+                @myFile =~ /\A#{mb[:regex]}/
                 
-                # Si coincide 
+                # Si coincide
                 if $&
                     # Extrae la palabra
-                    word = @myfile[0,($&.length)]
-                    self.skip($&)
-                    # Crea el nuevo token
-                    newtoken = Token.new(@TOKENNAME.at(i),word,@line,@column)
-                    # Guarda en la lista de tokens
-                    @mytokens << newtoken
+                    word = @myFile[0,($&.length)]
+                    
+                    # Verifica si el elemento encotrado era valido
+                    if mb[:name].eql?"404"
+                        # Crea error en caso de haber llegado al final
+                        errorFound = Error.new(word,@line,@column,"UNEXPECTED")
+                        @myErrors << errorFound
+                    else
+                        # Crea un token en caso valido
+                        newtoken = Token.new(mb[:name],word,@line,@column)
+                        @myTokens << newtoken
+                    end
+                    
+                    self.skip(word)
 
                     break
                 end
 
-
             end
 
-            break if @myfile.empty?
+            break if @myFile.empty?
 
-            if $&
-                puts "*"
-            else
-                # Si nunca coincidio, extrae la palabra
-                @myfile =~ /\A(\w|\p{punct})*/#NEW WORD FALTA EXPRESION REGULAR PARA AGARRAR LA PALABRA 
-                
-                word = $&[0,1]
-                # puts "abajo"
-                # puts $&
-                self.skip(word)
-                # Crea un nuevo error
-                newerror = Error.new(word, @line, @column)
-                # Guarda en la lista de errores
-                @myerrors << newerror
-            end
         end 
     end
 
-    # Metodo para correr el cursor
+    # Metodo para eliminar comentarios y encontrar errores en su formacion
+    def extractComments
+
+        @COMMENTS.each do |c|
+            @myFile =~ /\A#{c[:regex]}/
+            word = $&
+
+            #Si se encuentra un match
+            if word
+
+                #Se crea error en caso de no ser comentario bien formado
+                unless c[:type].eql?"GOODCOMMENT"
+                    errorFound = Error.new("",@line,@column,c[:type])
+                    @myErrors << errorFound
+                end
+
+                #Se ignora toda la cadena encontrada
+                self.skip(word)
+                break
+            end
+            
+        end
+    end
+
+    #Metodo que elimina caracteres en blanco
+    def ignoreWhiteSpace
+        #Extraccion de espacios, saltos de linea y tabuladores
+        @myFile =~ /\A(\ |\s)*/ 
+        self.skip($&)
+    end
+
+    # Metodo para correr el cursor 
     def skip(word)
 
         # Quita la palabra leida
-        
-        puts "skip"
-        
-        @myfile = @myfile[word.length..@myfile.length]
-        #puts @myfile
-        # FALTA ACTUALIZAR @line @column con el numero de columna 
-        # y de linea al que se movio
+        unless word.nil?
+            word.each_char do |c|  
+                if c.eql?"\n"
+                    @line +=1 
+                end
+                @column +=1
+            end
+            
+            @myFile = @myFile[word.length..@myFile.length]
+        end
     end
 
     def printOutPut
 
-        if @myerrors.length.eql?0
-            @mytokens.each { |tok| 
+        if @myErrors.length.eql?0
+            @myTokens.each { |tok| 
                 puts tok.to_s
             }
         else 
-            @myerrors.each { |err| 
+            @myErrors.each { |err| 
                 puts err.to_s
             }
         end
