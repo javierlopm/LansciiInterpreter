@@ -72,7 +72,9 @@ Dentro  del  lanscii  está  permitido  crear  identificadores  de  variables qu
 comiencen con "write", por  ejemplo el identificador "writesomething" es válido. 
 Por la  manera  en la que está  planteado  el autómata,  puede  suceder  que  se 
 reconozca "write" en el nodo final q1, dejando "something" como un identificador 
-a parte.
+a parte. Esto puede ocurrir con cualquier palabra reservada del lenguaje como 
+"read", "true", "false".
+
 
 8 Solución y justificación
 ==========================
