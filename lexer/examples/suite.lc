@@ -1,0 +1,35 @@
+{ % hola ! vale @ kease |
+    =;
+    read hola
+    write kease
+    (thisReal ? blah : justFantaSea)
+    +
+    -
+    *
+    /\backslash{}
+    \backslash{}/
+    
+    true
+    false
+    ^
+    <
+    >
+    <= 
+    >=
+    /=
+    '
+    $
+    ..
+    -2147483648
+    #
+    <   /|\   >
+    <  / | \  >
+    < /  |  \ >
+    </   |   \>
+    <---| |--->
+    <   | |   >
+    <   | |   > 
+    <   ---   >
+    
+
+}

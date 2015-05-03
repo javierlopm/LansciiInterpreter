@@ -14,7 +14,9 @@ class Token
         @column = column
 
         if mustStrip?value
-            @value = value[1..(palabra.length-2)]
+            @value = value[1..(value.length-2)]
+        elsif extraSpace?value
+            @value = value[0..(value.length-2)]
         else
             @value = value
         end
@@ -26,6 +28,10 @@ class Token
         res = (word =~ /<.*>/).eql?0
     end
 
+    #Función para eliminar el espacio extra en el valor de read y write
+    def extraSpace?(word)
+        res = word[word.length-1].eql?" "
+    end
 
     def to_s
         "token #{@name} value (#{@value}) at line: #{@line}, column: #{@column}"
@@ -55,7 +61,9 @@ class Error
         when "BADOPEN"
             msg += "Comment section opened but not closed"
         when "BADCLOSE"
-            msg += "Comment section closed but not opened"
+            msg += "Comment section closed but not opened"        
+        when "OVERFLOW"
+            msg += "Integer constant overflow"
         end
 
         msg  += " at line: #{@line}, column: #{@column}"
@@ -72,7 +80,7 @@ class FindRegex
             {:regex=>/\{/,          :name=>"LCURLY"             },
             {:regex=>/\}/,          :name=>"RCURLY"             },
             {:regex=>/\|/,          :name=>"PIPE"               },
-            {:regex=>/\%/,          :name=>"PIPE"               },
+            {:regex=>/\%/,          :name=>"PERCENT"            },
             {:regex=>/\!/,          :name=>"EXCLAMATION MARK"   },
             {:regex=>/\@/,          :name=>"AT"                 },
             {:regex=>/\=/,          :name=>"EQUALS"             },
@@ -85,25 +93,24 @@ class FindRegex
             {:regex=>/\]/,          :name=>"RSQUARE"            },
             {:regex=>/\(/,          :name=>"LPARENTHESIS"       },
             {:regex=>/\)/,          :name=>"RPARENTHESIS"       },
+            {:regex=>/true/,        :name=>"TRUE"               },
+            {:regex=>/false/,       :name=>"FALSE"              },
+            {:regex=>/\/\\backslash{}/,       :name=>"AND"      },
+            {:regex=>/\\backslash{}\//,       :name=>"OR"       },
+            {:regex=>/<(\/|\\|\||\_|\-|\ )*>/,:name=>"CANVAS"   },
+            {:regex=>/\^/,          :name=>"NOT"                },
+            {:regex=>/\<=/,         :name=>"LESSTHAN"           },
+            {:regex=>/\>=/,         :name=>"MORETHAN"           },
+            {:regex=>/\/=/,         :name=>"NOTEQUALS"          },
+            {:regex=>/\</,          :name=>"LESS"               },
+            {:regex=>/\>/,          :name=>"MORE"               },
             {:regex=>/\+/,          :name=>"PLUS"               },
             {:regex=>/\-/,          :name=>"MINUS"              },
             {:regex=>/\*/,          :name=>"MULTIPLICATION SIGN"},
             {:regex=>/\//,          :name=>"SLASH"              },
-            {:regex=>/\d+%\d+/,     :name=>"MODULO"             },
-            {:regex=>/true/,        :name=>"TRUE"               },
-            {:regex=>/false/,       :name=>"FALSE"              },
-            {:regex=>/\/\\/,        :name=>"AND"                },
-            {:regex=>/\\\//,        :name=>"OR"                 },
-            {:regex=>/\^/,          :name=>"NOT"                },
-            {:regex=>/\</,          :name=>"LESS"               },
-            {:regex=>/\<=/,         :name=>"LESSTHAN"           },
-            {:regex=>/\>/,          :name=>"MORE"               },
-            {:regex=>/\>=/,         :name=>"MORETHAN"           },
-            {:regex=>/\/=/,         :name=>"NOTEQUALS"          },
             {:regex=>/[a-zA-Z]\w*/, :name=>"IDENTIFIER"         },
-            {:regex=>/\d{1,10}/,    :name=>"NUMBER"             },
+            {:regex=>/\d{1,}/,      :name=>"NUMBER"             },
             {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
-            {:regex=>/<([\/\\\|\_\-\ ])*>/,:name=>"CANVAS"      },
             {:regex=>/\'/,          :name=>"TRANSPOSE"          },
             {:regex=>/\$/,          :name=>"ROTATION"           },
             {:regex=>/\.\./,        :name=>"COMPREHENSION"      },
@@ -112,8 +119,8 @@ class FindRegex
 
         #Arreglo de expresiones para comentarios y posibles malformaciones
         @COMMENTS = [
-            {:regex=>/\{\-(.*\-\}){2,}/m, :type=>"MULTICLOSE" },
-            {:regex=>/\{\-(.*\-\}){1}/m , :type=>"GOODCOMMENT"},
+            {:regex=>/\{\-(.*\-\}){2,}/m , :type=>"MULTICLOSE" },
+            {:regex=>/\{\-(.*\-\}){1}/m  , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/             , :type=>"BADOPEN"    },
             {:regex=>/\-\}/             , :type=>"BADCLOSE"   },
         ]
@@ -151,6 +158,14 @@ class FindRegex
                         # Crea error en caso de haber llegado al final
                         errorFound = Error.new(word,@line,@column,"UNEXPECTED")
                         @myErrors << errorFound
+                    elsif mb[:name].eql?"NUMBER"
+                        if self.is32bits?word
+                            newtoken = Token.new(mb[:name],word,@line,@column)
+                            @myTokens << newtoken
+                        else
+                            errorFound = Error.new(word,@line,@column,"OVERFLOW")
+                            @myErrors << errorFound
+                        end
                     else
                         # Crea un token en caso valido
                         newtoken = Token.new(mb[:name],word,@line,@column)
@@ -167,6 +182,11 @@ class FindRegex
             break if @myFile.empty?
 
         end 
+    end
+
+    #Indica si un numero es representable en 32bits con signo
+    def is32bits?(word)
+        return word.to_i <= 2**31
     end
 
     # Metodo para eliminar comentarios y encontrar errores en su formacion
