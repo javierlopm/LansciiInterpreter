@@ -95,8 +95,9 @@ class FindRegex
             {:regex=>/\)/,          :name=>"RPARENTHESIS"       },
             {:regex=>/true/,        :name=>"TRUE"               },
             {:regex=>/false/,       :name=>"FALSE"              },
-            {:regex=>/\/\\backslash\{\}/, :name=>"AND"          },
-            {:regex=>/\\backslash\{\}\//, :name=>"OR"           },
+            {:regex=>/\/\\backslash{}/, :name=>"AND"            },
+            {:regex=>/\\backslash{}\//, :name=>"OR"             },
+            {:regex=>/<(\/|\\|\||\_|\-|\ )*>/,:name=>"CANVAS"      },
             {:regex=>/\^/,          :name=>"NOT"                },
             {:regex=>/\<=/,         :name=>"LESSTHAN"           },
             {:regex=>/\>=/,         :name=>"MORETHAN"           },
@@ -110,7 +111,6 @@ class FindRegex
             {:regex=>/[a-zA-Z]\w*/, :name=>"IDENTIFIER"         },
             {:regex=>/\d{1,}/,      :name=>"NUMBER"             },
             {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
-            {:regex=>/<([\/\\\|\_\-\ ])*>/,:name=>"CANVAS"      },
             {:regex=>/\'/,          :name=>"TRANSPOSE"          },
             {:regex=>/\$/,          :name=>"ROTATION"           },
             {:regex=>/\.\./,        :name=>"COMPREHENSION"      },
@@ -158,6 +158,7 @@ class FindRegex
                         # Crea error en caso de haber llegado al final
                         errorFound = Error.new(word,@line,@column,"UNEXPECTED")
                         @myErrors << errorFound
+                        puts "La palabra que recibi fue #{word}"
                     elsif mb[:name].eql?"NUMBER"
                         if self.is32bits?word
                             newtoken = Token.new(mb[:name],word,@line,@column)
@@ -184,7 +185,7 @@ class FindRegex
         end 
     end
 
-
+    #Indica si un numero es representable en 32bits con signo
     def is32bits?(word)
         return word.to_i <= 2**31
     end
