@@ -66,7 +66,8 @@ al estado final q1, se puede elegir entre reconocer el token en ese punto o cont
 
 Dentro del lanscii está permitido crear identificadores de variables que comiencen
 con "write", por ejemplo el identificador "writesomething" es válido. Por la manera en la 
-que está planteado el autómata, puede suceder que se reconozca "write" en el nodo final q1, dejando "something" como un identificador a parte.
+que está planteado el autómata, puede suceder que se reconozca "write" en el nodo final q1, dejando "something" como
+ un identificador a parte. Esto puede ocurrir con cualquier palabra reservada del lenguaje como "read", "true", "false".
 
 8 Solución y justificación
 ==========================
@@ -81,4 +82,7 @@ identificadores de variables que comiencen por write.
 9 Relación entre implementación y preg 2/8
 ===========================================
 
-En el proyecto se realiza el lexer de nuestro interpretador, usando las expresiones regulares, se genera implícitamente un Autómata, tuvimos que generar expresiones regulares de modo tal que no se generen conflictos (es decir, una palabra haga match con dos expresiones regulares). En las preguntas 2-8 tenemos que desarrollar un autómata y resolver conflictos de reconocimiento, análogo a lo que hicimos con las expresiones regulares del proyecto.
+En el proyecto se realiza el lexer de nuestro interpretador, usando las expresiones regulares, se genera implícitamente un Autómata, tuvimos
+que generar expresiones regulares de modo tal que no se generen conflictos (es decir, una palabra haga match con dos expresiones regulares). 
+En las preguntas 2-8 tenemos que desarrollar un autómata y resolver conflictos de reconocimiento, análogo a lo que hicimos con las expresiones 
+regulares del proyecto.
