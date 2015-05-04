@@ -4,10 +4,12 @@
     write kease
     (thisReal ? blah : justFantaSea)
     +
+    {- 5874asb Debe ser una variable mala y lo es-}
+    _hey   {-Y esta buena-}
     -
     *
-    /\backslash{}
-    \/backslash{}/
+    /\
+    \/
     {-Esto es un comentario-}
     true
     false
@@ -19,7 +21,7 @@
     >=
     {-Un tecero multilinea
         yes it works pero no se
-        pueden usar corchetes -} {-no se queja del multicierre -}{-1-}
+        pueden usar corchetes  no se queja del multicierre -}{-1-}
 
     {--}
     /=

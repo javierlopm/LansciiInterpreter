@@ -56,8 +56,8 @@ class Error
         case @type
         when "UNEXPECTED"
             msg += "Unexpected character: \"#{@value}\""
-        when "MULTICLOSE"
-            msg += "Comment section closed more than once"
+        when "BAD IDENTIFIER"
+            msg += "Identifier starts with a number"
         when "BADOPEN"
             msg += "Comment section opened but not closed"
         when "BADCLOSE"
@@ -108,7 +108,8 @@ class FindRegex
             {:regex=>/\-/,          :name=>"MINUS"              },
             {:regex=>/\*/,          :name=>"MULTIPLICATION SIGN"},
             {:regex=>/\//,          :name=>"SLASH"              },
-            {:regex=>/[a-zA-Z]\w*/, :name=>"IDENTIFIER"         },
+            {:regex=>/\d+[a-zA-Z_]+/,:name=>"BAD IDENTIFIER"    },
+            {:regex=>/[a-zA-Z_]\w*/,:name=>"IDENTIFIER"         },
             {:regex=>/\d{1,}/,      :name=>"NUMBER"             },
             {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
             {:regex=>/\'/,          :name=>"TRANSPOSE"          },
@@ -119,7 +120,7 @@ class FindRegex
 
 
         @COMMENTS = [
-            {:regex=>/\{\-.*?\-\}/m  , :type=>"GOODCOMMENT"},
+            {:regex=>/\{\-.*?\-\}/m , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/         , :type=>"BADOPEN"    },
             {:regex=>/\-\}/         , :type=>"BADCLOSE"   },
         ]
@@ -166,6 +167,9 @@ class FindRegex
                             errorFound = Error.new(word,@line,@column,"OVERFLOW")
                             @myErrors << errorFound
                         end
+                    elsif mb[:name].eql?"BAD IDENTIFIER"
+                        errorFound = Error.new(word,@line,@column,mb[:name])
+                        @myErrors << errorFound
                     else
                         # Crea un token en caso valido
                         newtoken = Token.new(mb[:name],word,@line,@column)
