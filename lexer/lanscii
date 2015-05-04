@@ -8,9 +8,11 @@ require_relative 'findRegex'
 def main
 	myfile = File::read(ARGV[0])
 	puts myfile
-	lexer = FindRegex::new(myfile)
-	lexer.findAll
-	lexer.printOutPut
+	if ARGV.length == 1
+		lexer = FindRegex::new(myfile)
+		lexer.findAll
+		lexer.printOutPut
+	end
 end
 
 main

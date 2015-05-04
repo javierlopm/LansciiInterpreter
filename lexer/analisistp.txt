@@ -24,7 +24,7 @@ multilínea.
 
 Las  decisiones  tomadas  funcionan  ya que hacemos un filtrado del conflicto de
 múltiples  cierres,  ya que .* hace  match con  cualquier expresión  incluso -}.
-Los demás problemas como la  apertura sin cierre (o visceversa) simplemente no 
+Los demás  problemas como la  apertura sin cierre (o visceversa)  simplemente no 
 son  reconocidas por  la  primera ni la segunda expresión,  estos  dos casos son  
 reconocidos  por  separado sin afectar la solución propuesta. 
 El match  multilínea  solo afecta, en este caso a .*, así que no existen cierres 
@@ -38,7 +38,7 @@ las dos expresiones regulares. (comment.png)
 
 E0 es la expresión regular que corresponde a la palabra reservada write.
 El token write es reconocido simplemente por la concatenación de los caracteres
-lo representan, así /write/ reconocerá la expresión y /\Awrite/ lo reconocerá
+lo  representan, así /write/ reconocerá  la expresión y /\Awrite/ lo reconocerá
 únicamente al inicio de un string.
 
 E1 es la expresión regular que corresponde a los identificadores de variables
@@ -47,11 +47,12 @@ igualmente con \A al inicio, solo se reconoce como prefijo.
 
 3 Autómata de 2
 ===============
-El lenguaje L0 denotado por E0 que corresponde a la palabra reservada write 
-se encuentra representado por el autómata M0 en el archivo write.png
+El lenguaje L0 denotado por E0 que corresponde a la palabra reservada write se 
+encuentra representado por el autómata M0 en el archivo write.png
 
 El lenguaje L1 denotado por E1 que corresponde a los identificadores de 
-variables se encuentra representado por el autómata M1 en el archivo identifier.png
+variables se encuentra representado por el autómata M1 en el archivo 
+identifier.png
 
 4 Autómata de la unión de los lenguajes
 =======================================
@@ -86,19 +87,21 @@ a parte. Esto puede ocurrir con cualquier palabra reservada del lenguaje como
 8 Solución y justificación
 ==========================
 
-La solución empleada para el conflicto de reconocimiento fue cambiar la expresión
-regular que reconoce la palabra reservada write. Se agregó "\b" al final, quedando
-de la siguiente manera /write\b/ . Esto permite reconocer la palabra reservada solamente
-si es una palabra entera, si está seguido de algo, será reconocida como un identificador.
+La solución  empleada para el conflicto de  reconocimiento fue cambiar la
+expresión regular que reconoce la palabra reservada write. Se agregó "\b" 
+al  final, quedando  de  la  siguiente  manera  /write\b/ .  Esto permite 
+reconocer  la palabra  reservada  solamente si  es una palabra entera, si 
+está seguido de algo, será reconocida como un identificador.
 Se utilizó lo mismo para las demás palabras reservadas del sistema.
 
 
 9 Relación entre implementación y preg 2/8
 ===========================================
 
-Al implementar el analizador lexicográfico de Lanscii, se logra separar en tokens cada una de
-las palabras válidas para el lenguaje. Al hacer esto, se genera implícitamente un autómata. 
-Lo que se puede relacionar con las preguntas 2-8 ya que en éstas se definió explícitamente
-parte del autómata que define el lenguaje. Al responder estas preguntas, se pudo visualizar
-mejor los posibles conflictos de reconocimiento que luego fueron solucionados en el lexer
-creado.
+Al  implementar el  analizador lexicográfico de  Lanscii, se logra separar en 
+tokens  cada una de las palabras válidas para el lenguaje. Al  hacer esto, se 
+genera   implícitamente un  autómata. Lo  que  se puede  relacionar  con  las 
+preguntas 2-8 ya  que en  éstas se definió  explícitamente parte del autómata 
+que  define  el lenguaje. Al responder  estas preguntas, se  pudo  visualizar
+mejor los posibles conflictos de reconocimiento que luego fueron solucionados 
+en el lexer creado.

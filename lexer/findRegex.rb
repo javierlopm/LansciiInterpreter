@@ -95,8 +95,8 @@ class FindRegex
             {:regex=>/\)/,          :name=>"RPARENTHESIS"       },
             {:regex=>/true\b/,      :name=>"TRUE"               },
             {:regex=>/false\b/,     :name=>"FALSE"              },
-            {:regex=>/\/\\backslash{}/,       :name=>"AND"      },
-            {:regex=>/\\backslash{}\//,       :name=>"OR"       },
+            {:regex=>/\/\\/,        :name=>"AND"                },
+            {:regex=>/\\\//,        :name=>"OR"                 },
             {:regex=>/<(\/|\\|\||\_|\-|\ )*>/,:name=>"CANVAS"   },
             {:regex=>/\^/,          :name=>"NOT"                },
             {:regex=>/\<=/,         :name=>"LESSTHAN"           },
@@ -117,21 +117,11 @@ class FindRegex
             {:regex=>/./,           :name=>"404"                }   
         ]
 
-        #Arreglo de expresiones para comentarios y posibles malformaciones
-
-        @doesntOpen  = /^((?!\{\-).)*$/ 
-        @doesntOpen  = /^((?!\-\}).)*$/
-
-
 
         @COMMENTS = [
-            #{:regex=>/\{\-(([a-zA-Z\d\-\ ][^(\{\-)])(\-\})){2,}/m , :type=>"MULTICLOSE" },
-            #{:regex=>/\{\-((((?!\{\-).)*)\-\}(((?!\{\-).)*)){1,}\-\}/m,:type=>"MULTICLOSE"},
-            {:regex=>/\{\-(((?!\-\}|\{\-).{0,1})*)\-\}/m , :type=>"GOODCOMMENT" }, 
-            #{:regex=>/\{\-(.*\-\}){1}/m  , :type=>"GOODCOMMENT"},
-            {:regex=>/\{\-/              , :type=>"BADOPEN"    },
-            {:regex=>/\-\}/              , :type=>"BADCLOSE"   },
-
+            {:regex=>/\{\-.*?\-\}/m  , :type=>"GOODCOMMENT"},
+            {:regex=>/\{\-/         , :type=>"BADOPEN"    },
+            {:regex=>/\-\}/         , :type=>"BADCLOSE"   },
         ]
         
         @myFile   = myFile
@@ -148,8 +138,9 @@ class FindRegex
             
             #Extraccion de cadenas de caracteres ignorables
             self.ignoreWhiteSpace
-            self.extractComments 
-            self.ignoreWhiteSpace
+            while self.extractComments do
+                self.ignoreWhiteSpace
+            end
             
             # Para cada elemento en la lista de tokens
             @MAYBETOKEN.each do |mb|
@@ -216,10 +207,12 @@ class FindRegex
 
                 #Se ignora toda la cadena encontrada
                 self.skip(word)
-                break
+                #break
+                return true
             end
             
         end
+        return false
     end
 
     #Metodo que elimina caracteres en blanco
