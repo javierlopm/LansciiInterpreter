@@ -120,7 +120,7 @@ class FindRegex
         #Arreglo de expresiones para comentarios y posibles malformaciones
         @COMMENTS = [
 
-            {:regex=>/\{\-.*?\-\}/  , :type=>"GOODCOMMENT"},
+            {:regex=>/\{\-.*?\-\}/m  , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/         , :type=>"BADOPEN"    },
             {:regex=>/\-\}/         , :type=>"BADCLOSE"   },
 
