@@ -44,17 +44,3 @@ como  números  con  tamaño mayores a 32 bits  e identificadores mal formados
 Finalmente si no existe ningun error dentro del archivo, se imprime cada token 
 seguido de su ubicación.
 En caso contrario se imprime la lista de errores.
-
-
-
- Decisiones de implementación
-– Estado actual del proyecto
-– Problemas presentes
-– Cualquier comentario respecto al proyecto que consideren necesario
-– Este archivo debe estar identificado con los nombres, apellidos y carné
-de cada miembro del equipo de trabajo.
-
-
-
-
-
