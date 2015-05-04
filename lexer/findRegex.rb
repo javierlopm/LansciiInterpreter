@@ -53,6 +53,7 @@ class Error
 
         msg = "Error: "
 
+        #Todos los diferentes tipos de errores de lexer contemplados
         case @type
         when "UNEXPECTED"
             msg += "Unexpected character: \"#{@value}\""
@@ -118,18 +119,18 @@ class FindRegex
             {:regex=>/./,           :name=>"404"                }   
         ]
 
-
+        #Arreglo de hashes para los diferentes tipos de comentarios
         @COMMENTS = [
             {:regex=>/\{\-.*?\-\}/m , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/         , :type=>"BADOPEN"    },
             {:regex=>/\-\}/         , :type=>"BADCLOSE"   },
         ]
         
-        @myFile   = myFile
-        @myTokens = []
-        @myErrors = []
-        @line     = 1
-        @column   = 1
+        @myFile   = myFile  #Archivo a ser analizado
+        @myTokens = []      #Arreglo para tokens validos
+        @myErrors = []      #Arreglo para posibles errores existentes
+        @line     = 1       #Contador de lineas
+        @column   = 1       #Contados de columnas
 
     end
 
@@ -202,10 +203,10 @@ class FindRegex
 
             #Si se encuentra un match
             if word
-
                 #Se crea error en caso de no ser comentario bien formado
                 unless c[:type].eql?"GOODCOMMENT"
-                    errorFound = Error.new("",@line,@column,c[:type])
+
+                    errorFound = Error.new(c[:type],@line,@column,c[:type])
                     @myErrors << errorFound
                 end
 

@@ -7,26 +7,22 @@
     {- 5874asb Debe ser una variable mala y lo es-}
     _hey   {-Y esta buena-}
     -
-    *
+    
+
     /\
     \/
-    {-Esto es un comentario-}
+    {-ads-}
     true
     false
-    {-Esto es otro comentario-}
     ^
     <
     >
     <= 
     >=
-    {-Un tecero multilinea
-        yes it works pero no se
-        pueden usar corchetes  no se queja del multicierre -}{-1-}
-
-    {--}
     /=
     '
     $
+    {-d-}
     ..
     -2147483648
     #

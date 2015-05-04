@@ -1,5 +1,5 @@
-    Javier Lopez     11-10552
-    Patricia Reinoso 11-10851
+Javier   López   11-10552
+Patricia Reinoso 11-10851
 
 
 La implementación del lenguaje Lanscii está hecho en ruby 2.1
@@ -12,31 +12,39 @@ Por ejemplo:
 ./lanscii archivo
 
 
-Actualmente, solo está implementado el analizador lexicográfico del interpretador 
-de Lanscii. Éste permite la identificación de los tokens relevantes dentro de 
-lenguaje. 
+Actualmente,  solo  está implementado el  analizador lexicográfico del 
+interpretador de Lanscii. Éste permite la identificación de los tokens 
+relevantes dentro de lenguaje. 
 
-Es capaz de identificar la línea y columna en la que se encuentra cada token, en caso
-de encontrar caracteres que no correspondan a algún token relevante dentro de Lanscii 
-imprime un mensaje de error.
+Es capaz de identificar la línea y columna en la que se encuentra cada
+token, en  caso de encontrar  caracteres  que  no correspondan a algún 
+token relevante dentro de Lanscii imprime un mensaje de error.
 
-Para la implementación del lexer se crearon 3 clases, la primera corresponde a los tokens
-la segunda a los posibles errores que se encuentren y la tercera llamada FindRegex permite
-encontrar los tokens dentro del archivo.
+Nuestra  implementación no hace uso de la biblioteca rexical, así que 
+el modelo que utilizado se  basa un  análisis del  archivo de entrada 
+de forma secuencial identificando todos los posibles tokens y errores 
+mediante  expresiones  regulares, los resultados son almacenados para 
+ser mostrados en pantalla antes de terminar la ejecución.
 
-Las expresiones regulares se almacenaron en un arreglo de hashes de expresiones regulares
-con sus respectivos nombres.
+Para la  implementación del lexer se  crearon 3 clases, la primera corresponde 
+a los tokens, la segunda a los posibles errores que se encuentren y la tercera 
+llamada FindRegex permite encontrar los tokens dentro del archivo.
 
-Para el reconocimiento, inicialmente se descartan los espacios en blanco, saltos de línea,
-comentarios y tabuladores.
+Las expresiones regulares se almacenaron en un arreglo de hashes de expresiones 
+regulares con sus respectivos nombres.
 
-Luego se hace un match entre las expresiones regulares y el texto sobrante, identificando
-tokens, caracteres no reconocidos por el lenguaje, o errores como números con tamaño mayor
-a 32 bits.
+Para el reconocimiento, inicialmente se descartan los espacios en blanco, 
+saltos de línea, comentarios y tabuladores.
 
-Finalmente si no existe ningun error dentro del archivo, se imprime cada token seguido de
-su ubicación.
+Luego se hace  un match entre las  expresiones regulares y el texto sobrante, 
+identificando  tokens,  caracteres  no reconocidos por el lenguaje y errores 
+como  números  con  tamaño mayores a 32 bits  e identificadores mal formados 
+(que inician por valores numéricos).
+
+Finalmente si no existe ningun error dentro del archivo, se imprime cada token 
+seguido de su ubicación.
 En caso contrario se imprime la lista de errores.
+
 
 
  Decisiones de implementación

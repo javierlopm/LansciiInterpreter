@@ -1,37 +1,36 @@
-Javier Lopez     11-10552
+Javier   Lopez   11-10552
 Patricia Reinoso 11-10851
 
 1 Representación de comentarios
 ===============================
-Para el reconocimientos de  los comentarios en  nuestro analizador lexicográfico
-hicimos uso de varias expresiones regulares, las cuales atrapan posibles errores
-antes de intentar ignorar un comentario por completo.
+Para el reconocimiento de los comentarios hicimos uso de una única expresión 
+regular para aquellos bien formados, y  otras dos  auxiliares para reconocer
+comentarios que no terminan, o con múltiples cierres.
 
-Con  la  expresion   /\A\{\-(.*\-\}){2,}/m  encontramos  primero  los  posibles 
-comentarios  mal  formados  debido a cierres multiples con -}.  Si el string de 
-comentario no es reconocido como erróneo será atrapado por /\A\{\-(.*\-\}){1}/m
+Los  comentarios  bien formados  son  reconocidos   mediante la  expresión 
+/\{\-.*?\-\}/m la cual esta dividida en dos partes, la primera \{\-.*? que 
+reconoce únicamente  la apertura de un comentario {- seguida de caracteres 
+cualquiera incluyendo -}, la otra parte, \-\} nos asegura un único cierre. 
+Por último decidimos usar el modificador m sobre la expresión regular para 
+el 
+reconocimiento permitiera que los comentarios fueran muntilínea.
 
-Para construir  ambas expresiones pedimos con \A que la  coincidencia se  busque
-al inicio del string, luego con \{\- marcamos el inicio de un comentario (bien o 
-mal formado),  con .*  buscamos cadenas  de  caracteres cualquiera  (incluso una 
-vacía), pero que tengan -} como sufijo; mediante {2,} aseguramos que esta última 
-construcción se encuentre al menos  dos  veces,  este  será  un  comentario  mal 
-formado, el cual filtramos, y  está  asociado al estado  final q1 del  autómata.  
-Si  la búsqueda  anterior  falla buscamos  una expresión similar, pero usando el  
-sufijo es (.*\-\}){1}, el cual encuentrará el comentario bien  formado.  
-Por  último el modificador \m fue  usado para  que los comentarios  pudieran ser 
-multilínea.
+Las otras dos expresiones usadas para los comentarios mal formados son 
+/\{\-/ para reconocer solo {- y /\-\}/ de forma análoga con -}.
 
-Las  decisiones  tomadas  funcionan  ya que hacemos un filtrado del conflicto de
-múltiples  cierres,  ya que .* hace  match con  cualquier expresión  incluso -}.
-Los demás  problemas como la  apertura sin cierre (o visceversa)  simplemente no 
-son  reconocidas por  la  primera ni la segunda expresión,  estos  dos casos son  
-reconocidos  por  separado sin afectar la solución propuesta. 
-El match  multilínea  solo afecta, en este caso a .*, así que no existen cierres 
-ni aperturas de comentarios mal formados.
+Nuestro proceso funciona porque reconoce primero  los comentarios bien formados 
+sin importar  saltos de  línea con /m y permitiendo  solo nuevas aperturas, tal 
+como se indica en la espeficacion del problema y solo en caso de no lograr este 
+match intenta hacer buscar  coincidencias  con las expresiones alternativas las 
+cuales son más  simples y  están contenida en  esta. Si se intentarealizar este 
+reconocimiento en sentido inverso no funcionará debido al sentido de contención 
+de estas expresiones, tal como fue explicado anteriormente.
 
 El automata  no  determinista  de esta pregunta emula el resultado final de usar
-las dos expresiones regulares. (comment.png)
+las tres expresiones regulares, este se encuentra en comment.png
+
+Nuestro automata posee como estados finales q0 y q2 para los comentarios mal 
+formados, y los buenos terminan en el estado q1
 
 2 Expresiones write e identificadores
 =====================================
@@ -42,7 +41,7 @@ lo  representan, así /write/ reconocerá  la expresión y /\Awrite/ lo reconoce
 únicamente al inicio de un string.
 
 E1 es la expresión regular que corresponde a los identificadores de variables
-Un identificador es reconocido con la siguiente expresión regular /[a-zA-Z]\w*/,
+Un identificador es reconocido con la siguiente expresión regular /[a-zA-Z_]\w*/,
 igualmente con \A al inicio, solo se reconoce como prefijo.
 
 3 Autómata de 2
@@ -61,7 +60,7 @@ El autómata M2 que reconoce la unión de L(M0) y L(M1) se encuentra en union.pn
 5 Pertenencia de un token a un lenguaje
 =======================================
 Según el  autómata M2  en  union.png, el  estado  final  q0  reconoce a los 
-identificadores de varialbes del lenguaje y el estado final q1 reconoce 
+identificadores  de variables  del lenguaje y  el estado final  q1 reconoce 
 la palabra reservada write.
 
 6 Problemas en la selección de 5
