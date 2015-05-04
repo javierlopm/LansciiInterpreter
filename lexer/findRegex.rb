@@ -119,15 +119,10 @@ class FindRegex
 
         #Arreglo de expresiones para comentarios y posibles malformaciones
         @COMMENTS = [
-            #{:regex=>/\{\-([^(\-\})]|[\r\n])\-\}/ , :type=>"AY" }, 
-            #/\*([^*]|[\r\n]|(\*+([^*/]|[\r\n])))*\*/
-            #{:regex=>/\{\-.*[^(\-\})]*.*\-\}/ , :type=>"AY" }, 
-            
-            #{:regex=>/\{\-(([a-zA-Z\d\-\ ])(\-\})){2,}/m , :type=>"MULTICLOSE" },
-            #{:regex=>/\{\-.*(\-\}){1}/m , :type=>"GOODCOMMENT"},
+
             {:regex=>/\{\-.*?\-\}/  , :type=>"GOODCOMMENT"},
-            {:regex=>/\{\-/              , :type=>"BADOPEN"    },
-            {:regex=>/\-\}/              , :type=>"BADCLOSE"   },
+            {:regex=>/\{\-/         , :type=>"BADOPEN"    },
+            {:regex=>/\-\}/         , :type=>"BADCLOSE"   },
 
         ]
         
