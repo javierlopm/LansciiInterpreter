@@ -141,7 +141,7 @@ class FindRegex
             #Extraccion de cadenas de caracteres ignorables
             self.ignoreWhiteSpace
             while self.extractComments do
-                
+                self.ignoreWhiteSpace
             end
             
             # Para cada elemento en la lista de tokens
