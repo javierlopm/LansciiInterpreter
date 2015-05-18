@@ -1,0 +1,7 @@
+task :compile_grammar do
+    `racc ./ejemploGrammar.rb -oracc.rb`
+end
+
+task :run => [:compile_grammar] do
+    sh 'ruby correr.rb'
+end
