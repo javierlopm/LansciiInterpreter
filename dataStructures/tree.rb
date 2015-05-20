@@ -1,8 +1,17 @@
 #Nodo de arbol general
 class Node
-    def initialize(content,childs=nil)
+
+    def initialize(content,child=nil)
         @content = content
-        @childs  = childs   #Lista de hijos
+        if child.nil?
+            @children = []
+        else
+            @children << child
+        end
+    end
+
+    def insertChild(child)
+        @children << child
     end
 
 end
