@@ -1,24 +1,60 @@
 #Nodo de arbol general
 class Node
 
-    def initialize(content,child=nil)
-        @content = content
-        if child.nil?
-            @children = []
-        else
-            @children << child
-        end
+  def initialize(content,child=nil)
+    @content = content
+    if child.nil?
+      @children = []
+    else
+      @children << child
     end
 
-    def insertChild(child)
-        @children << child
+    @level = 0
+  end
+
+  def setLevel(level)
+    @level = level
+  end
+
+  def insertChild(child)
+    child.setLevel(@level+1)
+    @children << child
+
+  end
+
+  def printNode()
+
+    for i in 0..@level-1 do
+        print "|   "
+    end 
+
+    puts "#{@content}"
+    
+    unless @children.nil?
+      @children.each do |n|
+        n.printNode()
+      end
     end
+  end
 
 end
 
 #Clase para un arbol general
 class Tree
-    def initialize(content)
-        root = Node::new(content)
-    end
+  def initialize(content)
+    root = Node::new(content)
+  end
 end
+
+# as  = Node::new("ASSIGN")
+# var = Node::new("VARIABLE:")
+# id  = Node::new("IDENTIFIER: bar")
+# exp = Node::new("EXPRESION")
+# num = Node::new("NUMBER: 3")
+
+# as.insertChild(var)
+# as.insertChild(exp)
+# var.insertChild(id)
+# exp.insertChild(num)
+# 
+# as.printNode()
