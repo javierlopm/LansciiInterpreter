@@ -17,7 +17,7 @@ class Node
   end
 
   def insertChild(child)
-    child.setLevel(@level+1)
+    child.setLevel(@level+1) #Creo que estos levels se deberian calcular solo al momento de imprimir, no tiene sentido durante la construccion
     @children << child
 
   end
