@@ -8,7 +8,7 @@ require 'racc/parser.rb'
 module Calcparser
   class Parser < Racc::Parser
 
-module_eval(<<'...end ejemploGrammar.rb/module_eval...', 'ejemploGrammar.rb', 12)
+module_eval(<<'...end ejemploGrammar.rb/module_eval...', 'ejemploGrammar.rb', 17)
     def parser(tokens)
         @tokens = tokens
         do_parse
@@ -21,16 +21,16 @@ module_eval(<<'...end ejemploGrammar.rb/module_eval...', 'ejemploGrammar.rb', 12
 ##### State transition tables begin ###
 
 racc_action_table = [
-     6,     7,     3,    12,     4,     3,     3,     4,     4,     3,
-     5,     4,     6,     7,     6,     7,     6,     7,     9 ]
+     4,     6,     7,     3,    12,     4,     4,     4,     3,     3,
+     3,     6,     7,     6,     7,     6,     7,     5,     9 ]
 
 racc_action_check = [
-     8,     8,     7,     8,     7,     0,     3,     0,     3,     6,
-     1,     6,    11,    11,     2,     2,    10,    10,     5 ]
+     0,     8,     8,     0,     8,     7,     3,     6,     7,     3,
+     6,    11,    11,     2,     2,    10,    10,     1,     5 ]
 
 racc_action_pointer = [
-     1,    10,    12,     2,   nil,    18,     5,    -2,    -2,   nil,
-    14,    10,   nil ]
+    -2,    17,    10,     4,   nil,    18,     5,     3,    -2,   nil,
+    12,     8,   nil ]
 
 racc_action_default = [
     -6,    -6,    -1,    -6,    -5,    -6,    -6,    -6,    -6,    13,
@@ -50,7 +50,7 @@ racc_goto_default = [
 
 racc_reduce_table = [
   0, 0, :racc_error,
-  1, 8, :_reduce_none,
+  1, 8, :_reduce_1,
   3, 9, :_reduce_2,
   3, 9, :_reduce_3,
   3, 9, :_reduce_4,
@@ -63,11 +63,11 @@ racc_shift_n = 13
 racc_token_table = {
   false => 0,
   :error => 1,
-  "+" => 2,
-  "*" => 3,
-  "(" => 4,
-  ")" => 5,
-  :NUMBER => 6 }
+  "NUMBER" => 2,
+  "+" => 3,
+  "*" => 4,
+  "(" => 5,
+  ")" => 6 }
 
 racc_nt_base = 7
 
@@ -92,11 +92,11 @@ Racc_arg = [
 Racc_token_to_s_table = [
   "$end",
   "error",
+  "NUMBER",
   "\"+\"",
   "\"*\"",
   "\"(\"",
   "\")\"",
-  "NUMBER",
   "$start",
   "target",
   "exp" ]
@@ -107,32 +107,37 @@ Racc_debug_parser = false
 
 # reduce 0 omitted
 
-# reduce 1 omitted
-
-module_eval(<<'.,.,', 'ejemploGrammar.rb', 4)
-  def _reduce_2(val, _values, result)
-     puts "estoy en + #{val}" 
-    result
-  end
-.,.,
-
-module_eval(<<'.,.,', 'ejemploGrammar.rb', 5)
-  def _reduce_3(val, _values, result)
-     puts "estoy en * #{val}" 
-    result
-  end
-.,.,
-
-module_eval(<<'.,.,', 'ejemploGrammar.rb', 6)
-  def _reduce_4(val, _values, result)
-     puts "estoy en () #{val}" 
-    result
-  end
-.,.,
-
 module_eval(<<'.,.,', 'ejemploGrammar.rb', 7)
+  def _reduce_1(val, _values, result)
+    result = val
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'ejemploGrammar.rb', 9)
+  def _reduce_2(val, _values, result)
+     puts "estoy en + #{val}"; hey = val
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'ejemploGrammar.rb', 10)
+  def _reduce_3(val, _values, result)
+     puts "estoy en * #{val}"; yippie = val 
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'ejemploGrammar.rb', 11)
+  def _reduce_4(val, _values, result)
+     puts "estoy en () #{val}"; nou = val 
+    result
+  end
+.,.,
+
+module_eval(<<'.,.,', 'ejemploGrammar.rb', 12)
   def _reduce_5(val, _values, result)
-     puts "estoy en NUMBER #{val}"
+     puts "estoy en NUMBER #{val}"; quesesto = val
     result
   end
 .,.,

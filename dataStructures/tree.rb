@@ -19,10 +19,15 @@ class Node
   def insertChild(child)
     child.setLevel(@level+1) #Creo que estos levels se deberian calcular solo al momento de imprimir, no tiene sentido durante la construccion
     @children << child
-
   end
 
-  def printNode()
+
+
+  def printNode(isFirst=true)
+
+    # if isFirst
+      
+    # end
 
     for i in 0..@level-1 do
         print "|   "
@@ -46,15 +51,15 @@ class Tree
   end
 end
 
-# as  = Node::new("ASSIGN")
-# var = Node::new("VARIABLE:")
-# id  = Node::new("IDENTIFIER: bar")
-# exp = Node::new("EXPRESION")
-# num = Node::new("NUMBER: 3")
-
-# as.insertChild(var)
-# as.insertChild(exp)
-# var.insertChild(id)
-# exp.insertChild(num)
+as  = Node::new("ASSIGN")
+var = Node::new("VARIABLE:")
+id  = Node::new("IDENTIFIER: bar")
+exp = Node::new("EXPRESION")
+num = Node::new("NUMBER: 3")
 # 
-# as.printNode()
+as.insertChild(var)
+as.insertChild(exp)
+var.insertChild(id)
+exp.insertChild(num)
+
+as.printNode()
