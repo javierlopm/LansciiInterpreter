@@ -11,6 +11,8 @@ def main
 		lexer = FindRegex::new(myfile)
 		lexer.findAll
 		lexer.printOutPut
+		mylist = lexer.toList
+		print mylist
 	end
 end
 

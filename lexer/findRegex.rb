@@ -8,7 +8,11 @@
 # Clase para los token encontrados
 class Token
 
+    attr_accessor :name 
+    attr_accessor :value
+
     def initialize(name,value,line,column)
+
         @name   = name
         @line   = line
         @column = column
@@ -260,4 +264,17 @@ class FindRegex
             }
         end
     end
+
+    def toList
+
+        mylist = Array.new(@myTokens.length){Array.new(2)}
+        item = []
+
+        for i in 0..@myTokens.length-1 
+            mylist[i][0] = @myTokens[i].name
+            mylist[i][1] = @myTokens[i].value
+        end
+
+        return mylist
+     end
 end
