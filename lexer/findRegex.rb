@@ -191,7 +191,7 @@ class FindRegex
 
     #Indica si un numero es representable en 32bits con signo
     def is32bits?(word)
-        return word.to_i <= 2**31
+        return word.to_i <= (2**31)-1
     end
 
     # Metodo para eliminar comentarios y encontrar errores en su formacion
