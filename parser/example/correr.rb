@@ -4,8 +4,10 @@ require_relative 'racc.rb'
 
 ast = Calcparser::Parser.new.parser(
     [['(','('],
-     [:NUMBER,'2'],
+     ["NUMBER",'2'],
      ['+','+'] , 
-     [:NUMBER,'3'],
+     ["NUMBER",'3'],
      [')',')']
     ])
+
+puts "#{ast}"

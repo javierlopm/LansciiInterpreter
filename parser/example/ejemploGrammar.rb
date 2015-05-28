@@ -1,11 +1,16 @@
 class Calcparser::Parser
-rule
-  target: exp 
 
-  exp: exp '+' exp { puts "estoy en + #{val}" }
-     | exp '*' exp { puts "estoy en * #{val}" }
-     | '(' exp ')' { puts "estoy en () #{val}" }
-     | NUMBER      { puts "estoy en NUMBER #{val}"}
+convert
+  NUMBER '"NUMBER"'          # permite usar strings como claves
+end
+
+rule
+  target: exp {result = val}
+
+  exp: exp '+' exp { puts "estoy en + #{val}"; hey = val}
+     | exp '*' exp { puts "estoy en * #{val}"; yippie = val }
+     | '(' exp ')' { puts "estoy en () #{val}"; nou = val }
+     | NUMBER      { puts "estoy en NUMBER #{val}"; quesesto = val}
 end
 
 ---- inner ----
