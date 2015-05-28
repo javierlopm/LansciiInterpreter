@@ -115,6 +115,8 @@ class FindRegex
             {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
             {:regex=>/\'/,          :name=>"TRANSPOSE"          },
             {:regex=>/\$/,          :name=>"ROTATION"           },
+            {:regex=>/\~/,          :name=>"HORIZONTAL CONCAT"  },
+            {:regex=>/\&/,          :name=>"VERTICAL CONCAT"    },
             {:regex=>/\.\./,        :name=>"COMPREHENSION"      },
             {:regex=>/./,           :name=>"404"                }   
         ]
