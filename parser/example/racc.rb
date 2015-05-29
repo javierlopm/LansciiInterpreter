@@ -21,26 +21,26 @@ module_eval(<<'...end ejemploGrammar.rb/module_eval...', 'ejemploGrammar.rb', 17
 ##### State transition tables begin ###
 
 racc_action_table = [
-     4,     6,     7,     3,    12,     4,     4,     4,     3,     3,
-     3,     6,     7,     6,     7,     6,     7,     5,     9 ]
+     4,     6,     3,    10,     4,     4,     3,     3,     8,     6,
+     5,     6 ]
 
 racc_action_check = [
-     0,     8,     8,     0,     8,     7,     3,     6,     7,     3,
-     6,    11,    11,     2,     2,    10,    10,     1,     5 ]
+     0,     7,     0,     7,     6,     3,     6,     3,     5,     2,
+     1,     9 ]
 
 racc_action_pointer = [
-    -2,    17,    10,     4,   nil,    18,     5,     3,    -2,   nil,
-    12,     8,   nil ]
+    -2,    10,     6,     3,   nil,     8,     2,    -2,   nil,     8,
+   nil ]
 
 racc_action_default = [
-    -6,    -6,    -1,    -6,    -5,    -6,    -6,    -6,    -6,    13,
-    -2,    -3,    -4 ]
+    -5,    -5,    -1,    -5,    -4,    -5,    -5,    -5,    11,    -2,
+    -3 ]
 
 racc_goto_table = [
-     2,     1,   nil,     8,   nil,   nil,    10,    11 ]
+     2,     1,   nil,     7,   nil,   nil,     9 ]
 
 racc_goto_check = [
-     2,     1,   nil,     2,   nil,   nil,     2,     2 ]
+     2,     1,   nil,     2,   nil,   nil,     2 ]
 
 racc_goto_pointer = [
    nil,     1,     0 ]
@@ -50,26 +50,24 @@ racc_goto_default = [
 
 racc_reduce_table = [
   0, 0, :racc_error,
-  1, 8, :_reduce_1,
-  3, 9, :_reduce_2,
-  3, 9, :_reduce_3,
-  3, 9, :_reduce_4,
-  1, 9, :_reduce_5 ]
+  1, 7, :_reduce_1,
+  3, 8, :_reduce_2,
+  3, 8, :_reduce_3,
+  1, 8, :_reduce_4 ]
 
-racc_reduce_n = 6
+racc_reduce_n = 5
 
-racc_shift_n = 13
+racc_shift_n = 11
 
 racc_token_table = {
   false => 0,
   :error => 1,
   "NUMBER" => 2,
   "+" => 3,
-  "*" => 4,
-  "(" => 5,
-  ")" => 6 }
+  "(" => 4,
+  ")" => 5 }
 
-racc_nt_base = 7
+racc_nt_base = 6
 
 racc_use_result_var = true
 
@@ -94,7 +92,6 @@ Racc_token_to_s_table = [
   "error",
   "NUMBER",
   "\"+\"",
-  "\"*\"",
   "\"(\"",
   "\")\"",
   "$start",
@@ -109,34 +106,27 @@ Racc_debug_parser = false
 
 module_eval(<<'.,.,', 'ejemploGrammar.rb', 7)
   def _reduce_1(val, _values, result)
-    result = val
+    puts "#{val}"
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'ejemploGrammar.rb', 9)
   def _reduce_2(val, _values, result)
-     puts "estoy en + #{val}"; hey = val
-    result
-  end
-.,.,
-
-module_eval(<<'.,.,', 'ejemploGrammar.rb', 10)
-  def _reduce_3(val, _values, result)
-     puts "estoy en * #{val}"; yippie = val 
+     puts "estoy en + #{val} "; hey = val; return val
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'ejemploGrammar.rb', 11)
-  def _reduce_4(val, _values, result)
-     puts "estoy en () #{val}"; nou = val 
+  def _reduce_3(val, _values, result)
+     puts "estoy en () #{val[1]}"; nou = val 
     result
   end
 .,.,
 
 module_eval(<<'.,.,', 'ejemploGrammar.rb', 12)
-  def _reduce_5(val, _values, result)
+  def _reduce_4(val, _values, result)
      puts "estoy en NUMBER #{val}"; quesesto = val
     result
   end

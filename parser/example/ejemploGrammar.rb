@@ -5,11 +5,11 @@ convert
 end
 
 rule
-  target: exp {result = val}
+  target: exp {puts "#{val}"}
 
-  exp: exp '+' exp { puts "estoy en + #{val}"; hey = val}
-     | exp '*' exp { puts "estoy en * #{val}"; yippie = val }
-     | '(' exp ')' { puts "estoy en () #{val}"; nou = val }
+  exp: exp '+' exp { puts "estoy en + #{val} "; hey = val; return val}
+     #| exp '*' exp { puts "estoy en * #{val}"; yippie = val }
+     | '(' exp ')' { puts "estoy en () #{val[1]}"; nou = val }
      | NUMBER      { puts "estoy en NUMBER #{val}"; quesesto = val}
 end
 

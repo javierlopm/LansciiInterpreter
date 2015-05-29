@@ -3,5 +3,5 @@ task :compile_grammar do
 end
 
 task :run => [:compile_grammar] do
-    sh 'ruby lanscii.rb'
+    sh 'ruby lanscii'
 end
