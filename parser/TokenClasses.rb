@@ -128,7 +128,7 @@ class ExprSubs < BinExpr
 	end
 end
 
-class ExpreMult < BinExpr
+class ExprMult < BinExpr
 
 	def initialize(subexpr1, subexpr2)
 
@@ -168,7 +168,7 @@ class ExprOr < BinExpr
 
 	def initialize(subexpr1, subexpr2)
 
-		@op = "\/"
+		@op = "\\/"
 		@type = 1
 	end
 end

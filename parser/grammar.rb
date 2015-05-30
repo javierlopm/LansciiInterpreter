@@ -64,7 +64,7 @@ preclow
 rule
   target: program {puts "#{val}"}
 
-  program: "{" declare "|" program "}"
+  program: "{" declare "|" instruction "}" #No sure about this, va programa y coloque instruction
          | "{"instruction"}"
   
   declare: PERCENT         identifierlist
@@ -76,7 +76,7 @@ rule
   identifierlist: identifierlist IDENTIFIER
                 | identifier
   
-  instruction: assigment
+  instruction: assigment        #Retorno de objeto encontrado en cada caso
              | sequence
              | input
              | output
@@ -84,51 +84,51 @@ rule
              | notDetIteration
              | detIteration
 
-  assigment: IDENTIFIER "=" exp
+  assigment: IDENTIFIER "=" exp {result = Asign::new($2,$4)}
 
-  sequence: instruction ";" instruction
+  sequence: instruction ";" instruction {result = Secuence::new($2,$4,$6)}
 
-  input: READ IDENTIFIER
+  input: READ IDENTIFIER   {result = Read::new($1)}
 
-  output: WRITE IDENTIFIER
+  output: WRITE IDENTIFIER {result = Write::new($1)}
 
-  conditional: "(" exp "?" instruction ")"
-             | "(" exp "?" instruction ":" instruction ")"
+  conditional: "(" exp "?" instruction ")"          {result = Conditional::new($2,$4)}
+             | "(" exp "?" instruction ":" instruction ")" {result = Conditional2::new($2,$4,$6)}
 
-  notDetIteration: "[" exp ".." exp "|" instruction "]"
+  notDetIteration: "[" exp ".." exp "|" instruction "]" {result = DIteration::new($2,$4,$6)}
 
-  detIteration: "[" identifier ":" exp ".." exp  "|" instruction "]"
+  detIteration: "[" identifier ":" exp ".." exp  "|" instruction "]" {result = DIteration2::new($2,$4,$6,$8)}
 
   exp: IDENTIFIER
        #Bool
-     | exp AND exp  
-     | exp OR  exp  
-     | exp NOT      
-     | TRUE         
-     | FALSE
+     | exp AND exp  {result = ExprAnd::new($1,$3)}
+     | exp OR  exp  {result = ExprOr::new($1,$3)}
+     | exp NOT      {result = ExprNot::new($1)}
+     | TRUE         {result = ExprTrue::new()}
+     | FALSE        {result = ExprFalse::new()}
        #Comparadores 
-     | exp LESSTHAN  exp  
-     | exp MORETHAN  exp  
-     | exp LESS      exp     
-     | exp MORE      exp      
-     | exp EQUALS    exp   
-     | exp NOTEQUALS exp 
+     | exp LESSTHAN  exp  {result = ExprLessEql::new($1,$3)}
+     | exp MORETHAN  exp  {result = ExprMoreEql::new($1,$3)}
+     | exp LESS      exp  {result = ExprLess::new($1,$3)}   
+     | exp MORE      exp  {result = ExprMore::new($1,$3)}    
+     | exp EQUALS    exp  {result = ExprEql::new($1,$3)} 
+     | exp NOTEQUALS exp  {result = ExprDiff::new($1,$3)}
        #Canvas
-     | exp HORIZONTALCAT exp 
-     | exp VERTICALCAT exp   
-     | exp TRANSPOSE         
-     | ROTATION exp         
-     | EMPTYCANVAS           
-     | CANVAS
+     | exp HORIZONTALCAT exp {result = ExprHorConcat::new($1,$3)}
+     | exp VERTICALCAT exp   {result = ExprVerConcat::new($1,$3)}
+     | exp TRANSPOSE         {result = ExprTranspose::new($1)}
+     | ROTATION exp          #{result = Expr::new($2)}
+     | EMPTYCANVAS           {result = ExprEmptyCanvasE::new()}
+     | CANVAS                {result = ExprCanvas::new($1)}
        #Artimeticos 
-     | exp PLUS exp 
-     | exp MINUS exp 
-     | exp MULTIPLY exp 
-     | exp SLASH exp 
-     | exp PERCENT exp
-     | MINUS exp                
+     | exp PLUS exp           {result = ExprSum::new($1,$3)}
+     | exp MINUS exp          {result = ExprSubs::new($1,$3)}
+     | exp MULTIPLY exp       {result = ExprMult::new($1,$3)}
+     | exp SLASH exp          {result = ExprDiv::new($1,$3)}
+     | exp PERCENT exp        {result = ExprMod::new($1,$3)}
+     | MINUS exp              {result = ExprUnMinus::new($1.to_i)}  
      | "(" exp ")"             
-     | NUMBER #{result = ExprNumber::new(val[0].to_i)}
+     | NUMBER        {result = ExprNumber::new(val[0].to_i)}
 end
 
 ---- header ----
