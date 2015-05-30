@@ -23,8 +23,7 @@ def printLevel(level)
 	
 		
 	for i in 0..level-1 do
-    	#print "|   "
-    	puts "nivel"
+    	$stdout.print "|   "
 	end 
 	
 end
@@ -167,7 +166,6 @@ class BinExpr
 	def print(level=0)
 		printLevel(level)
 		puts "OPERATION: #{@op}"
-		puts "Mira lo que yo veo  es #{@subexpr1} y #{@subexpr2}"
 		@subexpr1.print(level+1)
 		@subexpr2.print(level+1)
 	end
