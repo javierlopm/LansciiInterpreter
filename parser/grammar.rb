@@ -1,7 +1,7 @@
 class Calcparser::Parser
 
 convert
-  #ParserTokens   LexertTokens
+  #ParserTokens   LexerTokens
   LCURLY          '"LCURLY"'
   RCURLY          '"RCURLY"'
   PIPE            '"PIPE"'
@@ -59,24 +59,32 @@ prechigh
     nonassoc ROTATION
     left     VERTICALCAT HORIZONTALCAT
 
-    nonassoc ASSIGNMENTRULE
+    # No afectan 
+    # nonassoc ASSIGNMENTRULE
+
+    # nonassoc assigment input output conditional notDetIteration detIteration
+    # left sequence
+    # nonassoc program
+
+    left DECLARATERULE
+    left SEQUENCERULE
 preclow
 
 rule
-  target: program {puts "#{val}"}
+  target: program {result = val[0]}
 
-  program: "{" declare "|" instruction "}" {result = $4}
-         | "{"instruction"}"               {result = $2}
+  program: LCURLY declare PIPE instruction RCURLY  {result = val[3]}
+         | LCURLY instruction RCURLY               {result = val[1]}
   
   #Declaraciones sin construccion, siguiente entrega
   declare: PERCENT         identifierlist {return "Declare"}
          | EXCLAMATIONMARK identifierlist {return "Declare"}
          | AT              identifierlist {return "Declare"}
-         | declare declare                {return "Declare"}
-         | declare                        {return "Declare"}
+         | declare declare   = DECLARATERULE             {return "Declare"} #oh oh esto elimina los errores
+         #| declare                        {return "Declare"}  Como mil errores jejeps
 
-  identifierlist: identifierlist IDENTIFIER 
-                | IDENTIFIER               
+  identifierlist: identifierlist IDENTIFIER  {return "Identifier"}
+                | IDENTIFIER                 {return "Identifier"}
 
   instruction: assigment        
              | sequence
@@ -87,51 +95,55 @@ rule
              | detIteration
              | program
 
-  assigment: IDENTIFIER "=" exp  = ASSIGNMENTRULE    {result = Asign::new($1,$2)}
+  assigment: IDENTIFIER EQUALS exp  = ASSIGNMENTRULE {
+                
+                identifier = ExprId::new(val[0]);
+                result = Asign::new(identifier,val[1])
+            }
 
-  sequence: instruction ";" instruction {result = Secuence::new($1,$3)}
+  sequence: instruction SEMICOLON instruction = SEQUENCERULE { result = Secuence::new(val[0],val[2])}
 
-  input: READ IDENTIFIER   {result = Read::new($1)}
+  input: READ IDENTIFIER   {result = Read::new(val[1])}
 
-  output: WRITE IDENTIFIER {result = Write::new($1)}
+  output: WRITE IDENTIFIER {result = Write::new(val[1])}
 
-  conditional: "(" exp "?" instruction ")"          {result = Conditional::new($2,$4)}
-             | "(" exp "?" instruction ":" instruction ")" {result = Conditional2::new($2,$4,$6)}
+  conditional: LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS          {result = Conditional::new(val[1],val[3])}
+             | LPARENTHESIS exp QUESTIONMARK instruction COLON instruction RPARENTHESIS {result = Conditional2::new(val[1],val[3],val[5])}
 
-  notDetIteration: "[" exp ".." exp "|" instruction "]" {result = DIteration::new($2,$4,$6)}
+  notDetIteration: LSQUARE exp COMPREHENSION exp PIPE instruction RSQUARE {result = DIteration::new(val[1],val[3],val[5])}
 
-  detIteration: "[" identifier ":" exp ".." exp  "|" instruction "]" {result = DIteration2::new($2,$4,$6,$8)}
+  detIteration: LSQUARE identifier COLON exp COMPREHENSION exp  PIPE instruction RSQUARE {result = DIteration2::new(val[1],val[3],val[5],val[7])}
 
-  exp: IDENTIFIER
+  exp: IDENTIFIER   {result = ExprId::new(val[0])}
        #Bool
-     | exp AND exp  {result = ExprAnd::new($1,$3)}
-     | exp OR  exp  {result = ExprOr::new($1,$3)}
-     | exp NOT      {result = ExprNot::new($1)}
+     | exp AND exp  {result = ExprAnd::new(val[0],val[2])}
+     | exp OR  exp  {result = ExprOr::new(val[0],val[2])}
+     | exp NOT      {result = ExprNot::new(val[0])}
      | TRUE         {result = ExprTrue::new()}
      | FALSE        {result = ExprFalse::new()}
        #Comparadores 
-     | exp LESSEQL   exp  {result = ExprLessEql::new($1,$3)}
-     | exp MOREEQL   exp  {result = ExprMoreEql::new($1,$3)}
-     | exp LESS      exp  {result = ExprLess::new($1,$3)}   
-     | exp MORE      exp  {result = ExprMore::new($1,$3)}    
-     | exp EQUALS    exp  {result = ExprEql::new($1,$3)} 
-     | exp NOTEQUALS exp  {result = ExprDiff::new($1,$3)}
+     | exp LESSEQL   exp  {result = ExprLessEql::new(val[0],val[2])}
+     | exp MOREEQL   exp  {result = ExprMoreEql::new(val[0],val[2])}
+     | exp LESS      exp  {result = ExprLess::new(val[0],val[2])}   
+     | exp MORE      exp  {result = ExprMore::new(val[0],val[2])}    
+     | exp EQUALS    exp  {result = ExprEql::new(val[0],val[2])} 
+     | exp NOTEQUALS exp  {result = ExprDiff::new(val[0],val[2])}
        #Canvas
-     | exp HORIZONTALCAT exp {result = ExprHorConcat::new($1,$3)}
-     | exp VERTICALCAT   exp {result = ExprVerConcat::new($1,$3)}
-     | exp TRANSPOSE         {result = ExprTranspose::new($1)}
-     | ROTATION          exp {result = Expr::new($2)}
+     | exp HORIZONTALCAT exp {result = ExprHorConcat::new(val[0],val[2])}
+     | exp VERTICALCAT   exp {result = ExprVerConcat::new(val[0],val[2])}
+     | exp TRANSPOSE         {result = ExprTranspose::new(val[0])}
+     | ROTATION  exp         {result = Expr::new(val[2])}
      | EMPTYCANVAS           {result = ExprEmptyCanvasE::new()}
-     | CANVAS                {result = ExprCanvas::new($1)}
+     | CANVAS                {result = ExprCanvas::new(val[0])}
        #Artimeticos 
-     | exp PLUS     exp   {result = ExprSum::new($1,$3)}
-     | exp MINUS    exp   {result = ExprSubs::new($1,$3)}
-     | exp MULTIPLY exp   {result = ExprMult::new($1,$3)}
-     | exp SLASH    exp   {result = ExprDiv::new($1,$3)}
-     | exp PERCENT  exp   {result = ExprMod::new($1,$3)}
-     | MINUS exp          {result = ExprUnMinus::new($1.to_i)}  
-     | "(" exp ")"        {result = $2}           
-     | NUMBER        {result = ExprNumber::new(val[0].to_i)}
+     | exp PLUS     exp   {result = ExprSum::new(val[0],val[2])}
+     | exp MINUS    exp   {result = ExprSubs::new(val[0],val[2])}
+     | exp MULTIPLY exp   {result = ExprMult::new(val[0],val[2])}
+     | exp SLASH    exp   {result = ExprDiv::new(val[0],val[2])}
+     | exp PERCENT  exp   {result = ExprMod::new(val[0],val[2])}
+     | MINUS exp          {result = ExprUnMinus::new(val[0])}  
+     | LPARENTHESIS exp RPARENTHESIS        {result = val[1]}           
+     | NUMBER             {result = ExprNumber::new(val[0].to_i)}
 end
 
 ---- header ----

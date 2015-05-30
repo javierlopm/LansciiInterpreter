@@ -10,11 +10,13 @@ def main
     myfile = File::read(ARGV[0])
     if ARGV.length == 1
         lexer  = FindRegex::new(myfile)
+        lexer.findAll
 
         if lexer.errorFound
             lexer.printOutPut
         else
             parser = Calcparser::Parser.new.parser(lexer.toList)
+            parser.print
         end
 
         

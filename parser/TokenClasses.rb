@@ -5,11 +5,24 @@
     Patricia Reinoso 11-10851
 =end
 
+# puts "Estoy con #{val}";
 
+=begin
 class IdentList
 	def initialize(identifier,list=nil)
 		@identifier = identifier
 		@list = list
+	end
+
+end
+=end
+def printLevel(level)
+	unless level.eql?0
+		puts "#{(0..level)}"
+
+		(0..level).each do |c|
+			print "|  "
+		end
 	end
 end
 
@@ -18,7 +31,15 @@ class Asign
 	def initialize (identifier, subexpr1)
 
 		@identifier = identifier
-		@subexpr1 = subexpr1
+		@subexpr1   = subexpr1
+	end
+
+	def print(level=0)
+
+		printLevel(level)
+		puts "ASSIGN:"
+		@identifier.print(level+1)
+		@subexpr1.print(level+1)
 	end
 end
 
@@ -30,6 +51,13 @@ class Secuence
 		@instrucion1 = instrucion1
 		@instrucion2 = instrucion2
 	end
+
+	def print(level=0)
+
+		printLevel(level)
+		@instrucion1.print(level)
+		@instrucion2.print(level)
+	end
 end
 
 class Read
@@ -37,6 +65,10 @@ class Read
 	def initialize (identifier)
 
 		@identifier = identifier
+	end
+
+	def print(level=0)
+		printLevel(level)
 	end
 end
 
@@ -336,6 +368,12 @@ class ExprId
 
 		@subexpr1 = identifier
 		@type = 3
+	end
+
+	def print(level=0)
+		printLevel(level)
+		puts "VARIABLE:"
+		print(level+1)
 	end
 end
 	
