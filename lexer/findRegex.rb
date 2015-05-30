@@ -86,7 +86,7 @@ class FindRegex
             {:regex=>/\}/,          :name=>"RCURLY"             },
             {:regex=>/\|/,          :name=>"PIPE"               },
             {:regex=>/\%/,          :name=>"PERCENT"            },
-            {:regex=>/\!/,          :name=>"EXCLAMATION MARK"   },
+            {:regex=>/\!/,          :name=>"EXCLAMATIONMARK"    },
             {:regex=>/\@/,          :name=>"AT"                 },
             {:regex=>/\=/,          :name=>"EQUALS"             },
             {:regex=>/\;/,          :name=>"SEMICOLON"          },
@@ -263,6 +263,10 @@ class FindRegex
                 puts err.to_s
             }
         end
+    end
+
+    def errorFound
+        return @myErrors.length > 0
     end
 
     def toList
