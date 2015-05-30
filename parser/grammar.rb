@@ -24,8 +24,8 @@ convert
   OR              '"OR"'
   CANVAS          '"CANVAS"'
   NOT             '"NOT"'
-  LESSTHAN        '"LESSTHAN"'
-  MORETHAN        '"MORETHAN"'
+  LESSEQL        '"LESSEQL"'
+  MOREEQL        '"MOREEQL"'
   NOTEQUALS       '"NOTEQUALS"'
   LESS            '"LESS"'
   MORE            '"MORE"'
@@ -53,7 +53,7 @@ prechigh
     left MULTIPLY SLASH PERCENT
     left PLUS MINUS
 
-    nonassoc LESS LESSTHAN MORE MORETHAN EQUALS NOTEQUALS
+    nonassoc LESS LESSEQL MORE MOREEQL EQUALS NOTEQUALS
 
     nonassoc TRANSPOSE 
     nonassoc ROTATION
@@ -64,25 +64,27 @@ preclow
 rule
   target: program {puts "#{val}"}
 
-  program: "{" declare "|" instruction "}" #No sure about this, va programa y coloque instruction
-         | "{"instruction"}"
+  program: "{" declare "|" instruction "}" {result = $4}
+         | "{"instruction"}"               {result = $2}
   
-  declare: PERCENT         identifierlist
-         | EXCLAMATIONMARK identifierlist
-         | AT              identifierlist
-         | declare declare
-         | declare
+  #Declaraciones sin construccion, siguiente entrega
+  declare: PERCENT         identifierlist {return "Declare"}
+         | EXCLAMATIONMARK identifierlist {return "Declare"}
+         | AT              identifierlist {return "Declare"}
+         | declare declare                {return "Declare"}
+         | declare                        {return "Declare"}
 
-  identifierlist: identifierlist IDENTIFIER
-                | identifier
-  
-  instruction: assigment        #Retorno de objeto encontrado en cada caso
+  identifierlist: identifierlist IDENTIFIER 
+                | IDENTIFIER               
+
+  instruction: assigment        
              | sequence
              | input
              | output
              | conditional
              | notDetIteration
              | detIteration
+             | program
 
   assigment: IDENTIFIER "=" exp {result = Asign::new($2,$4)}
 
@@ -107,8 +109,8 @@ rule
      | TRUE         {result = ExprTrue::new()}
      | FALSE        {result = ExprFalse::new()}
        #Comparadores 
-     | exp LESSTHAN  exp  {result = ExprLessEql::new($1,$3)}
-     | exp MORETHAN  exp  {result = ExprMoreEql::new($1,$3)}
+     | exp LESSEQL  exp  {result = ExprLessEql::new($1,$3)}
+     | exp MOREEQL  exp  {result = ExprMoreEql::new($1,$3)}
      | exp LESS      exp  {result = ExprLess::new($1,$3)}   
      | exp MORE      exp  {result = ExprMore::new($1,$3)}    
      | exp EQUALS    exp  {result = ExprEql::new($1,$3)} 

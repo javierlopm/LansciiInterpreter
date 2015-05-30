@@ -8,116 +8,116 @@
 # Clase para los token encontrados
 class Token
 
-    attr_accessor :name 
-    attr_accessor :value
+  attr_accessor :name
+  attr_accessor :value
 
-    def initialize(name,value,line,column)
+  def initialize(name,value,line,column)
 
-        @name   = name
-        @line   = line
-        @column = column
+    @name   = name
+    @line   = line
+    @column = column
 
-        if mustStrip?value
-            @value = value[1..(value.length-2)]
-        elsif extraSpace?value
-            @value = value[0..(value.length-2)]
-        else
-            @value = value
-        end
-
+    if mustStrip?value
+      @value = value[1..(value.length-2)]
+    elsif extraSpace?value
+      @value = value[0..(value.length-2)]
+    else
+      @value = value
     end
 
-    #Funcion para verificar si el token encontrado debe ser divido
-    def mustStrip?(word)
-        res = (word =~ /<.*>/).eql?0
-    end
+  end
 
-    #Función para eliminar el espacio extra en el valor de read y write
-    def extraSpace?(word)
-        res = word[word.length-1].eql?" "
-    end
+  #Funcion para verificar si el token encontrado debe ser divido
+  def mustStrip?(word)
+    res = (word =~ /<.*>/).eql?0
+  end
 
-    def to_s
-        "token #{@name} value (#{@value}) at line: #{@line}, column: #{@column}"
-    end
+  #Función para eliminar el espacio extra en el valor de read y write
+  def extraSpace?(word)
+    res = word[word.length-1].eql?" "
+  end
+
+  def to_s
+    "token #{@name} value (#{@value}) at line: #{@line}, column: #{@column}"
+  end
 
 end
 
 
 class Error
 
-    def initialize (value, line, column, type)
-        @value  = value
-        @line   = line
-        @column = column
-        @type   = type
+  def initialize (value, line, column, type)
+    @value  = value
+    @line   = line
+    @column = column
+    @type   = type
+  end
+
+  def to_s
+
+    msg = "Error: "
+
+    #Todos los diferentes tipos de errores de lexer contemplados
+    case @type
+    when "UNEXPECTED"
+      msg += "Unexpected character: \"#{@value}\""
+    when "BAD IDENTIFIER"
+      msg += "Identifier starts with a number"
+    when "BADOPEN"
+      msg += "Comment section opened but not closed"
+    when "BADCLOSE"
+      msg += "Comment section closed but not opened"
+    when "OVERFLOW"
+      msg += "Integer constant overflow"
     end
 
-    def to_s
-
-        msg = "Error: "
-
-        #Todos los diferentes tipos de errores de lexer contemplados
-        case @type
-        when "UNEXPECTED"
-            msg += "Unexpected character: \"#{@value}\""
-        when "BAD IDENTIFIER"
-            msg += "Identifier starts with a number"
-        when "BADOPEN"
-            msg += "Comment section opened but not closed"
-        when "BADCLOSE"
-            msg += "Comment section closed but not opened"        
-        when "OVERFLOW"
-            msg += "Integer constant overflow"
-        end
-
-        msg  += " at line: #{@line}, column: #{@column}"
-    end
+    msg  += " at line: #{@line}, column: #{@column}"
+  end
 
 end
 
 class FindRegex
 
-    def initialize(myFile)
+  def initialize(myFile)
 
-        #Arreglo de hashes con expr. regulares y nombres de token asociados
-        @MAYBETOKEN = [ 
-            {:regex=>/\{/,          :name=>"LCURLY"             },
+    #Arreglo de hashes con expr. regulares y nombres de token asociados
+    @MAYBETOKEN = [
+      {:regex=>/\{/,          :name=>"LCURLY"             },
             {:regex=>/\}/,          :name=>"RCURLY"             },
             {:regex=>/\|/,          :name=>"PIPE"               },
-            {:regex=>/\%/,          :name=>"PERCENT"            },
-            {:regex=>/\!/,          :name=>"EXCLAMATIONMARK"    },
-            {:regex=>/\@/,          :name=>"AT"                 },
-            {:regex=>/\=/,          :name=>"EQUALS"             },
+      {:regex=>/\%/,          :name=>"PERCENT"            },
+      {:regex=>/\!/,          :name=>"EXCLAMATIONMARK"    },
+      {:regex=>/\@/,          :name=>"AT"                 },
+      {:regex=>/\=/,          :name=>"EQUALS"             },
             {:regex=>/\;/,          :name=>"SEMICOLON"          },
-            {:regex=>/read\b/,      :name=>"READ"               },
-            {:regex=>/write\b/,     :name=>"WRITE"              },
-            {:regex=>/\?/,          :name=>"QUESTIONMARK"       },
-            {:regex=>/\:/,          :name=>"COLON"              },
-            {:regex=>/\[/,          :name=>"LSQUARE"            },
+      {:regex=>/read\b/,      :name=>"READ"               },
+      {:regex=>/write\b/,     :name=>"WRITE"              },
+      {:regex=>/\?/,          :name=>"QUESTIONMARK"       },
+      {:regex=>/\:/,          :name=>"COLON"              },
+      {:regex=>/\[/,          :name=>"LSQUARE"            },
             {:regex=>/\]/,          :name=>"RSQUARE"            },
             {:regex=>/\(/,          :name=>"LPARENTHESIS"       },
             {:regex=>/\)/,          :name=>"RPARENTHESIS"       },
             {:regex=>/true\b/,      :name=>"TRUE"               },
-            {:regex=>/false\b/,     :name=>"FALSE"              },
-            {:regex=>/\/\\/,        :name=>"AND"                },
-            {:regex=>/\\\//,        :name=>"OR"                 },
-            {:regex=>/<(\/|\\|\||\_|\-|\ )*>/,:name=>"CANVAS"   },
-            {:regex=>/\^/,          :name=>"NOT"                },
-            {:regex=>/\<=/,         :name=>"LESSTHAN"           },
-            {:regex=>/\>=/,         :name=>"MORETHAN"           },
+      {:regex=>/false\b/,     :name=>"FALSE"              },
+      {:regex=>/\/\\/,        :name=>"AND"                },
+      {:regex=>/\\\//,        :name=>"OR"                 },
+      {:regex=>/<(\/|\\|\||\_|\-|\ )*>/,:name=>"CANVAS"   },
+      {:regex=>/\^/,          :name=>"NOT"                },
+      {:regex=>/\<=/,         :name=>"LESSEQL"            },
+            {:regex=>/\>=/,         :name=>"MOREEQL"            },
             {:regex=>/\/=/,         :name=>"NOTEQUALS"          },
             {:regex=>/\</,          :name=>"LESS"               },
-            {:regex=>/\>/,          :name=>"MORE"               },
-            {:regex=>/\+/,          :name=>"PLUS"               },
-            {:regex=>/\-/,          :name=>"MINUS"              },
-            {:regex=>/\*/,          :name=>"MULTIPLICATION SIGN"},
-            {:regex=>/\//,          :name=>"SLASH"              },
-            {:regex=>/\d+[a-zA-Z_]+/,:name=>"BAD IDENTIFIER"    },
-            {:regex=>/[a-zA-Z_]\w*/,:name=>"IDENTIFIER"         },
-            {:regex=>/\d{1,}/,      :name=>"NUMBER"             },
+      {:regex=>/\>/,          :name=>"MORE"               },
+      {:regex=>/\+/,          :name=>"PLUS"               },
+      {:regex=>/\-/,          :name=>"MINUS"              },
+      {:regex=>/\*/,          :name=>"MULTIPLICATION SIGN"},
+      {:regex=>/\//,          :name=>"SLASH"              },
+      {:regex=>/\d+[a-zA-Z_]+/,:name=>"BAD IDENTIFIER"    },
+      {:regex=>/[a-zA-Z_]\w*/,:name=>"IDENTIFIER"         },
+      {:regex=>/\d{1,}/,      :name=>"NUMBER"             },
             {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
-            {:regex=>/\'/,          :name=>"TRANSPOSE"          },
+       {:regex=>/\'/,          :name=>"TRANSPOSE"          },
             {:regex=>/\$/,          :name=>"ROTATION"           },
             {:regex=>/\~/,          :name=>"HORIZONTAL CONCAT"  },
             {:regex=>/\&/,          :name=>"VERTICAL CONCAT"    },

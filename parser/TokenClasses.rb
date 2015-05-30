@@ -5,6 +5,14 @@
     Patricia Reinoso 11-10851
 =end
 
+
+class IdentList
+	def initialize(identifier,list=nil)
+		@identifier = identifier
+		@list = list
+	end
+end
+
 class Asign
 
 	def initialize (identifier, subexpr1)
