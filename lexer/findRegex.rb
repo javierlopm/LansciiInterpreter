@@ -8,7 +8,11 @@
 # Clase para los token encontrados
 class Token
 
+    attr_accessor :name 
+    attr_accessor :value
+
     def initialize(name,value,line,column)
+
         @name   = name
         @line   = line
         @column = column
@@ -115,6 +119,8 @@ class FindRegex
             {:regex=>/\#/,          :name=>"EMPTY CANVAS"       },
             {:regex=>/\'/,          :name=>"TRANSPOSE"          },
             {:regex=>/\$/,          :name=>"ROTATION"           },
+            {:regex=>/\~/,          :name=>"HORIZONTAL CONCAT"  },
+            {:regex=>/\&/,          :name=>"VERTICAL CONCAT"    },
             {:regex=>/\.\./,        :name=>"COMPREHENSION"      },
             {:regex=>/./,           :name=>"404"                }   
         ]
@@ -191,7 +197,7 @@ class FindRegex
 
     #Indica si un numero es representable en 32bits con signo
     def is32bits?(word)
-        return word.to_i <= 2**31
+        return word.to_i < 2**31
     end
 
     # Metodo para eliminar comentarios y encontrar errores en su formacion
@@ -258,4 +264,17 @@ class FindRegex
             }
         end
     end
+
+    def toList
+
+        mylist = Array.new(@myTokens.length){Array.new(2)}
+        item = []
+
+        for i in 0..@myTokens.length-1 
+            mylist[i][0] = @myTokens[i].name
+            mylist[i][1] = @myTokens[i].value
+        end
+
+        return mylist
+     end
 end
