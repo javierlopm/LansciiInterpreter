@@ -24,8 +24,8 @@ convert
   OR              '"OR"'
   CANVAS          '"CANVAS"'
   NOT             '"NOT"'
-  LESSEQL        '"LESSEQL"'
-  MOREEQL        '"MOREEQL"'
+  LESSEQL         '"LESSEQL"'
+  MOREEQL         '"MOREEQL"'
   NOTEQUALS       '"NOTEQUALS"'
   LESS            '"LESS"'
   MORE            '"MORE"'
@@ -45,20 +45,21 @@ end
 
 #Precedencias
 prechigh
-    nonassoc NOT
-    left AND
-    left OR 
+    nonassoc NOT #Es no asociativo o asociativo a izq
+    left     AND
+    left     OR 
 
     nonassoc MINUS
-    left MULTIPLY SLASH PERCENT
-    left PLUS MINUS
+    left     MULTIPLY SLASH PERCENT
+    left     PLUS MINUS
 
     nonassoc LESS LESSEQL MORE MOREEQL EQUALS NOTEQUALS
 
     nonassoc TRANSPOSE 
     nonassoc ROTATION
-    left VERTICALCAT HORIZONTALCAT
+    left     VERTICALCAT HORIZONTALCAT
 
+    nonassoc ASSIGNMENTRULE
 preclow
 
 rule
@@ -86,9 +87,9 @@ rule
              | detIteration
              | program
 
-  assigment: IDENTIFIER "=" exp {result = Asign::new($2,$4)}
+  assigment: IDENTIFIER "=" exp  = ASSIGNMENTRULE    {result = Asign::new($1,$2)}
 
-  sequence: instruction ";" instruction {result = Secuence::new($2,$4,$6)}
+  sequence: instruction ";" instruction {result = Secuence::new($1,$3)}
 
   input: READ IDENTIFIER   {result = Read::new($1)}
 
@@ -109,27 +110,27 @@ rule
      | TRUE         {result = ExprTrue::new()}
      | FALSE        {result = ExprFalse::new()}
        #Comparadores 
-     | exp LESSEQL  exp  {result = ExprLessEql::new($1,$3)}
-     | exp MOREEQL  exp  {result = ExprMoreEql::new($1,$3)}
+     | exp LESSEQL   exp  {result = ExprLessEql::new($1,$3)}
+     | exp MOREEQL   exp  {result = ExprMoreEql::new($1,$3)}
      | exp LESS      exp  {result = ExprLess::new($1,$3)}   
      | exp MORE      exp  {result = ExprMore::new($1,$3)}    
      | exp EQUALS    exp  {result = ExprEql::new($1,$3)} 
      | exp NOTEQUALS exp  {result = ExprDiff::new($1,$3)}
        #Canvas
      | exp HORIZONTALCAT exp {result = ExprHorConcat::new($1,$3)}
-     | exp VERTICALCAT exp   {result = ExprVerConcat::new($1,$3)}
+     | exp VERTICALCAT   exp {result = ExprVerConcat::new($1,$3)}
      | exp TRANSPOSE         {result = ExprTranspose::new($1)}
-     | ROTATION exp          #{result = Expr::new($2)}
+     | ROTATION          exp {result = Expr::new($2)}
      | EMPTYCANVAS           {result = ExprEmptyCanvasE::new()}
      | CANVAS                {result = ExprCanvas::new($1)}
        #Artimeticos 
-     | exp PLUS exp           {result = ExprSum::new($1,$3)}
-     | exp MINUS exp          {result = ExprSubs::new($1,$3)}
-     | exp MULTIPLY exp       {result = ExprMult::new($1,$3)}
-     | exp SLASH exp          {result = ExprDiv::new($1,$3)}
-     | exp PERCENT exp        {result = ExprMod::new($1,$3)}
-     | MINUS exp              {result = ExprUnMinus::new($1.to_i)}  
-     | "(" exp ")"             
+     | exp PLUS     exp   {result = ExprSum::new($1,$3)}
+     | exp MINUS    exp   {result = ExprSubs::new($1,$3)}
+     | exp MULTIPLY exp   {result = ExprMult::new($1,$3)}
+     | exp SLASH    exp   {result = ExprDiv::new($1,$3)}
+     | exp PERCENT  exp   {result = ExprMod::new($1,$3)}
+     | MINUS exp          {result = ExprUnMinus::new($1.to_i)}  
+     | "(" exp ")"        {result = $2}           
      | NUMBER        {result = ExprNumber::new(val[0].to_i)}
 end
 
