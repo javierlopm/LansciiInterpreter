@@ -97,8 +97,8 @@ rule
 
   assigment: IDENTIFIER EQUALS exp  = ASSIGNMENTRULE {
                 
-                identifier = ExprId::new(val[0]);
-                result = Asign::new(identifier,val[1])
+                identifier = ExprId::new(val[0])
+                result = Asign::new(identifier,val[2])
             }
 
   sequence: instruction SEMICOLON instruction = SEQUENCERULE { result = Secuence::new(val[0],val[2])}
@@ -107,7 +107,10 @@ rule
 
   output: WRITE IDENTIFIER {result = Write::new(val[1])}
 
-  conditional: LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS          {result = Conditional::new(val[1],val[3])}
+  conditional: 
+             | LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS {
+                    result = Conditional::new(val[1],val[3])
+             }
              | LPARENTHESIS exp QUESTIONMARK instruction COLON instruction RPARENTHESIS {result = Conditional2::new(val[1],val[3],val[5])}
 
   notDetIteration: LSQUARE exp COMPREHENSION exp PIPE instruction RSQUARE {result = DIteration::new(val[1],val[3],val[5])}

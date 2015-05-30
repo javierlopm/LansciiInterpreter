@@ -16,14 +16,17 @@ class IdentList
 
 end
 =end
-def printLevel(level)
-	unless level.eql?0
-		puts "#{(0..level)}"
 
-		(0..level).each do |c|
-			print "|  "
-		end
-	end
+
+def printLevel(level)
+
+	
+		
+	for i in 0..level-1 do
+    	#print "|   "
+    	puts "nivel"
+	end 
+	
 end
 
 class Asign
@@ -39,6 +42,8 @@ class Asign
 		printLevel(level)
 		puts "ASSIGN:"
 		@identifier.print(level+1)
+		printLevel(level)
+		puts "EXPRESION:"
 		@subexpr1.print(level+1)
 	end
 end
@@ -86,6 +91,16 @@ class Conditional
 		
 		@subexpr1 = subexpr1
 		@instrucion1 = instrucion1
+	end
+
+	def print(level=0)
+		printLevel(level)
+		puts "CONDITIONAL:"
+		@subexpr1.print(level+1)
+
+		printLevel(level)
+		puts "THEN:"
+		@instrucion1.print(level+1)
 	end
 end
 
@@ -148,12 +163,21 @@ class BinExpr
 		@subexpr1 = subexpr1
 		@subexpr2 = subexpr2
 	end
+
+	def print(level=0)
+		printLevel(level)
+		puts "OPERATION: #{@op}"
+		puts "Mira lo que yo veo  es #{@subexpr1} y #{@subexpr2}"
+		@subexpr1.print(level+1)
+		@subexpr2.print(level+1)
+	end
 end
+
 
 class ExprSum < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "+"
 		@type = 0
 	end
@@ -162,7 +186,7 @@ end
 class ExprSubs < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "-"
 		@type = 0
 	end
@@ -171,7 +195,7 @@ end
 class ExprMult < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "*"
 		@type = 0
 	end
@@ -180,7 +204,7 @@ end
 class ExprDiv < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "/"
 		@type = 0
 	end
@@ -189,7 +213,7 @@ end
 class ExprMod < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "%"
 		@type = 0
 	end
@@ -198,7 +222,7 @@ end
 class ExprAnd < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "/\\"
 		@type = 1
 	end
@@ -207,7 +231,7 @@ end
 class ExprOr < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "\\/"
 		@type = 1
 	end
@@ -216,7 +240,7 @@ end
 class ExprLess < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "<"
 		@type = 1
 	end
@@ -225,7 +249,7 @@ end
 class ExprLessEql < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "<="
 		@type = 1
 	end
@@ -233,17 +257,19 @@ end
 	
 class ExprMore < BinExpr
 
-	def initialize(subexpr1, subexpr2)
-
+	def 		superinitialize(subexpr1, subexpr2)
+		super
 		@op = ">"
 		@type = 1
 	end
+
+
 end
 	
 class ExprMoreEql < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = ">="
 		@type = 1
 	end
@@ -252,7 +278,7 @@ end
 class ExprEql < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "="
 		@type = 1
 	end
@@ -261,7 +287,7 @@ end
 class ExprDiff < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "/="
 		@type = 1
 	end
@@ -270,7 +296,7 @@ end
 class ExprVerConcat < BinExpr
 	
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "&"
 		@type = 2
 	end
@@ -279,7 +305,7 @@ end
 class ExprHorConcat < BinExpr
 
 	def initialize(subexpr1, subexpr2)
-
+		super
 		@op = "~"
 		@type = 2
 	end
@@ -342,6 +368,11 @@ class ExprNumber
 		@subexpr1 = subexpr1
 		@type = 0
 	end
+
+	def print(level=0)
+		printLevel(level)
+		puts "NUMBER: #{@subexpr1}"
+	end
 end
 	
 class ExprTrue
@@ -373,7 +404,8 @@ class ExprId
 	def print(level=0)
 		printLevel(level)
 		puts "VARIABLE:"
-		print(level+1)
+		printLevel(level+1)
+		puts "#{@subexpr1}"
 	end
 end
 	
