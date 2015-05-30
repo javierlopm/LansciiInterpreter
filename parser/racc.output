@@ -1,0 +1,1979 @@
+
+
+-------- Grammar --------
+
+rule 1 target: program
+rule 2 program: LCURLY declare PIPE instruction RCURLY
+rule 3 program: LCURLY instruction RCURLY
+rule 4 declare: PERCENT identifierlist
+rule 5 declare: EXCLAMATIONMARK identifierlist
+rule 6 declare: AT identifierlist
+rule 7 declare: declare PERCENT identifierlist
+rule 8 declare: declare EXCLAMATIONMARK identifierlist
+rule 9 declare: declare AT identifierlist
+rule 10 identifierlist: identifierlist IDENTIFIER
+rule 11 identifierlist: IDENTIFIER
+rule 12 instruction: assigment
+rule 13 instruction: sequence
+rule 14 instruction: input
+rule 15 instruction: output
+rule 16 instruction: conditional
+rule 17 instruction: notDetIteration
+rule 18 instruction: detIteration
+rule 19 instruction: program
+rule 20 assigment: IDENTIFIER EQUALS exp
+rule 21 sequence: instruction SEMICOLON instruction
+rule 22 input: READ IDENTIFIER
+rule 23 output: WRITE IDENTIFIER
+rule 24 conditional: LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS
+rule 25 conditional: LPARENTHESIS exp QUESTIONMARK instruction COLON instruction RPARENTHESIS
+rule 26 notDetIteration: LSQUARE exp COMPREHENSION exp PIPE instruction RSQUARE
+rule 27 detIteration: LSQUARE identifier COLON exp COMPREHENSION exp PIPE instruction RSQUARE
+rule 28 exp: IDENTIFIER
+rule 29 exp: exp AND exp
+rule 30 exp: exp OR exp
+rule 31 exp: exp NOT
+rule 32 exp: TRUE
+rule 33 exp: FALSE
+rule 34 exp: exp LESSEQL exp
+rule 35 exp: exp MOREEQL exp
+rule 36 exp: exp LESS exp
+rule 37 exp: exp MORE exp
+rule 38 exp: exp EQUALS exp
+rule 39 exp: exp NOTEQUALS exp
+rule 40 exp: exp HORIZONTALCAT exp
+rule 41 exp: exp VERTICALCAT exp
+rule 42 exp: exp TRANSPOSE
+rule 43 exp: ROTATION exp
+rule 44 exp: EMPTYCANVAS
+rule 45 exp: CANVAS
+rule 46 exp: exp PLUS exp
+rule 47 exp: exp MINUS exp
+rule 48 exp: exp MULTIPLY exp
+rule 49 exp: exp SLASH exp
+rule 50 exp: exp PERCENT exp
+rule 51 exp: MINUS exp
+rule 52 exp: LPARENTHESIS exp RPARENTHESIS
+rule 53 exp: NUMBER
+
+------- Symbols -------
+
+**Nonterminals, with rules where they appear
+
+  $start (45)
+    on right: 
+    on left : 
+  target (46)
+    on right: 
+    on left : 1
+  program (47)
+    on right: 1 19
+    on left : 2 3
+  declare (48)
+    on right: 2 7 8 9
+    on left : 4 5 6 7 8 9
+  instruction (49)
+    on right: 2 3 21 24 25 26 27
+    on left : 12 13 14 15 16 17 18 19
+  identifierlist (50)
+    on right: 4 5 6 7 8 9 10
+    on left : 10 11
+  assigment (51)
+    on right: 12
+    on left : 20
+  sequence (52)
+    on right: 13
+    on left : 21
+  input (53)
+    on right: 14
+    on left : 22
+  output (54)
+    on right: 15
+    on left : 23
+  conditional (55)
+    on right: 16
+    on left : 24 25
+  notDetIteration (56)
+    on right: 17
+    on left : 26
+  detIteration (57)
+    on right: 18
+    on left : 27
+  exp (58)
+    on right: 20 24 25 26 27 29 30 31 34 35 36 37 38 39 40 41 42 43 46 47 48 49 50 51 52
+    on left : 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53
+
+**Terminals, with rules where they appear
+
+  $end (0) 
+  error (1) 
+  LCURLY (2) 2 3
+  RCURLY (3) 2 3
+  PIPE (4) 2 26 27
+  PERCENT (5) 4 7 50
+  EXCLAMATIONMARK (6) 5 8
+  AT (7) 6 9
+  EQUALS (8) 20 38
+  SEMICOLON (9) 21
+  READ (10) 22
+  WRITE (11) 23
+  QUESTIONMARK (12) 24 25
+  COLON (13) 25 27
+  LSQUARE (14) 26 27
+  RSQUARE (15) 26 27
+  LPARENTHESIS (16) 24 25 52
+  RPARENTHESIS (17) 24 25 52
+  TRUE (18) 32
+  FALSE (19) 33
+  AND (20) 29
+  OR (21) 30
+  CANVAS (22) 45
+  NOT (23) 31
+  LESSEQL (24) 34
+  MOREEQL (25) 35
+  NOTEQUALS (26) 39
+  LESS (27) 36
+  MORE (28) 37
+  PLUS (29) 46
+  MINUS (30) 47 51
+  MULTIPLY (31) 48
+  SLASH (32) 49
+  IDENTIFIER (33) 10 11 20 22 23 28
+  NUMBER (34) 53
+  EMPTYCANVAS (35) 44
+  TRANSPOSE (36) 42
+  ROTATION (37) 43
+  HORIZONTALCAT (38) 40
+  VERTICALCAT (39) 41
+  COMPREHENSION (40) 26 27
+  DECLARATERULE (41) 
+  SEQUENCERULE (42) 
+  ASSIGNMENTRULE (43) 
+  identifier (44) 27
+
+--------- State ---------
+
+state 0
+
+
+  LCURLY        shift, and go to state 3
+
+  target        go to state 1
+  program       go to state 2
+
+state 1
+
+
+  $end          shift, and go to state 4
+
+
+state 2
+
+   1) target : program _
+
+  $default      reduce using rule 1 (target)
+
+
+state 3
+
+   2) program : LCURLY _ declare PIPE instruction RCURLY
+   3) program : LCURLY _ instruction RCURLY
+
+  LCURLY        shift, and go to state 3
+  PERCENT       shift, and go to state 7
+  EXCLAMATIONMARK  shift, and go to state 8
+  AT            shift, and go to state 9
+  READ          shift, and go to state 19
+  WRITE         shift, and go to state 20
+  LSQUARE       shift, and go to state 22
+  LPARENTHESIS  shift, and go to state 21
+  IDENTIFIER    shift, and go to state 18
+
+  declare       go to state 5
+  instruction   go to state 6
+  assigment     go to state 10
+  sequence      go to state 11
+  input         go to state 12
+  output        go to state 13
+  conditional   go to state 14
+  notDetIteration  go to state 15
+  detIteration  go to state 16
+  program       go to state 17
+
+state 4
+
+
+  $end          shift, and go to state 23
+
+
+state 5
+
+   2) program : LCURLY declare _ PIPE instruction RCURLY
+   7) declare : declare _ PERCENT identifierlist
+   8) declare : declare _ EXCLAMATIONMARK identifierlist
+   9) declare : declare _ AT identifierlist
+
+  PIPE          shift, and go to state 24
+  PERCENT       shift, and go to state 25
+  EXCLAMATIONMARK  shift, and go to state 26
+  AT            shift, and go to state 27
+
+
+state 6
+
+   3) program : LCURLY instruction _ RCURLY
+  21) sequence : instruction _ SEMICOLON instruction
+
+  RCURLY        shift, and go to state 28
+  SEMICOLON     shift, and go to state 29
+
+
+state 7
+
+   4) declare : PERCENT _ identifierlist
+
+  IDENTIFIER    shift, and go to state 31
+
+  identifierlist  go to state 30
+
+state 8
+
+   5) declare : EXCLAMATIONMARK _ identifierlist
+
+  IDENTIFIER    shift, and go to state 31
+
+  identifierlist  go to state 32
+
+state 9
+
+   6) declare : AT _ identifierlist
+
+  IDENTIFIER    shift, and go to state 31
+
+  identifierlist  go to state 33
+
+state 10
+
+  12) instruction : assigment _
+
+  $default      reduce using rule 12 (instruction)
+
+
+state 11
+
+  13) instruction : sequence _
+
+  $default      reduce using rule 13 (instruction)
+
+
+state 12
+
+  14) instruction : input _
+
+  $default      reduce using rule 14 (instruction)
+
+
+state 13
+
+  15) instruction : output _
+
+  $default      reduce using rule 15 (instruction)
+
+
+state 14
+
+  16) instruction : conditional _
+
+  $default      reduce using rule 16 (instruction)
+
+
+state 15
+
+  17) instruction : notDetIteration _
+
+  $default      reduce using rule 17 (instruction)
+
+
+state 16
+
+  18) instruction : detIteration _
+
+  $default      reduce using rule 18 (instruction)
+
+
+state 17
+
+  19) instruction : program _
+
+  $default      reduce using rule 19 (instruction)
+
+
+state 18
+
+  20) assigment : IDENTIFIER _ EQUALS exp
+
+  EQUALS        shift, and go to state 34
+
+
+state 19
+
+  22) input : READ _ IDENTIFIER
+
+  IDENTIFIER    shift, and go to state 35
+
+
+state 20
+
+  23) output : WRITE _ IDENTIFIER
+
+  IDENTIFIER    shift, and go to state 36
+
+
+state 21
+
+  24) conditional : LPARENTHESIS _ exp QUESTIONMARK instruction RPARENTHESIS
+  25) conditional : LPARENTHESIS _ exp QUESTIONMARK instruction COLON instruction RPARENTHESIS
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 37
+
+state 22
+
+  26) notDetIteration : LSQUARE _ exp COMPREHENSION exp PIPE instruction RSQUARE
+  27) detIteration : LSQUARE _ identifier COLON exp COMPREHENSION exp PIPE instruction RSQUARE
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+  identifier    shift, and go to state 48
+
+  exp           go to state 47
+
+state 23
+
+
+  $default      accept
+
+
+state 24
+
+   2) program : LCURLY declare PIPE _ instruction RCURLY
+
+  LCURLY        shift, and go to state 3
+  READ          shift, and go to state 19
+  WRITE         shift, and go to state 20
+  LSQUARE       shift, and go to state 22
+  LPARENTHESIS  shift, and go to state 21
+  IDENTIFIER    shift, and go to state 18
+
+  instruction   go to state 49
+  assigment     go to state 10
+  sequence      go to state 11
+  input         go to state 12
+  output        go to state 13
+  conditional   go to state 14
+  notDetIteration  go to state 15
+  detIteration  go to state 16
+  program       go to state 17
+
+state 25
+
+   7) declare : declare PERCENT _ identifierlist
+
+  IDENTIFIER    shift, and go to state 31
+
+  identifierlist  go to state 50
+
+state 26
+
+   8) declare : declare EXCLAMATIONMARK _ identifierlist
+
+  IDENTIFIER    shift, and go to state 31
+
+  identifierlist  go to state 51
+
+state 27
+
+   9) declare : declare AT _ identifierlist
+
+  IDENTIFIER    shift, and go to state 31
+
+  identifierlist  go to state 52
+
+state 28
+
+   3) program : LCURLY instruction RCURLY _
+
+  $default      reduce using rule 3 (program)
+
+
+state 29
+
+  21) sequence : instruction SEMICOLON _ instruction
+
+  LCURLY        shift, and go to state 3
+  READ          shift, and go to state 19
+  WRITE         shift, and go to state 20
+  LSQUARE       shift, and go to state 22
+  LPARENTHESIS  shift, and go to state 21
+  IDENTIFIER    shift, and go to state 18
+
+  assigment     go to state 10
+  sequence      go to state 11
+  input         go to state 12
+  output        go to state 13
+  conditional   go to state 14
+  notDetIteration  go to state 15
+  detIteration  go to state 16
+  program       go to state 17
+  instruction   go to state 53
+
+state 30
+
+   4) declare : PERCENT identifierlist _
+  10) identifierlist : identifierlist _ IDENTIFIER
+
+  IDENTIFIER    shift, and go to state 54
+  $default      reduce using rule 4 (declare)
+
+
+state 31
+
+  11) identifierlist : IDENTIFIER _
+
+  $default      reduce using rule 11 (identifierlist)
+
+
+state 32
+
+   5) declare : EXCLAMATIONMARK identifierlist _
+  10) identifierlist : identifierlist _ IDENTIFIER
+
+  IDENTIFIER    shift, and go to state 54
+  $default      reduce using rule 5 (declare)
+
+
+state 33
+
+   6) declare : AT identifierlist _
+  10) identifierlist : identifierlist _ IDENTIFIER
+
+  IDENTIFIER    shift, and go to state 54
+  $default      reduce using rule 6 (declare)
+
+
+state 34
+
+  20) assigment : IDENTIFIER EQUALS _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 55
+
+state 35
+
+  22) input : READ IDENTIFIER _
+
+  $default      reduce using rule 22 (input)
+
+
+state 36
+
+  23) output : WRITE IDENTIFIER _
+
+  $default      reduce using rule 23 (output)
+
+
+state 37
+
+  24) conditional : LPARENTHESIS exp _ QUESTIONMARK instruction RPARENTHESIS
+  25) conditional : LPARENTHESIS exp _ QUESTIONMARK instruction COLON instruction RPARENTHESIS
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  QUESTIONMARK  shift, and go to state 56
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  HORIZONTALCAT  shift, and go to state 66
+  VERTICALCAT   shift, and go to state 67
+
+
+state 38
+
+  28) exp : IDENTIFIER _
+
+  $default      reduce using rule 28 (exp)
+
+
+state 39
+
+  32) exp : TRUE _
+
+  $default      reduce using rule 32 (exp)
+
+
+state 40
+
+  33) exp : FALSE _
+
+  $default      reduce using rule 33 (exp)
+
+
+state 41
+
+  43) exp : ROTATION _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 74
+
+state 42
+
+  44) exp : EMPTYCANVAS _
+
+  $default      reduce using rule 44 (exp)
+
+
+state 43
+
+  45) exp : CANVAS _
+
+  $default      reduce using rule 45 (exp)
+
+
+state 44
+
+  51) exp : MINUS _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 75
+
+state 45
+
+  52) exp : LPARENTHESIS _ exp RPARENTHESIS
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 76
+
+state 46
+
+  53) exp : NUMBER _
+
+  $default      reduce using rule 53 (exp)
+
+
+state 47
+
+  26) notDetIteration : LSQUARE exp _ COMPREHENSION exp PIPE instruction RSQUARE
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  HORIZONTALCAT  shift, and go to state 66
+  VERTICALCAT   shift, and go to state 67
+  COMPREHENSION  shift, and go to state 77
+
+
+state 48
+
+  27) detIteration : LSQUARE identifier _ COLON exp COMPREHENSION exp PIPE instruction RSQUARE
+
+  COLON         shift, and go to state 78
+
+
+state 49
+
+   2) program : LCURLY declare PIPE instruction _ RCURLY
+  21) sequence : instruction _ SEMICOLON instruction
+
+  RCURLY        shift, and go to state 79
+  SEMICOLON     shift, and go to state 29
+
+
+state 50
+
+   7) declare : declare PERCENT identifierlist _
+  10) identifierlist : identifierlist _ IDENTIFIER
+
+  IDENTIFIER    shift, and go to state 54
+  $default      reduce using rule 7 (declare)
+
+
+state 51
+
+   8) declare : declare EXCLAMATIONMARK identifierlist _
+  10) identifierlist : identifierlist _ IDENTIFIER
+
+  IDENTIFIER    shift, and go to state 54
+  $default      reduce using rule 8 (declare)
+
+
+state 52
+
+   9) declare : declare AT identifierlist _
+  10) identifierlist : identifierlist _ IDENTIFIER
+
+  IDENTIFIER    shift, and go to state 54
+  $default      reduce using rule 9 (declare)
+
+
+state 53
+
+  21) sequence : instruction _ SEMICOLON instruction
+  21) sequence : instruction SEMICOLON instruction _
+
+  SEMICOLON     shift, and go to state 29
+  $default      reduce using rule 21 (sequence)
+
+
+state 54
+
+  10) identifierlist : identifierlist IDENTIFIER _
+
+  $default      reduce using rule 10 (identifierlist)
+
+
+state 55
+
+  20) assigment : IDENTIFIER EQUALS exp _
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  HORIZONTALCAT  shift, and go to state 66
+  VERTICALCAT   shift, and go to state 67
+  $default      reduce using rule 20 (assigment)
+
+
+state 56
+
+  24) conditional : LPARENTHESIS exp QUESTIONMARK _ instruction RPARENTHESIS
+  25) conditional : LPARENTHESIS exp QUESTIONMARK _ instruction COLON instruction RPARENTHESIS
+
+  LCURLY        shift, and go to state 3
+  READ          shift, and go to state 19
+  WRITE         shift, and go to state 20
+  LSQUARE       shift, and go to state 22
+  LPARENTHESIS  shift, and go to state 21
+  IDENTIFIER    shift, and go to state 18
+
+  assigment     go to state 10
+  sequence      go to state 11
+  input         go to state 12
+  output        go to state 13
+  conditional   go to state 14
+  notDetIteration  go to state 15
+  detIteration  go to state 16
+  program       go to state 17
+  instruction   go to state 80
+
+state 57
+
+  29) exp : exp AND _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 81
+
+state 58
+
+  30) exp : exp OR _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 82
+
+state 59
+
+  31) exp : exp NOT _
+
+  $default      reduce using rule 31 (exp)
+
+
+state 60
+
+  34) exp : exp LESSEQL _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 83
+
+state 61
+
+  35) exp : exp MOREEQL _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 84
+
+state 62
+
+  36) exp : exp LESS _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 85
+
+state 63
+
+  37) exp : exp MORE _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 86
+
+state 64
+
+  38) exp : exp EQUALS _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 87
+
+state 65
+
+  39) exp : exp NOTEQUALS _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 88
+
+state 66
+
+  40) exp : exp HORIZONTALCAT _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 89
+
+state 67
+
+  41) exp : exp VERTICALCAT _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 90
+
+state 68
+
+  42) exp : exp TRANSPOSE _
+
+  $default      reduce using rule 42 (exp)
+
+
+state 69
+
+  46) exp : exp PLUS _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 91
+
+state 70
+
+  47) exp : exp MINUS _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 92
+
+state 71
+
+  48) exp : exp MULTIPLY _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 93
+
+state 72
+
+  49) exp : exp SLASH _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 94
+
+state 73
+
+  50) exp : exp PERCENT _ exp
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 95
+
+state 74
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  43) exp : ROTATION exp _
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  $default      reduce using rule 43 (exp)
+
+
+state 75
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+  51) exp : MINUS exp _
+
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  MINUS         error
+  $default      reduce using rule 51 (exp)
+
+
+state 76
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+  52) exp : LPARENTHESIS exp _ RPARENTHESIS
+
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  RPARENTHESIS  shift, and go to state 96
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  HORIZONTALCAT  shift, and go to state 66
+  VERTICALCAT   shift, and go to state 67
+
+
+state 77
+
+  26) notDetIteration : LSQUARE exp COMPREHENSION _ exp PIPE instruction RSQUARE
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 97
+
+state 78
+
+  27) detIteration : LSQUARE identifier COLON _ exp COMPREHENSION exp PIPE instruction RSQUARE
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 98
+
+state 79
+
+   2) program : LCURLY declare PIPE instruction RCURLY _
+
+  $default      reduce using rule 2 (program)
+
+
+state 80
+
+  21) sequence : instruction _ SEMICOLON instruction
+  24) conditional : LPARENTHESIS exp QUESTIONMARK instruction _ RPARENTHESIS
+  25) conditional : LPARENTHESIS exp QUESTIONMARK instruction _ COLON instruction RPARENTHESIS
+
+  SEMICOLON     shift, and go to state 29
+  COLON         shift, and go to state 100
+  RPARENTHESIS  shift, and go to state 99
+
+
+state 81
+
+  29) exp : exp _ AND exp
+  29) exp : exp AND exp _
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  NOT           shift, and go to state 59
+  $default      reduce using rule 29 (exp)
+
+
+state 82
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  30) exp : exp OR exp _
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  AND           shift, and go to state 57
+  NOT           shift, and go to state 59
+  $default      reduce using rule 30 (exp)
+
+
+state 83
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  34) exp : exp LESSEQL exp _
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  EQUALS        error
+  LESSEQL       error
+  MOREEQL       error
+  NOTEQUALS     error
+  LESS          error
+  MORE          error
+  $default      reduce using rule 34 (exp)
+
+
+state 84
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  35) exp : exp MOREEQL exp _
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  EQUALS        error
+  LESSEQL       error
+  MOREEQL       error
+  NOTEQUALS     error
+  LESS          error
+  MORE          error
+  $default      reduce using rule 35 (exp)
+
+
+state 85
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  36) exp : exp LESS exp _
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  EQUALS        error
+  LESSEQL       error
+  MOREEQL       error
+  NOTEQUALS     error
+  LESS          error
+  MORE          error
+  $default      reduce using rule 36 (exp)
+
+
+state 86
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  37) exp : exp MORE exp _
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  EQUALS        error
+  LESSEQL       error
+  MOREEQL       error
+  NOTEQUALS     error
+  LESS          error
+  MORE          error
+  $default      reduce using rule 37 (exp)
+
+
+state 87
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  38) exp : exp EQUALS exp _
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  EQUALS        error
+  LESSEQL       error
+  MOREEQL       error
+  NOTEQUALS     error
+  LESS          error
+  MORE          error
+  $default      reduce using rule 38 (exp)
+
+
+state 88
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  39) exp : exp NOTEQUALS exp _
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  EQUALS        error
+  LESSEQL       error
+  MOREEQL       error
+  NOTEQUALS     error
+  LESS          error
+  MORE          error
+  $default      reduce using rule 39 (exp)
+
+
+state 89
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  40) exp : exp HORIZONTALCAT exp _
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  $default      reduce using rule 40 (exp)
+
+
+state 90
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  41) exp : exp VERTICALCAT exp _
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  $default      reduce using rule 41 (exp)
+
+
+state 91
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  46) exp : exp PLUS exp _
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  $default      reduce using rule 46 (exp)
+
+
+state 92
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  47) exp : exp MINUS exp _
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  MINUS         error
+  $default      reduce using rule 47 (exp)
+
+
+state 93
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  48) exp : exp MULTIPLY exp _
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  MINUS         shift, and go to state 70
+  $default      reduce using rule 48 (exp)
+
+
+state 94
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  49) exp : exp SLASH exp _
+  50) exp : exp _ PERCENT exp
+
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  MINUS         shift, and go to state 70
+  $default      reduce using rule 49 (exp)
+
+
+state 95
+
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+  50) exp : exp PERCENT exp _
+
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  MINUS         shift, and go to state 70
+  $default      reduce using rule 50 (exp)
+
+
+state 96
+
+  52) exp : LPARENTHESIS exp RPARENTHESIS _
+
+  $default      reduce using rule 52 (exp)
+
+
+state 97
+
+  26) notDetIteration : LSQUARE exp COMPREHENSION exp _ PIPE instruction RSQUARE
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PIPE          shift, and go to state 101
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  HORIZONTALCAT  shift, and go to state 66
+  VERTICALCAT   shift, and go to state 67
+
+
+state 98
+
+  27) detIteration : LSQUARE identifier COLON exp _ COMPREHENSION exp PIPE instruction RSQUARE
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  HORIZONTALCAT  shift, and go to state 66
+  VERTICALCAT   shift, and go to state 67
+  COMPREHENSION  shift, and go to state 102
+
+
+state 99
+
+  24) conditional : LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS _
+
+  $default      reduce using rule 24 (conditional)
+
+
+state 100
+
+  25) conditional : LPARENTHESIS exp QUESTIONMARK instruction COLON _ instruction RPARENTHESIS
+
+  LCURLY        shift, and go to state 3
+  READ          shift, and go to state 19
+  WRITE         shift, and go to state 20
+  LSQUARE       shift, and go to state 22
+  LPARENTHESIS  shift, and go to state 21
+  IDENTIFIER    shift, and go to state 18
+
+  assigment     go to state 10
+  sequence      go to state 11
+  input         go to state 12
+  output        go to state 13
+  conditional   go to state 14
+  notDetIteration  go to state 15
+  detIteration  go to state 16
+  program       go to state 17
+  instruction   go to state 103
+
+state 101
+
+  26) notDetIteration : LSQUARE exp COMPREHENSION exp PIPE _ instruction RSQUARE
+
+  LCURLY        shift, and go to state 3
+  READ          shift, and go to state 19
+  WRITE         shift, and go to state 20
+  LSQUARE       shift, and go to state 22
+  LPARENTHESIS  shift, and go to state 21
+  IDENTIFIER    shift, and go to state 18
+
+  assigment     go to state 10
+  sequence      go to state 11
+  input         go to state 12
+  output        go to state 13
+  conditional   go to state 14
+  notDetIteration  go to state 15
+  detIteration  go to state 16
+  program       go to state 17
+  instruction   go to state 104
+
+state 102
+
+  27) detIteration : LSQUARE identifier COLON exp COMPREHENSION _ exp PIPE instruction RSQUARE
+
+  LPARENTHESIS  shift, and go to state 45
+  TRUE          shift, and go to state 39
+  FALSE         shift, and go to state 40
+  CANVAS        shift, and go to state 43
+  MINUS         shift, and go to state 44
+  IDENTIFIER    shift, and go to state 38
+  NUMBER        shift, and go to state 46
+  EMPTYCANVAS   shift, and go to state 42
+  ROTATION      shift, and go to state 41
+
+  exp           go to state 105
+
+state 103
+
+  21) sequence : instruction _ SEMICOLON instruction
+  25) conditional : LPARENTHESIS exp QUESTIONMARK instruction COLON instruction _ RPARENTHESIS
+
+  SEMICOLON     shift, and go to state 29
+  RPARENTHESIS  shift, and go to state 106
+
+
+state 104
+
+  21) sequence : instruction _ SEMICOLON instruction
+  26) notDetIteration : LSQUARE exp COMPREHENSION exp PIPE instruction _ RSQUARE
+
+  SEMICOLON     shift, and go to state 29
+  RSQUARE       shift, and go to state 107
+
+
+state 105
+
+  27) detIteration : LSQUARE identifier COLON exp COMPREHENSION exp _ PIPE instruction RSQUARE
+  29) exp : exp _ AND exp
+  30) exp : exp _ OR exp
+  31) exp : exp _ NOT
+  34) exp : exp _ LESSEQL exp
+  35) exp : exp _ MOREEQL exp
+  36) exp : exp _ LESS exp
+  37) exp : exp _ MORE exp
+  38) exp : exp _ EQUALS exp
+  39) exp : exp _ NOTEQUALS exp
+  40) exp : exp _ HORIZONTALCAT exp
+  41) exp : exp _ VERTICALCAT exp
+  42) exp : exp _ TRANSPOSE
+  46) exp : exp _ PLUS exp
+  47) exp : exp _ MINUS exp
+  48) exp : exp _ MULTIPLY exp
+  49) exp : exp _ SLASH exp
+  50) exp : exp _ PERCENT exp
+
+  PIPE          shift, and go to state 108
+  PERCENT       shift, and go to state 73
+  EQUALS        shift, and go to state 64
+  AND           shift, and go to state 57
+  OR            shift, and go to state 58
+  NOT           shift, and go to state 59
+  LESSEQL       shift, and go to state 60
+  MOREEQL       shift, and go to state 61
+  NOTEQUALS     shift, and go to state 65
+  LESS          shift, and go to state 62
+  MORE          shift, and go to state 63
+  PLUS          shift, and go to state 69
+  MINUS         shift, and go to state 70
+  MULTIPLY      shift, and go to state 71
+  SLASH         shift, and go to state 72
+  TRANSPOSE     shift, and go to state 68
+  HORIZONTALCAT  shift, and go to state 66
+  VERTICALCAT   shift, and go to state 67
+
+
+state 106
+
+  25) conditional : LPARENTHESIS exp QUESTIONMARK instruction COLON instruction RPARENTHESIS _
+
+  $default      reduce using rule 25 (conditional)
+
+
+state 107
+
+  26) notDetIteration : LSQUARE exp COMPREHENSION exp PIPE instruction RSQUARE _
+
+  $default      reduce using rule 26 (notDetIteration)
+
+
+state 108
+
+  27) detIteration : LSQUARE identifier COLON exp COMPREHENSION exp PIPE _ instruction RSQUARE
+
+  LCURLY        shift, and go to state 3
+  READ          shift, and go to state 19
+  WRITE         shift, and go to state 20
+  LSQUARE       shift, and go to state 22
+  LPARENTHESIS  shift, and go to state 21
+  IDENTIFIER    shift, and go to state 18
+
+  assigment     go to state 10
+  sequence      go to state 11
+  input         go to state 12
+  output        go to state 13
+  conditional   go to state 14
+  notDetIteration  go to state 15
+  detIteration  go to state 16
+  program       go to state 17
+  instruction   go to state 109
+
+state 109
+
+  21) sequence : instruction _ SEMICOLON instruction
+  27) detIteration : LSQUARE identifier COLON exp COMPREHENSION exp PIPE instruction _ RSQUARE
+
+  SEMICOLON     shift, and go to state 29
+  RSQUARE       shift, and go to state 110
+
+
+state 110
+
+  27) detIteration : LSQUARE identifier COLON exp COMPREHENSION exp PIPE instruction RSQUARE _
+
+  $default      reduce using rule 27 (detIteration)
+

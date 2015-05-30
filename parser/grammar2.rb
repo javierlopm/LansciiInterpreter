@@ -45,7 +45,6 @@ end
 
 #Precedencias
 prechigh
-    left SEMICOLON
     nonassoc NOT #Es no asociativo o asociativo a izq
     left     AND
     left     OR 
