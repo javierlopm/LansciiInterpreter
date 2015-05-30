@@ -43,6 +43,22 @@ convert
   COMPREHENSION   '"COMPREHENSION"'
 end
 
+#Precedencias
+prechigh
+    nonassoc NOT
+    left AND
+    left OR 
+
+    nonassoc MINUS
+    left MULTIPLY SLASH PERCENT
+    left PLUS MINUS
+
+    nonassoc TRANSPOSE 
+    nonassoc ROTATION
+    left VERTICALCAT HORIZONTALCAT
+
+preclow
+
 rule
   target: program {puts "#{val}"}
 
@@ -108,8 +124,9 @@ rule
      | exp MULTIPLY exp 
      | exp SLASH exp 
      | exp PERCENT exp
-     | exp exp                
-     | NUMBER 
+     | MINUS exp                
+     | "(" exp ")"               
+     | NUMBER {result = ExprNumber::new($1.to_i)}
 end
 
 ---- header ----
