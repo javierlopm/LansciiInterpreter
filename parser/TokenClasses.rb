@@ -23,7 +23,7 @@ def printLevel(level)
 	
 		
 	for i in 0..level-1 do
-    	$stdout.print "|   "
+    	$stdout.print " |  " #Believe in magic
 	end 
 	
 end
@@ -40,10 +40,14 @@ class Asign
 
 		printLevel(level)
 		puts "ASSIGN:"
-		@identifier.print(level+1)
-		printLevel(level)
+
+		printLevel(level+1)
+		puts "VARIABLE: "
+		@identifier.print(level+2)
+
+		printLevel(level+1)
 		puts "EXPRESION:"
-		@subexpr1.print(level+1)
+		@subexpr1.print(level+2)
 	end
 end
 
@@ -94,12 +98,15 @@ class Conditional
 
 	def print(level=0)
 		printLevel(level)
-		puts "CONDITIONAL:"
-		@subexpr1.print(level+1)
+		puts "CONDITIONAL STATEMENT:"
+		
+		printLevel(level+1)
+		puts "CONDITION:"
+		@subexpr1.print(level+2)
 
-		printLevel(level)
+		printLevel(level+1)
 		puts "THEN:"
-		@instrucion1.print(level+1)
+		@instrucion1.print(level+2)
 	end
 end
 
@@ -255,7 +262,7 @@ end
 	
 class ExprMore < BinExpr
 
-	def 		superinitialize(subexpr1, subexpr2)
+	def initialize(subexpr1, subexpr2)
 		super
 		@op = ">"
 		@type = 1
@@ -401,9 +408,7 @@ class ExprId
 
 	def print(level=0)
 		printLevel(level)
-		puts "VARIABLE:"
-		printLevel(level+1)
-		puts "#{@subexpr1}"
+		puts "IDENTIFIER: #{@subexpr1}"
 	end
 end
 	
