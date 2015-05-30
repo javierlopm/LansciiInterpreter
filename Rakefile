@@ -1,5 +1,5 @@
 task :compile_grammar do
-    `racc ./parser/grammar.rb -oracc.rb`
+    `racc ./parser/grammar.rb -oparser/racc.rb`
 end
 
 task :run => [:compile_grammar] do

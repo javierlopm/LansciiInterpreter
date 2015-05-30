@@ -248,7 +248,11 @@ end
 
 # Expresiones unarias
 
-class UnExpr end
+class UnExpr 
+	def print
+		puts "#{@op}"
+	end
+end
 
 
 class ExprUnMinus < UnExpr

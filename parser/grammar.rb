@@ -53,6 +53,8 @@ prechigh
     left MULTIPLY SLASH PERCENT
     left PLUS MINUS
 
+    nonassoc LESS LESSTHAN MORE MORETHAN EQUALS NOTEQUALS
+
     nonassoc TRANSPOSE 
     nonassoc ROTATION
     left VERTICALCAT HORIZONTALCAT
@@ -105,11 +107,11 @@ rule
      | TRUE         
      | FALSE
        #Comparadores 
-     | exp LESSTHAN exp  
-     | exp MORETHAN exp  
-     | exp LESS  exp     
-     | exp MORE exp      
-     | exp EQUALS exp   
+     | exp LESSTHAN  exp  
+     | exp MORETHAN  exp  
+     | exp LESS      exp     
+     | exp MORE      exp      
+     | exp EQUALS    exp   
      | exp NOTEQUALS exp 
        #Canvas
      | exp HORIZONTALCAT exp 
@@ -125,12 +127,12 @@ rule
      | exp SLASH exp 
      | exp PERCENT exp
      | MINUS exp                
-     | "(" exp ")"               
-     | NUMBER {result = ExprNumber::new($1.to_i)}
+     | "(" exp ")"             
+     | NUMBER #{result = ExprNumber::new(val[0].to_i)}
 end
 
 ---- header ----
-require_relative "tokenClasses"
+require_relative "TokenClasses"
 
 ---- inner ----
     def parser(tokens)
