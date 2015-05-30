@@ -104,9 +104,15 @@ rule
 
   sequence: instruction SEMICOLON instruction = SEQUENCERULE { result = Secuence::new(val[0],val[2])}
 
-  input: READ IDENTIFIER   {result = Read::new(val[1])}
+  input: READ IDENTIFIER   {
+            identifier = ExprId::new(val[1])
+            result     = Read::new(identifier)
+        }
 
-  output: WRITE IDENTIFIER {result = Write::new(val[1])}
+  output: WRITE IDENTIFIER {
+            identifier = ExprId::new(val[1])
+            result = Write::new(identifier)
+        }
 
   conditional: 
              | LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS {
@@ -123,12 +129,11 @@ rule
                 }
               | LSQUARE IDENTIFIER COLON exp COMPREHENSION exp  PIPE instruction RSQUARE {
                     identifier = ExprId::new(val[1])
-                    result = DIteration2::new(identifier,val[3],val[5],val[7])
+                    result     = DIteration2::new(identifier,val[3],val[5],val[7])
                 }
 
   varIncorporationRange:  LCURLY declare PIPE instruction RCURLY  {
                             #Ignorando declare en esta entrega
-                            puts "Me llego esto #{val[3]}"
                             result = VarBlock::new(val[3])
                           } 
   
