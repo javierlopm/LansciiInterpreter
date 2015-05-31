@@ -428,9 +428,16 @@ end
 # Expresiones unarias
 
 class UnExpr 
-	def print
-		puts "#{@op}"
+
+	def initialize (subexpr1)
+
+		@subexpr1 = subexpr1
 	end
+
+	def print
+		printLevel(level)
+		puts "OPERATION: #{@op}"
+		@subexpr1.print(level+1)	end
 end
 
 
@@ -438,6 +445,7 @@ class ExprUnMinus < UnExpr
 
 	def initialize(subexpr1)
 
+		super
 		@op = "-"
 		@type = 0
 	end
@@ -447,6 +455,7 @@ class ExprNot < UnExpr
 
 	def initialize(subexpr1)
 
+		super
 		@op = "^"
 		@type = 1
 	end
@@ -455,7 +464,8 @@ end
 class ExprTranspose < UnExpr
 
 	def initialize(subexpr1)
-
+		
+		super
 		@op = "'"
 		@type = 2
 	end
