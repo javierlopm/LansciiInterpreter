@@ -129,7 +129,7 @@ class FindRegex
         @COMMENTS = [
             {:regex=>/\{\-.*?\-\}/m , :type=>"GOODCOMMENT"},
             {:regex=>/\{\-/         , :type=>"BADOPEN"    },
-            {:regex=>/\-\}/         , :type=>"BADCLOSE"   },
+            #{:regex=>/\-\}/         , :type=>"BADCLOSE"   },
         ]
         
         @myFile   = myFile  #Archivo a ser analizado
