@@ -1,0 +1,46 @@
+Javier Lopez     11-10552
+Patricia Reinoso 11-10851
+
+
+Uso
+===
+
+Para correr el proyecto (Lexer y parser) es necesario "compilar" el archivo 
+de gramaticá parse/grammar.rb, esto puede realizarse en la carpeta principal
+con el comando rake compile_grammar, esta accion tambien puede realizarse 
+mediante el comando 'racc ./parser/grammar.rb -oparser/racc.rb'
+
+Luego de compilar, la ejecución se hará mediante ./lanscii [archivo a analizar] 
+esto reportará posibles errores de lexing encontrados, si no se encuentra 
+ninguno, los tokens hallados serán parseados en un árbol sintactico e impreso
+en pantala de acuerdo al formato indicado. Si un error de sintaxis es contrado
+se reportará y terminará la ejecución.
+
+Con el comando rake run, se compilará la gramática y se ejecutará el parser
+reconociendo el archivo parser/example1.lc
+
+
+Decisiones de implementación
+============================
+
+Luego de realizar el diseño de gramatica e implementarlo, nos encontramos con 
+una gran cantidad de shift/reduce y algunos reduce/reduce conflicts, luego de
+agregar precedencias y sentido de las asociatividades en las expresiones, estos 
+errores disminuyeron. Pero fue necesario agregar reglas de precedencia a la 
+concatenación de instrucciones y a la declaración de vairiables.
+
+Por último, para eliminar los ultimos shift/reduce conflicts encontrados
+se tuvo que reestructurar la regla "declare", inicialmente teníamos una regla
+declare -> "declare declare", pero fue modificada hasta la forma actual, la cual
+construye las diferentes declaraciones de variables mediante recursión izquierda.
+
+Estado actual del proyecto
+==========================
+
+Para esta nueva entrega se resolvieron los problemas de especificación como se 
+nosrecomendó. Adicionalmentes e realizó la construcción de un arból sintáctico,
+en donde realizamos un pequeño bocetos en los nodos de los tipos que pueden
+recibir algunas expresiones, pero sin realizar las verificaciones pertinentes
+de la siguiente entrega, en la construcción tampoco se crean estructuras 
+relacionadas a la declaracion de variables, ya que la tabla de símbolos no
+ha sido planteada todavía.
