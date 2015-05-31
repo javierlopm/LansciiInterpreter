@@ -47,8 +47,6 @@ class Secuence
 	end
 
 	def print(level=0)
-
-		printLevel(level)
 		@instrucion1.print(level)
 		@instrucion2.print(level)
 	end
@@ -132,7 +130,7 @@ class Conditional2 < Conditional
 		printLevel(level+1)
 		puts "THEN:"
 		@instrucion1.print(level+2)
-
+		
 		printLevel(level+1)
 		puts "ELSE:"
 		@instrucion2.print(level+2)

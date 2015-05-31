@@ -44,3 +44,18 @@ recibir algunas expresiones, pero sin realizar las verificaciones pertinentes
 de la siguiente entrega, en la construcción tampoco se crean estructuras 
 relacionadas a la declaración de variables, ya que la tabla de símbolos no
 ha sido planteada todavía.
+
+Comentarios
+===========
+
+En la carpeta parser/examples se encuentran alguno ejemplos de programas.
+* example1.lc ejemplo del enunciado de la entrega 2
+* example2.lc programa ejemplo de la especificación del lenguaje
+* example3.lc ejempl de read, concatenación y ciclo determinado
+* example4.lc ejemplo de ciclo determinado sin variable con un ciclo 
+              indeterminado anidado
+* example5.lc ejemplo de los dos tipos de if anidados
+* example6.lc muestra la construccion de un árbol con expresiones aritméticas
+* example7.lc muestra un arbol de expresión correcto respecto a la gramática
+              pero equivocado respecto a la compatibilidad de tipos a analizar
+              en las próximas entregas

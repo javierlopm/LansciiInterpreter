@@ -1,0 +1,5 @@
+{ % naboo !hey |
+
+    hey = nabo /\ true +2 -7
+
+}

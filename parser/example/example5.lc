@@ -1,3 +1,7 @@
 { !boo |
-	( x = 1 ? x = true^: x = false /\ (false \/ false) )
+	( x = 1 ? 
+        x = true^: 
+        x = false /\ (false \/ false);
+        (true? read x )
+    )
 }

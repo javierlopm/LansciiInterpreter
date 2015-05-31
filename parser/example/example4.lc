@@ -1,4 +1,7 @@
 { !boo |
     read variable;
-    [ aqui..pekin | write  variable]
+    [ aqui..pekin | 
+        write  variable;
+        [ x | x = x +1]
+    ]
 } 
