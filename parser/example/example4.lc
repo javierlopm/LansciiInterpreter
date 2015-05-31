@@ -1,4 +1,4 @@
 { !boo |
     read variable;
-    [ aqui..pekin | write enAvion ]
+    [ aqui..pekin | write  variable]
 } 

@@ -86,7 +86,7 @@ class Write
 
 		printLevel(level+1)
 		puts "VARIABLE: "
-		@identifier.print(level+2)
+		@subexpr1.print(level+2)
 	end
 end
 
@@ -259,7 +259,8 @@ class Block
 end
 
 
-=begin 
+=begin
+@type indica el tipo de la salida
 type = 0 ==> Aritmetic 
 type = 1 ==> Boolean
 type = 2 ==> Canvas
