@@ -32,7 +32,7 @@ class Asign
 		@identifier.print(level+2)
 
 		printLevel(level+1)
-		puts "EXPRESION:"
+		puts "EXPRESSION:"
 		@subexpr1.print(level+2)
 	end
 end
