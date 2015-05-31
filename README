@@ -23,7 +23,7 @@ reconociendo el archivo parser/example1.lc
 Decisiones de implementación
 ============================
 
-Luego de realizar el diseño de gramatica e implementarlo, nos encontramos con 
+Luego de realizar el diseño de gramática e implementarlo, nos encontramos con 
 una gran cantidad de shift/reduce y algunos reduce/reduce conflicts, luego de
 agregar precedencias y sentido de las asociatividades en las expresiones, estos 
 errores disminuyeron. Pero fue necesario agregar reglas de precedencia a la 
@@ -38,9 +38,9 @@ Estado actual del proyecto
 ==========================
 
 Para esta nueva entrega se resolvieron los problemas de especificación como se 
-nosrecomendó. Adicionalmentes e realizó la construcción de un arból sintáctico,
+nos recomendó. Adicionalmentes e realizó la construcción de un arból sintáctico,
 en donde realizamos un pequeño bocetos en los nodos de los tipos que pueden
 recibir algunas expresiones, pero sin realizar las verificaciones pertinentes
 de la siguiente entrega, en la construcción tampoco se crean estructuras 
-relacionadas a la declaracion de variables, ya que la tabla de símbolos no
+relacionadas a la declaración de variables, ya que la tabla de símbolos no
 ha sido planteada todavía.
