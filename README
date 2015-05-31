@@ -13,7 +13,7 @@ mediante el comando 'racc ./parser/grammar.rb -oparser/racc.rb'
 Luego de compilar, la ejecución se hará mediante ./lanscii [archivo a analizar] 
 esto reportará posibles errores de lexing encontrados, si no se encuentra 
 ninguno, los tokens hallados serán parseados en un árbol sintactico e impreso
-en pantala de acuerdo al formato indicado. Si un error de sintaxis es contrado
+en pantalla de acuerdo al formato indicado. Si un error de sintaxis es contrado
 se reportará y terminará la ejecución.
 
 Con el comando rake run, se compilará la gramática y se ejecutará el parser
