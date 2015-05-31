@@ -171,7 +171,7 @@ rule
      | exp MULTIPLY exp   {result = ExprMult::new(val[0],val[2])}
      | exp SLASH    exp   {result = ExprDiv::new(val[0],val[2])}
      | exp PERCENT  exp   {result = ExprMod::new(val[0],val[2])}
-     | MINUS exp          {result = ExprUnMinus::new(val[0])}  
+     | MINUS exp          {result = ExprUnMinus::new(val[1])}  
      | LPARENTHESIS exp RPARENTHESIS        {result = val[1]}           
      | NUMBER             {result = ExprNumber::new(val[0].to_i)}
 end

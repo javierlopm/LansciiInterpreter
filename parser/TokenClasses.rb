@@ -434,7 +434,7 @@ class UnExpr
 		@subexpr1 = subexpr1
 	end
 
-	def print
+	def print(level=0)
 		printLevel(level)
 		puts "OPERATION: #{@op}"
 		@subexpr1.print(level+1)	end
@@ -444,7 +444,6 @@ end
 class ExprUnMinus < UnExpr
 
 	def initialize(subexpr1)
-
 		super
 		@op = "-"
 		@type = 0
