@@ -65,8 +65,6 @@ class Error
       msg += "Identifier starts with a number"
     when "BADOPEN"
       msg += "Comment section opened but not closed"
-    when "BADCLOSE"
-      msg += "Comment section closed but not opened"
     when "OVERFLOW"
       msg += "Integer constant overflow"
     end
@@ -82,6 +80,7 @@ class FindRegex
 
     #Arreglo de hashes con expr. regulares y nombres de token asociados
     @MAYBETOKEN = [
+      {:regex=>/\{\-/,        :name=>"BADOPEN"            },
       {:regex=>/\{/,          :name=>"LCURLY"             },
       {:regex=>/\}/,          :name=>"RCURLY"             },
       {:regex=>/\|/,          :name=>"PIPE"               },
@@ -128,7 +127,6 @@ class FindRegex
         #Arreglo de hashes para los diferentes tipos de comentarios
         @COMMENTS = [
             {:regex=>/\{\-.*?\-\}/m , :type=>"GOODCOMMENT"},
-            {:regex=>/\{\-/         , :type=>"BADOPEN"    },
         ]
         
         @myFile   = myFile  #Archivo a ser analizado
@@ -141,7 +139,9 @@ class FindRegex
 
     def findAll
 
-        while !@myFile.empty? do
+        isbadopen = false
+
+        while !@myFile.empty? and not isbadopen do
             
             #Extraccion de cadenas de caracteres ignorables
             self.ignoreWhiteSpace
@@ -159,9 +159,15 @@ class FindRegex
                 if $&
                     # Extrae la palabra
                     word = @myFile[0,($&.length)]
-                    
+
+                    if mb[:name].eql?"BADOPEN"
+                      @myErrors.clear
+                      errorFound = Error.new(mb[:name],@line,@column,mb[:name])
+                      @myErrors << errorFound
+                      isbadopen = true
+                      break
                     # Verifica si el elemento encotrado era valido
-                    if mb[:name].eql?"404"
+                    elsif mb[:name].eql?"404"
                         # Crea error en caso de haber llegado al final
                         errorFound = Error.new(word,@line,@column,"UNEXPECTED")
                         @myErrors << errorFound

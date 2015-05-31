@@ -12,7 +12,7 @@ def main
 		lexer.findAll
 		lexer.printOutPut
 		mylist = lexer.toList
-		print mylist
+		#print mylist
 	end
 end
 
