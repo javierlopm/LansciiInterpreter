@@ -45,7 +45,6 @@ end
 
 #Precedencias
 prechigh
-    left SEMICOLON
     nonassoc NOT #Es no asociativo o asociativo a izq
     left     AND
     left     OR 
@@ -83,7 +82,7 @@ rule
          | declare PERCENT         identifierlist {return "Declare"}
          | declare EXCLAMATIONMARK identifierlist {return "Declare"}
          | declare AT              identifierlist {return "Declare"}
-
+         #| declare                        {return "Declare"}  Como mil errores jejeps
 
   identifierlist: identifierlist IDENTIFIER  {return "Identifier"}
                 | IDENTIFIER                 {return "Identifier"}
@@ -95,8 +94,7 @@ rule
              | conditional
              | notDetIteration
              | detIteration
-             | varIncorporationRange
-             | noVarIncoporationRange
+             | program
 
   assigment: IDENTIFIER EQUALS exp  = ASSIGNMENTRULE {
                 
@@ -107,42 +105,18 @@ rule
   sequence: instruction SEMICOLON instruction = SEQUENCERULE { result = Secuence::new(val[0],val[2])}
             
 
-  input: READ IDENTIFIER   {
-            identifier = ExprId::new(val[1])
-            result     = Read::new(identifier)
-        }
+  input: READ IDENTIFIER   {result = Read::new(val[1])}
 
-  output: WRITE IDENTIFIER {
-            identifier = ExprId::new(val[1])
-            result = Write::new(identifier)
-        }
+  output: WRITE IDENTIFIER {result = Write::new(val[1])}
 
   conditional:  LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS {
                     result = Conditional::new(val[1],val[3])
              }
              | LPARENTHESIS exp QUESTIONMARK instruction COLON instruction RPARENTHESIS {result = Conditional2::new(val[1],val[3],val[5])}
 
-  notDetIteration: LSQUARE exp PIPE instruction RSQUARE {
-                        result = IIteration::new(val[1],val[3])
-                   }
+  notDetIteration: LSQUARE exp COMPREHENSION exp PIPE instruction RSQUARE {result = DIteration::new(val[1],val[3],val[5])}
 
-  detIteration: LSQUARE exp COMPREHENSION exp PIPE instruction RSQUARE {
-                    result = DIteration::new(val[1],val[3],val[5])
-                }
-              | LSQUARE IDENTIFIER COLON exp COMPREHENSION exp  PIPE instruction RSQUARE {
-                    identifier = ExprId::new(val[1])
-                    result     = DIteration2::new(identifier,val[3],val[5],val[7])
-                }
-
-  varIncorporationRange:  LCURLY declare PIPE instruction RCURLY  {
-                            #Ignorando declare en esta entrega
-                            result = VarBlock::new(val[3])
-                          } 
-  
-  noVarIncoporationRange: LCURLY instruction RCURLY {
-                            #Ignorando declare en esta entrega
-                            result = Block::new(val[1])
-                          }
+  detIteration: LSQUARE identifier COLON exp COMPREHENSION exp  PIPE instruction RSQUARE {result = DIteration2::new(val[1],val[3],val[5],val[7])}
 
   exp: IDENTIFIER   {result = ExprId::new(val[0])}
        #Bool
@@ -163,7 +137,7 @@ rule
      | exp VERTICALCAT   exp {result = ExprVerConcat::new(val[0],val[2])}
      | exp TRANSPOSE         {result = ExprTranspose::new(val[0])}
      | ROTATION  exp         {result = Expr::new(val[2])}
-     | EMPTYCANVAS           {result = ExprEmptyCanvas::new}
+     | EMPTYCANVAS           {result = ExprEmptyCanvasE::new()}
      | CANVAS                {result = ExprCanvas::new(val[0])}
        #Artimeticos 
      | exp PLUS     exp   {result = ExprSum::new(val[0],val[2])}
