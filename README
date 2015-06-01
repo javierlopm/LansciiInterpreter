@@ -19,6 +19,13 @@ se reportará y terminará la ejecución.
 Con el comando rake run, se compilará la gramática y se ejecutará el parser
 reconociendo el archivo parser/example1.lc
 
+El comando rake suite ejecutará todos los ejemplos correctos de la carpeta 
+parser/examples y colocara su salida en /salida.txt
+
+El comando rake runBadGrammar mostrará el error del ejemplo 
+parser/example/example8.lc
+
+
 
 Decisiones de implementación
 ============================
@@ -59,3 +66,5 @@ En la carpeta parser/examples se encuentran alguno ejemplos de programas.
 * example7.lc muestra un arbol de expresión correcto respecto a la gramática
               pero equivocado respecto a la compatibilidad de tipos a analizar
               en las próximas entregas
+* example8.lc Ejemplo con dos errores de gramática, el programa muestra el 
+              primer error.

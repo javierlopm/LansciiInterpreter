@@ -8,7 +8,26 @@ task :debug do
     sh 'ruby lanscii parsere/example/example5.lc'
 end
 
+task :suite => [:compile_grammar] do
+
+    sh "echo 'SUITE de ejemplo' > salida.txt"
+
+    (1...8).each do |ej|
+        a = "parser/example/example#{ej}.lc"
+        puts "CORRIENDO #{a}"
+        sh " echo 'CORRIENDO #{a}' >> salida.txt"
+
+        sh "cat #{a} >> salida.txt"
+        sh "./lanscii #{a} >> salida.txt"
+        sh "echo '\n\n\n' >> salida.txt"
+    end
+    
+end
+
 task :run => [:compile_grammar] do
-    #sh 'ruby lanscii'
-    sh 'ruby lanscii parser/example/example5.lc'
+    sh "./lanscii parser/example/example1.lc"
+end
+
+task :runBadGrammar => [:compile_grammar] do
+    sh "./lanscii parser/example/example8.lc"
 end
