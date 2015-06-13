@@ -521,6 +521,22 @@ class ExprAnd < BinExpr
 		@op = "/\\"
 		@type = 1
 	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?1 then
+			# ERROR: debe ser booleano
+			@symbolTable.errors << "{subexpr {@subexpr1} is not Boolean}"
+		end
+
+		unless @subexpr2.type.eql?1 then
+			# ERROR: debe ser booleano
+			@symbolTable.errors << "{subexpr {@subexpr2} is not Boolean}"
+		end
+
+	end
 end
 	
 class ExprOr < BinExpr
@@ -530,6 +546,23 @@ class ExprOr < BinExpr
 		@op = "\\/"
 		@type = 1
 	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?1 then
+			# ERROR: debe ser booleano
+			@symbolTable.errors << "{subexpr {@subexpr1} is not Boolean}"
+		end
+
+		unless @subexpr2.type.eql?1 then
+			# ERROR: debe ser booleano
+			@symbolTable.errors << "{subexpr {@subexpr2} is not Boolean}"
+		end
+
+	end
+
 end
 	
 class ExprLess < BinExpr
@@ -619,7 +652,8 @@ class UnExpr
 	def print(level=0)
 		printLevel(level)
 		puts "OPERATION: #{@op}"
-		@subexpr1.print(level+1)	end
+		@subexpr1.print(level+1)	
+	end
 end
 
 
@@ -629,6 +663,16 @@ class ExprUnMinus < UnExpr
 		super
 		@op = "-"
 		@type = 0
+	end
+
+	def context()
+		@subexpr1.context()
+
+		unless @subexpr1.type.eql? @type then
+			@symbolTable.errors << "subexpr {@subexpr1} is not a Aritmetic"
+			
+		end
+		
 	end
 end
 	
@@ -640,6 +684,16 @@ class ExprNot < UnExpr
 		@op = "^"
 		@type = 1
 	end
+
+	def context()
+		@subexpr1.context()
+
+		unless @subexpr1.type.eql? @type then
+			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
+			
+		end
+		
+	end
 end
 	
 class ExprTranspose < UnExpr
@@ -649,6 +703,16 @@ class ExprTranspose < UnExpr
 		super
 		@op = "'"
 		@type = 2
+	end
+
+	def context()
+		@subexpr1.context()
+
+		unless @subexpr1.type.eql? @type then
+			@symbolTable.errors << "subexpr {@subexpr1} is not a Canvas"
+			
+		end
+		
 	end
 end
 	
