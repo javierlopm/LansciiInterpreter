@@ -395,6 +395,11 @@ class ExprSum < BinExpr
 		@op = "+"
 		@type = 0
 	end
+
+	def context ()
+
+
+	end
 end
 
 class ExprSubs < BinExpr
@@ -632,14 +637,26 @@ class ExprId
 
 	def initialize(identifier)
 
-		@subexpr1 = identifier
+		@identifier = identifier
 		@type = 3
 	end
 
 	def print(level=0)
 		printLevel(level)
-		puts "IDENTIFIER: #{@subexpr1}"
+		puts "IDENTIFIER: #{@identifier}"
 	end
+
+	def context()
+
+		symboltype = @symbolTable.lookup(@identifier)
+		if symboltype.nil? then 
+			# Error: No declarado
+			@symbolTable.errors << "identifier {@identifier} is not declare"
+		else
+			@type = symboltype
+		end
+	end
+
 end
 	
 class ExprCanvas
@@ -647,7 +664,7 @@ class ExprCanvas
 	def initialize(canvas)
 
 		@subexpr1 = canvas
-		@type = 3
+		@type = 2
 	end
 
 	def print(level=0)
