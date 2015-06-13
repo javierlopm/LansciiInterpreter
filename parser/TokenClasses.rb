@@ -397,7 +397,18 @@ class ExprSum < BinExpr
 	end
 
 	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
 
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+		end
+
+		unless @subexpr2.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
+		end
 
 	end
 end
@@ -409,6 +420,23 @@ class ExprSubs < BinExpr
 		@op = "-"
 		@type = 0
 	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+		end
+
+		unless @subexpr2.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
+		end
+
+	end
+
 end
 
 class ExprMult < BinExpr
@@ -417,6 +445,22 @@ class ExprMult < BinExpr
 		super
 		@op = "*"
 		@type = 0
+	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+		end
+
+		unless @subexpr2.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
+		end
+
 	end
 end
 	
@@ -427,6 +471,22 @@ class ExprDiv < BinExpr
 		@op = "/"
 		@type = 0
 	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+		end
+
+		unless @subexpr2.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
+		end
+
+	end
 end
 	
 class ExprMod < BinExpr
@@ -435,6 +495,22 @@ class ExprMod < BinExpr
 		super
 		@op = "%"
 		@type = 0
+	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+		end
+
+		unless @subexpr2.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
+		end
+
 	end
 end
 	
