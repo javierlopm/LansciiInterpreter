@@ -881,7 +881,14 @@ class ExprParenthesis < SymbolUser
 		@type = 3
 	end
 
-	def context();end
+	def context()
+		@subexpr1.context()
+		
+		if @type.eql?3 then
+			@type = @subexpr1.type
+		end
+
+	end
 end
 	
 class ExprNumber < Constant
