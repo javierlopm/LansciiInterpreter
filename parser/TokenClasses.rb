@@ -400,12 +400,12 @@ class ExprSum < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
+		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
 		end
 
-		unless @subexpr2.type.eql?0 then
+		unless @type.eql? @subexpr2.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
 		end
@@ -425,12 +425,12 @@ class ExprSubs < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
+		unless @type.eql? @subexpr1.typethen
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
 		end
 
-		unless @subexpr2.type.eql?0 then
+		unless @type.eql? @subexpr2.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
 		end
@@ -451,12 +451,12 @@ class ExprMult < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
+		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
 		end
 
-		unless @subexpr2.type.eql?0 then
+		unless @type.eql? @subexpr2.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
 		end
@@ -476,12 +476,12 @@ class ExprDiv < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
+		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
 		end
 
-		unless @subexpr2.type.eql?0 then
+		unless @type.eql? @subexpr2.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
 		end
@@ -501,12 +501,12 @@ class ExprMod < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
+		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
 		end
 
-		unless @subexpr2.type.eql?0 then
+		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser aritmetica
 			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
 		end
@@ -526,12 +526,12 @@ class ExprAnd < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?1 then
+		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser booleano
 			@symbolTable.errors << "{subexpr {@subexpr1} is not Boolean}"
 		end
 
-		unless @subexpr2.type.eql?1 then
+		unless @type.eql? @subexpr2.type then
 			# ERROR: debe ser booleano
 			@symbolTable.errors << "{subexpr {@subexpr2} is not Boolean}"
 		end
@@ -551,12 +551,12 @@ class ExprOr < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?1 then
+		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser booleano
 			@symbolTable.errors << "{subexpr {@subexpr1} is not Boolean}"
 		end
 
-		unless @subexpr2.type.eql?1 then
+		unless @type.eql? @subexpr2.type then
 			# ERROR: debe ser booleano
 			@symbolTable.errors << "{subexpr {@subexpr2} is not Boolean}"
 		end
@@ -628,6 +628,23 @@ class ExprVerConcat < BinExpr
 		@op = "&"
 		@type = 2
 	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @type.eql? @subexpr1.type then
+			# ERROR: debe ser canvas
+			@symbolTable.errors << "subexpr {@subexpr1} is not Canvas"
+		end
+
+		unless @type.eql? @subexpr2.type then
+			# ERROR: debe ser canvas
+			@symbolTable.errors << "subexpr {@subexpr2} is not Canvas"
+		end
+
+	end
+
 end
 	
 class ExprHorConcat < BinExpr
@@ -636,6 +653,22 @@ class ExprHorConcat < BinExpr
 		super
 		@op = "~"
 		@type = 2
+	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @type.eql? @subexpr1.type then
+			# ERROR: debe ser booleano
+			@symbolTable.errors << "subexpr {@subexpr1} is not Canvas"
+		end
+
+		unless @type.eql? @subexpr2.type then
+			# ERROR: debe ser booleano
+			@symbolTable.errors << "subexpr {@subexpr2} is not Canvas"
+		end
+
 	end
 end
 	
@@ -668,7 +701,7 @@ class ExprUnMinus < UnExpr
 	def context()
 		@subexpr1.context()
 
-		unless @subexpr1.type.eql? @type then
+		unless @type.eql? @subexpr1.type then
 			@symbolTable.errors << "subexpr {@subexpr1} is not a Aritmetic"
 			
 		end
@@ -688,7 +721,7 @@ class ExprNot < UnExpr
 	def context()
 		@subexpr1.context()
 
-		unless @subexpr1.type.eql? @type then
+		unless @type.eql? @subexpr1.type then
 			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
 			
 		end
@@ -708,7 +741,7 @@ class ExprTranspose < UnExpr
 	def context()
 		@subexpr1.context()
 
-		unless @subexpr1.type.eql? @type then
+		unless @type.eql? @subexpr1.type @type then
 			@symbolTable.errors << "subexpr {@subexpr1} is not a Canvas"
 			
 		end
