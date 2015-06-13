@@ -43,13 +43,14 @@ class Asign
 		@subexpr1.print(level+2)
 	end
 
-	def check ()
+	def context()
 
 		symboltype = @symbolTable.lookup(@identifier)
 		if symboltype.nil? then 
 			# Error: No declarado
 			@symbolTable.errors << "identifier {@identifier} is not declare"
 		else
+			@subexpr1.context()
 			unless symboltype.eql? @subexpr1.type then
 				# Error: Tipo
 				@symbolTable.errors << "identifier {@identifier} and subexpr {@subexpr1} are different types"
@@ -129,6 +130,18 @@ class Conditional
 		puts "THEN:"
 		@instrucion1.print(level+2)
 	end
+
+	def context()
+
+		@subexpr1.context()
+
+		unless @subexpr1.type.eql? 1 then
+			# Error: Debe ser de tipo booleano
+			@symbolTable << "subexpr {@subexpr1} is not boolean"
+		end
+		@instrucion1.context()
+
+	end
 end
 
 class Conditional2 < Conditional
@@ -155,6 +168,19 @@ class Conditional2 < Conditional
 		printLevel(level+1)
 		puts "ELSE:"
 		@instrucion2.print(level+2)
+	end
+
+
+	def context()
+
+		@subexpr1.context()
+
+		unless @subexpr1.type.eql? 1 then
+			# Error: Debe ser de tipo booleano
+			@symbolTable << "subexpr {@subexpr1} is not boolean"
+		end
+		@instrucion1.context()
+		@instrucion2.context()
 	end
 end
 
