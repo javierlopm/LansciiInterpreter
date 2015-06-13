@@ -15,8 +15,9 @@ def main
         if lexer.errorFound
             lexer.printOutPut
         else
-            parser = Calcparser::Parser.new.parser(lexer.toList)
-            parser.print
+            tree = Calcparser::Parser.new.parser(lexer.toList)
+            #tree.check
+            tree.print
         end
 
         
