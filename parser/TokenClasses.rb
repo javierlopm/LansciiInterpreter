@@ -263,7 +263,6 @@ type = 0 ==> Aritmetic
 type = 1 ==> Boolean
 type = 2 ==> Canvas
 type = 3 ==> Cualquier tipo
-
 =end
 
 # Expresiones binarias

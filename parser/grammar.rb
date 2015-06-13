@@ -73,20 +73,20 @@ preclow
 rule
   target: program {result = val[0]}
 
-  program: LCURLY declare PIPE instruction RCURLY  {result = val[3]}
+  program: LCURLY declare PIPE instruction RCURLY  {val[1].show_all ;result = val[3]}
          | LCURLY instruction RCURLY               {result = val[1]}
   
   #Declaraciones sin construccion, siguiente entrega
-  declare: PERCENT         identifierlist {return "Declare"}
-         | EXCLAMATIONMARK identifierlist {return "Declare"}
-         | AT              identifierlist {return "Declare"}
-         | declare PERCENT         identifierlist {return "Declare"}
-         | declare EXCLAMATIONMARK identifierlist {return "Declare"}
-         | declare AT              identifierlist {return "Declare"}
+  declare: PERCENT         identifierlist {puts "Esto recibi #{val} si, aqui agregue"; sb = SymbolTable::new(); sb.insert_symbol_list(val[1],val[0]); result = sb  }
+         | EXCLAMATIONMARK identifierlist {puts "Esto recibi #{val}"; sb = SymbolTable::new(); sb.insert_symbol_list(val[1],val[0]); result = sb  }
+         | AT              identifierlist {puts "Esto recibi #{val}"; sb = SymbolTable::new(); sb.insert_symbol_list(val[1],val[0]); result = sb  }
+         | declare PERCENT         identifierlist {puts "Esto recibi #{val}"; val[0].insert_symbol_list(val[2],val[1]); result = val[0] }
+         | declare EXCLAMATIONMARK identifierlist {puts "Esto recibi #{val}"; val[0].insert_symbol_list(val[2],val[1]); result = val[0] }
+         | declare AT              identifierlist {puts "Esto recibi #{val}"; val[0].insert_symbol_list(val[2],val[1]); result = val[0] }
 
 
-  identifierlist: identifierlist IDENTIFIER  {return "Identifier"}
-                | IDENTIFIER                 {return "Identifier"}
+  identifierlist: identifierlist IDENTIFIER  {result = val[0] << val[1] }
+                | IDENTIFIER                 {result = [val[0]]}
 
   instruction: assigment        
              | sequence
@@ -178,6 +178,7 @@ end
 
 ---- header ----
 require_relative "TokenClasses"
+require_relative "../dataStructures/symbolTable"
 
 ---- inner ----
     def parser(tokens)

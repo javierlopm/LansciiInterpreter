@@ -7,9 +7,28 @@ class SymbolTable
 
   def insert_symbol(identifier,content)
     if contains?identifier
+      puts "Si, mira me encontre a #{identifier} y ya lo tenia"
       @errors << "identifier #{identifier} already declared"
     else
       @tb[identifier] = content
+    end
+  end
+
+  def insert_symbol_list(identifierList,type)
+    
+    case type
+      when '%'
+        code = 0
+      when '!'
+        code = 1
+      when '@'
+        code = 2
+      else
+        code = 3
+    end
+
+    identifierList.each do |i|
+      self.insert_symbol(identifierList,code)
     end
   end
 
@@ -52,6 +71,19 @@ class SymbolTable
       @father.lookup(identifier)
     end
     #res = @tb[identifier]
+  end
+
+  def show_all
+    puts "My father is : #{@father}"
+    puts "My table  has: "
+    @tb.each do |entry|
+      print "#{entry} "
+    end
+    puts "\nAnd my errors are:"
+    @errors.each do |er|
+      print "#{er} "
+    end
+    
   end
 
 end
