@@ -850,6 +850,8 @@ class ExprParenthesis
 		@subexpr1 = subexpr1
 		@type = 3
 	end
+
+	def context();end
 end
 	
 class ExprNumber
@@ -864,6 +866,8 @@ class ExprNumber
 		printLevel(level)
 		puts "NUMBER: #{@subexpr1}"
 	end
+
+	def context();end
 end
 
 
@@ -880,6 +884,8 @@ class ExprTrue
 		printLevel(level)
 		puts "BOOL: #{@subexpr1}"
 	end
+
+	def context();end
 end
 	
 class ExprFalse
@@ -894,6 +900,8 @@ class ExprFalse
 		printLevel(level)
 		puts "BOOL: #{@subexpr1}"
 	end
+
+	def context();end
 end
 	
 class ExprId
@@ -934,6 +942,8 @@ class ExprCanvas
 		printLevel(level)
 		puts "CANVAS: #{@subexpr1}"
 	end
+
+	def context();end
 end
 	
 class ExprEmptyCanvas
@@ -948,5 +958,7 @@ class ExprEmptyCanvas
 		printLevel(level)
 		puts "CANVAS: #{@subexpr1}"
 	end
+
+	def context();end
 end
 
