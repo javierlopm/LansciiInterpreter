@@ -72,6 +72,11 @@ class Secuence
 		@instrucion1.print(level)
 		@instrucion2.print(level)
 	end
+
+	def context()
+		@instrucion1.context()
+		@instrucion2.context()
+	end
 end
 
 class Read
@@ -206,6 +211,16 @@ class IIteration
 
 	end
 
+	def context()
+
+		@subexpr1.context()
+	
+		unless @subexpr1.type.eql?1 then
+			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
+		end
+		@instrucion1.context()
+	end
+
 end
 
 class DIteration
@@ -234,6 +249,22 @@ class DIteration
 		puts "DO:"
 		@instrucion1.print(level+2)
 	end
+
+	def context()
+
+		@subexpr1.context()
+		@subexpr1.context()
+
+		unless @subexpr1.type.eql?0 then
+			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		end
+		unless @subexpr2.type.eql?0 then
+			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
+		end
+
+		@instrucion1.context()
+	end
+
 end
 
 class DIteration2
@@ -266,6 +297,31 @@ class DIteration2
 		puts "DO:"
 		@instrucion1.print(level+2)
 
+	end
+
+	def context()
+
+		symboltype = @symbolTable.lookup(@identifier)
+		if symboltype.nil? then 
+			# Error: No declarado
+			@symbolTable.errors << "identifier {@identifier} is not declare"
+		end
+		unless symboltype.eql?0 then
+			# Error: La variable debe ser del tipo aritmetica
+			@symbolTable.errors << "identifier {@identifier} is not Aritmetic"
+		end
+
+		@subexpr1.context()
+		@subexpr1.context()
+
+		unless @subexpr1.type.eql?0 then
+			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		end
+		unless @subexpr2.type.eql?0 then
+			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
+		end
+
+		@instrucion1.context()
 	end
 end
 
