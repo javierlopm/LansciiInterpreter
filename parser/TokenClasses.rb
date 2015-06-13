@@ -14,6 +14,13 @@ def printLevel(level)
 	
 end
 
+class Program
+	def initialize (instrucion1,symbolTable=nil)
+		@instrucion1 = @instrucion1
+		@symbolTable = symbolTable
+	end
+end
+
 class Asign
 
 	def initialize (identifier, subexpr1)
@@ -224,7 +231,8 @@ end
 
 class VarBlock
 
-	def initialize(instrucion1)
+	def initialize(symbolTable,instrucion1)
+		@symbolTable = symbolTable
 		@instrucion1 = instrucion1
 	end
 
