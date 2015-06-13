@@ -548,6 +548,10 @@ class ExprId < Constant
 		@type = 3
 	end
 
+	def add_symbols(symbolTable)
+    	@symbolTable = symbolTable
+    end
+
 	def print(level=0)
 		printLevel(level)
 		puts "IDENTIFIER: #{@subexpr1}"
