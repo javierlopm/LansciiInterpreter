@@ -73,20 +73,41 @@ preclow
 rule
   target: program {result = val[0]}
 
-  program: LCURLY declare PIPE instruction RCURLY  {result = val[3]}
-         | LCURLY instruction RCURLY               {result = val[1]}
+  program: LCURLY declare PIPE instruction RCURLY  {val[1].show_all ;result = Program::new(val[1],val[3]); result = val[3]}
+         | LCURLY instruction RCURLY               {result = Program::new(val[1]);result = val[3]}
   
   #Declaraciones sin construccion, siguiente entrega
-  declare: PERCENT         identifierlist {return "Declare"}
-         | EXCLAMATIONMARK identifierlist {return "Declare"}
-         | AT              identifierlist {return "Declare"}
-         | declare PERCENT         identifierlist {return "Declare"}
-         | declare EXCLAMATIONMARK identifierlist {return "Declare"}
-         | declare AT              identifierlist {return "Declare"}
+  declare: PERCENT         identifierlist {
+              st = SymbolTable::new()
+              st.insert_symbol_list(val[1],val[0])
+              result = st 
+           }
+         | EXCLAMATIONMARK identifierlist {
+              st = SymbolTable::new()
+              st.insert_symbol_list(val[1],val[0])
+              result = st 
+           }
+         | AT              identifierlist {
+              st = SymbolTable::new()
+              st.insert_symbol_list(val[1],val[0])
+              result = st 
+           }
+         | declare PERCENT         identifierlist {
+              val[0].insert_symbol_list(val[2],val[1])
+              result = val[0] 
+           }
+         | declare EXCLAMATIONMARK identifierlist {
+              val[0].insert_symbol_list(val[2],val[1])
+              result = val[0] 
+           }
+         | declare AT              identifierlist {
+              val[0].insert_symbol_list(val[2],val[1])
+              result = val[0] 
+           }
 
 
-  identifierlist: identifierlist IDENTIFIER  {return "Identifier"}
-                | IDENTIFIER                 {return "Identifier"}
+  identifierlist: identifierlist IDENTIFIER  {result = val[0] << val[1]}
+                | IDENTIFIER                 {result = [val[0]]        }
 
   instruction: assigment        
              | sequence
@@ -130,17 +151,18 @@ rule
                     result = DIteration::new(val[1],val[3],val[5])
                 }
               | LSQUARE IDENTIFIER COLON exp COMPREHENSION exp  PIPE instruction RSQUARE {
-                    identifier = ExprId::new(val[1])
-                    result     = DIteration2::new(identifier,val[3],val[5],val[7])
+                    #Creacion de tabla
+                    st = SymbolTable::new()
+                    st.insert_symbol(val[1],'%')     #entero implicito
+                    #identifier = ExprId::new(val[1])
+                    result     = DIteration2::new(st,val[3],val[5],val[7])
                 }
 
   varIncorporationRange:  LCURLY declare PIPE instruction RCURLY  {
-                            #Ignorando declare en esta entrega
-                            result = VarBlock::new(val[3])
+                            result = VarBlock::new(val[1],val[3])
                           } 
   
   noVarIncoporationRange: LCURLY instruction RCURLY {
-                            #Ignorando declare en esta entrega
                             result = Block::new(val[1])
                           }
 
@@ -178,6 +200,7 @@ end
 
 ---- header ----
 require_relative "TokenClasses"
+require_relative "../dataStructures/symbolTable"
 
 ---- inner ----
     def parser(tokens)

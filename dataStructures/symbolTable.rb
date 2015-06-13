@@ -7,9 +7,28 @@ class SymbolTable
 
   def insert_symbol(identifier,content)
     if contains?identifier
+      #print "Si, mira me encontre a #{identifier}  en"
       @errors << "identifier #{identifier} already declared"
     else
       @tb[identifier] = content
+    end
+  end
+
+  def insert_symbol_list(identifierList,type)
+    
+    case type
+      when '%'
+        code = 0
+      when '!'
+        code = 1
+      when '@'
+        code = 2
+      else
+        code = 3
+    end
+
+    identifierList.each do |i|
+      self.insert_symbol(i,code)
     end
   end
 
@@ -38,6 +57,7 @@ class SymbolTable
     if @father.nil? then
       return @tb.has_key?(identifier)
     else
+      #No deberia haber problemas de declaraciones en diferentes niveles
       return (@tb.has_key?(identifier) or @father.contains?(identifier))
     end
     #res = @tb.has_key?identifier
@@ -52,6 +72,19 @@ class SymbolTable
       @father.lookup(identifier)
     end
     #res = @tb[identifier]
+  end
+
+  def show_all
+    puts "My father is : #{@father}"
+    puts "My table  has: "
+    @tb.each do |entry|
+      print "#{entry} "
+    end
+    puts "\nAnd my errors are:"
+    @errors.each do |er|
+      print "#{er} "
+    end
+    
   end
 
 end
