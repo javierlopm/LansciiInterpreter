@@ -19,6 +19,10 @@ class Program
 		@instrucion1 = @instrucion1
 		@symbolTable = symbolTable
 	end
+
+	def context()
+		@instrucion1.context()
+	end
 end
 
 class Asign
@@ -95,6 +99,15 @@ class Read
 		puts "VARIABLE: "
 		@identifier.print(level+2)
 	end
+
+	def context()
+		@identifier.context
+
+		unless @identifier.type.eql?0 or @identifier.type.eql?1 then
+			@symbolTable << "subexpr {@subexpr1} must be Aritmetic or Boolean"
+		end
+	end
+
 end
 
 class Write 
@@ -113,6 +126,15 @@ class Write
 		puts "VARIABLE: "
 		@subexpr1.print(level+2)
 	end
+
+	def context()
+
+		@subexpr1.context()
+
+		unless @subexpr1.type.eql?2 then
+			#ERROR: debe ser Canvas
+			@symbolTable << "subexpr {@subexpr1} is not Canvas"
+		end
 end
 
 class Conditional
@@ -924,7 +946,9 @@ class ExprId
 			# Error: No declarado
 			@symbolTable.errors << "identifier {@identifier} is not declare"
 		else
-			@type = symboltype
+			if @type.eql?3 then
+				@type = symboltype
+			end
 		end
 	end
 
