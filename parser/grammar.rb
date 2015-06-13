@@ -77,16 +77,37 @@ rule
          | LCURLY instruction RCURLY               {result = val[1]}
   
   #Declaraciones sin construccion, siguiente entrega
-  declare: PERCENT         identifierlist {puts "Esto recibi #{val} si, aqui agregue"; sb = SymbolTable::new(); sb.insert_symbol_list(val[1],val[0]); result = sb  }
-         | EXCLAMATIONMARK identifierlist {puts "Esto recibi #{val}"; sb = SymbolTable::new(); sb.insert_symbol_list(val[1],val[0]); result = sb  }
-         | AT              identifierlist {puts "Esto recibi #{val}"; sb = SymbolTable::new(); sb.insert_symbol_list(val[1],val[0]); result = sb  }
-         | declare PERCENT         identifierlist {puts "Esto recibi #{val}"; val[0].insert_symbol_list(val[2],val[1]); result = val[0] }
-         | declare EXCLAMATIONMARK identifierlist {puts "Esto recibi #{val}"; val[0].insert_symbol_list(val[2],val[1]); result = val[0] }
-         | declare AT              identifierlist {puts "Esto recibi #{val}"; val[0].insert_symbol_list(val[2],val[1]); result = val[0] }
+  declare: PERCENT         identifierlist {
+              sb = SymbolTable::new()
+              sb.insert_symbol_list(val[1],val[0])
+              result = sb 
+           }
+         | EXCLAMATIONMARK identifierlist {
+              sb = SymbolTable::new()
+              sb.insert_symbol_list(val[1],val[0])
+              result = sb 
+           }
+         | AT              identifierlist {
+              sb = SymbolTable::new()
+              sb.insert_symbol_list(val[1],val[0])
+              result = sb 
+           }
+         | declare PERCENT         identifierlist {
+              val[0].insert_symbol_list(val[2],val[1])
+              result = val[0] 
+           }
+         | declare EXCLAMATIONMARK identifierlist {
+              val[0].insert_symbol_list(val[2],val[1])
+              result = val[0] 
+           }
+         | declare AT              identifierlist {
+              val[0].insert_symbol_list(val[2],val[1])
+              result = val[0] 
+           }
 
 
-  identifierlist: identifierlist IDENTIFIER  {result = val[0] << val[1] }
-                | IDENTIFIER                 {result = [val[0]]}
+  identifierlist: identifierlist IDENTIFIER  {r = val[0] << val[1] ; puts "En la lista encole #{r}"; result = r}
+                | IDENTIFIER                 {r = [val[0]]; puts "En la lista encole #{r}"; result = r}
 
   instruction: assigment        
              | sequence
