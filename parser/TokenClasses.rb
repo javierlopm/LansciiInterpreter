@@ -503,12 +503,12 @@ class ExprMod < BinExpr
 
 		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
 		end
 
 		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
+			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
 		end
 
 	end
@@ -528,12 +528,12 @@ class ExprAnd < BinExpr
 
 		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser booleano
-			@symbolTable.errors << "{subexpr {@subexpr1} is not Boolean}"
+			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
 		end
 
 		unless @type.eql? @subexpr2.type then
 			# ERROR: debe ser booleano
-			@symbolTable.errors << "{subexpr {@subexpr2} is not Boolean}"
+			@symbolTable.errors << "subexpr {@subexpr2} is not Boolean"
 		end
 
 	end
@@ -553,12 +553,12 @@ class ExprOr < BinExpr
 
 		unless @type.eql? @subexpr1.type then
 			# ERROR: debe ser booleano
-			@symbolTable.errors << "{subexpr {@subexpr1} is not Boolean}"
+			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
 		end
 
 		unless @type.eql? @subexpr2.type then
 			# ERROR: debe ser booleano
-			@symbolTable.errors << "{subexpr {@subexpr2} is not Boolean}"
+			@symbolTable.errors << "subexpr {@subexpr2} is not Boolean"
 		end
 
 	end
@@ -572,6 +572,23 @@ class ExprLess < BinExpr
 		@op = "<"
 		@type = 1
 	end
+
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		end
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
+		end
+
+	end
 end
 	
 class ExprLessEql < BinExpr
@@ -580,6 +597,22 @@ class ExprLessEql < BinExpr
 		super
 		@op = "<="
 		@type = 1
+	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		end
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
+		end
+
 	end
 end
 	
@@ -592,6 +625,21 @@ class ExprMore < BinExpr
 	end
 
 
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		end
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
+		end
+
+	end
 end
 	
 class ExprMoreEql < BinExpr
@@ -600,6 +648,23 @@ class ExprMoreEql < BinExpr
 		super
 		@op = ">="
 		@type = 1
+	end
+
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		end
+
+		unless @subexpr1.type.eql?0 then
+			# ERROR: debe ser aritmetica
+			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
+		end
+
 	end
 end
 	
@@ -610,6 +675,19 @@ class ExprEql < BinExpr
 		@op = "="
 		@type = 1
 	end
+
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless  (@subexpr1.type.eql?0 and @subexpr2.type.eql?0) or 
+			    (@type.eql? @subexpr1.type and  @type.eql? @subexpr1.type) then
+
+			@symbolTable.errors << "subexpr {@subexpr1} and subexpr {@subexpr2} wrong type"
+		end
+
+	end
 end
 	
 class ExprDiff < BinExpr
@@ -618,6 +696,18 @@ class ExprDiff < BinExpr
 		super
 		@op = "/="
 		@type = 1
+	end
+
+	def context ()
+		@subexpr1.context()
+		@subexpr2.context()
+
+		unless  (@subexpr1.type.eql?0 and @subexpr2.type.eql?0) or 
+			    (@type.eql? @subexpr1.type and  @type.eql? @subexpr1.type) then
+
+			@symbolTable.errors << "subexpr {@subexpr1} and subexpr {@subexpr2} wrong type"
+		end
+
 	end
 end
 	
