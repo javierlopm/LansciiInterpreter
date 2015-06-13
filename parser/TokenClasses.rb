@@ -5,6 +5,7 @@
     Patricia Reinoso 11-10851
 =end
 
+require_relative "../dataStructures/symbolTable"
 
 def printLevel(level)
 		
@@ -16,8 +17,9 @@ end
 
 class Program
 	def initialize (instrucion1,symbolTable=nil)
-		@instrucion1 = @instrucion1
+		@instrucion1 = instrucion1
 		@symbolTable = symbolTable
+		@instrucion1.add_symbols(symbolTable)
 	end
 
 	def context()
@@ -25,7 +27,8 @@ class Program
 	end
 end
 
-class Asign
+
+class Asign < SymbolUser
 
 	def initialize (identifier, subexpr1)
 
@@ -64,7 +67,7 @@ class Asign
 
 end
 
-class Secuence
+class Secuence < SymbolUser
 
 	def initialize (instrucion1, instrucion2)
 
@@ -83,7 +86,7 @@ class Secuence
 	end
 end
 
-class Read
+class Read < SymbolUser
 
 	def initialize (identifier)
 
@@ -110,7 +113,7 @@ class Read
 
 end
 
-class Write 
+class Write < SymbolUser
 
 	def initialize (subexpr1)
 
@@ -137,7 +140,7 @@ class Write
 		end
 end
 
-class Conditional
+class Conditional < SymbolUser
 
 	def initialize (subexpr1, instrucion1)
 		
@@ -211,7 +214,7 @@ class Conditional2 < Conditional
 	end
 end
 
-class IIteration
+class IIteration < SymbolUser
 
 	def initialize (subexpr1, instrucion1)
 		
@@ -245,7 +248,7 @@ class IIteration
 
 end
 
-class DIteration
+class DIteration < SymbolUser
 
 	def initialize(subexpr1, subexpr2, instrucion1)
 
@@ -289,7 +292,7 @@ class DIteration
 
 end
 
-class DIteration2
+class DIteration2 < SymbolUser
 
 	def initialize(identifier, subexpr1, subexpr2, instrucion1)
 
@@ -347,11 +350,16 @@ class DIteration2
 	end
 end
 
-class VarBlock
+class VarBlock < SymbolUser
 
 	def initialize(symbolTable,instrucion1)
 		@symbolTable = symbolTable
 		@instrucion1 = instrucion1
+	end
+
+	def add_symbols(symbolTable)
+		@symbolTable.add_father(symbolTable)
+		@instrucion1.add_symbols(@symbolTable)
 	end
 
 	def print(level=0)
@@ -365,7 +373,7 @@ class VarBlock
 	end
 end
 
-class Block
+class Block < SymbolUser
 
 	def initialize(instrucion1)
 		@instrucion1 = instrucion1
@@ -393,7 +401,7 @@ type = 3 ==> Cualquier tipo
 
 # Expresiones binarias
 
-class BinExpr
+class BinExpr < SymbolUser
 
 	def initialize (subexpr1, subexpr2)
 
@@ -787,7 +795,7 @@ end
 
 # Expresiones unarias
 
-class UnExpr 
+class UnExpr < SymbolUser
 
 	def initialize (subexpr1)
 
@@ -863,7 +871,7 @@ end
 	
 # Expresiones constantes
 
-class ExprParenthesis
+class ExprParenthesis < SymbolUser
 	
 	def initialize(subexpr1)
 
@@ -876,7 +884,7 @@ class ExprParenthesis
 	def context();end
 end
 	
-class ExprNumber
+class ExprNumber < Constant
 
 	def initialize(subexpr1)
 
@@ -894,7 +902,7 @@ end
 
 
 
-class ExprTrue
+class ExprTrue < Constant
 
 	def initialize()
 
@@ -910,7 +918,7 @@ class ExprTrue
 	def context();end
 end
 	
-class ExprFalse
+class ExprFalse < Constant
 
 	def initialize()
 
@@ -926,13 +934,17 @@ class ExprFalse
 	def context();end
 end
 	
-class ExprId
+class ExprId < Constant
 
 	def initialize(identifier)
 
 		@identifier = identifier
 		@type = 3
 	end
+
+	def add_symbols(symbolTable)
+    	@symbolTable = symbolTable
+    end
 
 	def print(level=0)
 		printLevel(level)
@@ -954,7 +966,7 @@ class ExprId
 
 end
 	
-class ExprCanvas
+class ExprCanvas < Constant
 
 	def initialize(canvas)
 
@@ -970,7 +982,7 @@ class ExprCanvas
 	def context();end
 end
 	
-class ExprEmptyCanvas
+class ExprEmptyCanvas < Constant
 
 	def initialize()
 

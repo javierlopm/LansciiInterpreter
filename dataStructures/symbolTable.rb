@@ -1,8 +1,20 @@
+=begin
+    Clases relativas a tablas de simbolos
+
+    Javier Lopez     11-10552
+    Patricia Reinoso 11-10851
+=end
+
+# Implementacion de tabla de simbolos
 class SymbolTable
   def initialize(father = nil)
     @tb = {}
     @father = father
     @errors = []
+  end
+
+  def add_father(father)
+    @father = father
   end
 
   def insert_symbol(identifier,content)
@@ -88,3 +100,35 @@ class SymbolTable
   end
 
 end
+
+# Clase padre de toda instruccion y expresion
+class SymbolUser                 #Jejeps no se me ocurrio otro nombre para esta clase
+  def add_symbols(symbolTable)
+    @symbolTable = symbolTable
+
+    if defined?@subexpr1
+      @subexpr1.add_symbols(symbolTable)
+    end
+
+    if defined?@subexpr2
+      @subexpr2.add_symbols(symbolTable)
+    end
+
+    if defined?@instrucion1
+      @instrucion1.add_symbols(symbolTable)
+    end
+
+    if defined?@instrucion2
+      @instrucion1.add_symbols(symbolTable)
+    end
+
+  end
+end
+
+# Clase padre de constantes, ignora la tabla de simbolos
+class Constant
+  def add_symbols(symbolTable)
+  end
+end
+
+

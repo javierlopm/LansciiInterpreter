@@ -46,7 +46,7 @@ end
 #Precedencias
 prechigh
     left SEMICOLON
-    nonassoc NOT #Es no asociativo o asociativo a izq
+    nonassoc NOT 
     left     AND
     left     OR 
 
@@ -59,12 +59,6 @@ prechigh
     nonassoc TRANSPOSE 
     nonassoc ROTATION
     left     VERTICALCAT HORIZONTALCAT
-    # No afectan 
-    # nonassoc ASSIGNMENTRULE
-
-    # nonassoc assigment input output conditional notDetIteration detIteration
-    # left sequence
-    # nonassoc program
 
     left DECLARATERULE
     left SEQUENCERULE
@@ -73,8 +67,15 @@ preclow
 rule
   target: program {result = val[0]}
 
-  program: LCURLY declare PIPE instruction RCURLY  {val[1].show_all ;result = Program::new(val[1],val[3]); result = val[3]}
-         | LCURLY instruction RCURLY               {result = Program::new(val[1]);result = val[3]}
+  program: LCURLY declare PIPE instruction RCURLY  {
+            val[1].show_all
+            result = Program::new(val[3],val[1])
+            result = val[3]
+           }
+         | LCURLY instruction RCURLY   {
+          result = Program::new(val[1])
+          result = val[3]
+         }
   
   #Declaraciones sin construccion, siguiente entrega
   declare: PERCENT         identifierlist {
@@ -137,6 +138,7 @@ rule
             identifier = ExprId::new(val[1])
             result = Write::new(identifier)
         }
+        # NOS FALTA QUE RECONOZCA PRINTS DE OTRAS COSAS
 
   conditional:  LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS {
                     result = Conditional::new(val[1],val[3])
