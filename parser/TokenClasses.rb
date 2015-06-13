@@ -42,8 +42,22 @@ class Asign
 		puts "EXPRESSION:"
 		@subexpr1.print(level+2)
 	end
-end
 
+	def check ()
+
+		symboltype = @symbolTable.lookup(@identifier)
+		if symboltype.nil? then 
+			# Error: No declarado
+			@symbolTable.errors << "identifier {@identifier} is not declare"
+		else
+			unless symboltype.eql? @subexpr1.type then
+				# Error: Tipo
+				@symbolTable.errors << "identifier {@identifier} and subexpr {@subexpr1} are different types"
+			end
+		end
+	end
+
+end
 
 class Secuence
 

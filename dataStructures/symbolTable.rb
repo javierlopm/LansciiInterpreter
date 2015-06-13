@@ -69,7 +69,7 @@ class SymbolTable
     elsif @father.nil? then
       return nil
     else
-      @father.lookup(identifier)
+      return @father.lookup(identifier)
     end
     #res = @tb[identifier]
   end
