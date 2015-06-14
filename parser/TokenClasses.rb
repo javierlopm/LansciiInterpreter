@@ -16,6 +16,10 @@ def printLevel(level)
 end
 
 class Program
+
+	attr_accessor :subexpr1
+  	attr_accessor :symbolTable
+
 	def initialize (instrucion1,symbolTable=nil)
 		@instrucion1 = instrucion1
 		@symbolTable = symbolTable
@@ -29,6 +33,9 @@ end
 
 
 class Asign < SymbolUser
+
+	attr_accessor :identifier
+	attr_accessor :subexpr1
 
 	def initialize (identifier, subexpr1)
 
@@ -69,6 +76,9 @@ end
 
 class Secuence < SymbolUser
 
+  	attr_accessor :instrucion1
+  	attr_accessor :instrucion2
+
 	def initialize (instrucion1, instrucion2)
 
 		@instrucion1 = instrucion1
@@ -87,6 +97,8 @@ class Secuence < SymbolUser
 end
 
 class Read < SymbolUser
+
+	attr_accessor :identifier
 
 	def initialize (identifier)
 
@@ -121,6 +133,8 @@ end
 
 class Write < SymbolUser
 
+	attr_accessor :subexpr1
+
 	def initialize (subexpr1)
 
 		@subexpr1 = subexpr1
@@ -147,6 +161,9 @@ class Write < SymbolUser
 end
 
 class Conditional < SymbolUser
+
+	attr_accessor :subexpr1
+	attr_accessor :instrucion1
 
 	def initialize (subexpr1, instrucion1)
 		
@@ -181,6 +198,10 @@ class Conditional < SymbolUser
 end
 
 class Conditional2 < Conditional
+
+  	attr_accessor :subexpr1
+	attr_accessor :instrucion1
+  	attr_accessor :instrucion2
 
 	def initialize (subexpr1, instrucion1, instrucion2)
 
@@ -222,6 +243,9 @@ end
 
 class IIteration < SymbolUser
 
+  	attr_accessor :subexpr1
+  	attr_accessor :instrucion1
+
 	def initialize (subexpr1, instrucion1)
 		
 		@subexpr1 = subexpr1
@@ -255,6 +279,10 @@ class IIteration < SymbolUser
 end
 
 class DIteration < SymbolUser
+
+	attr_accessor :subexpr1
+	attr_accessor :subexpr2
+  	attr_accessor :instrucion1
 
 	def initialize(subexpr1, subexpr2, instrucion1)
 
@@ -299,6 +327,11 @@ class DIteration < SymbolUser
 end
 
 class DIteration2 < SymbolUser
+
+	attr_accessor :identifier
+  	attr_accessor :subexpr1
+	attr_accessor :subexpr2
+  	attr_accessor :instrucion1
 
 	def initialize(identifier, subexpr1, subexpr2, instrucion1)
 
@@ -358,6 +391,9 @@ end
 
 class VarBlock < SymbolUser
 
+	attr_accessor :symbolTable
+  	attr_accessor :instrucion1
+
 	def initialize(symbolTable,instrucion1)
 		@symbolTable = symbolTable
 		@instrucion1 = instrucion1
@@ -380,6 +416,8 @@ class VarBlock < SymbolUser
 end
 
 class Block < SymbolUser
+
+	attr_accessor :initialize
 
 	def initialize(instrucion1)
 		@instrucion1 = instrucion1
@@ -409,6 +447,9 @@ type = 3 ==> Cualquier tipo
 
 class BinExpr < SymbolUser
 
+	attr_accessor :subexpr1
+  	attr_accessor :subexpr2
+
 	def initialize (subexpr1, subexpr2)
 
 		@subexpr1 = subexpr1
@@ -425,6 +466,9 @@ end
 
 
 class ExprSum < BinExpr
+
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -445,6 +489,9 @@ class ExprSum < BinExpr
 end
 
 class ExprSubs < BinExpr
+	
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -466,6 +513,9 @@ end
 
 class ExprMult < BinExpr
 
+	attr_accessor :op
+  	attr_accessor :type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "*"
@@ -484,6 +534,9 @@ class ExprMult < BinExpr
 end
 	
 class ExprDiv < BinExpr
+	
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -504,6 +557,9 @@ end
 	
 class ExprMod < BinExpr
 
+	attr_accessor :op
+  	attr_accessor :type
+	
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "%"
@@ -522,6 +578,9 @@ class ExprMod < BinExpr
 end
 	
 class ExprAnd < BinExpr
+
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -543,6 +602,9 @@ end
 	
 class ExprOr < BinExpr
 
+	attr_accessor :op
+  	attr_accessor :type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "\\/"
@@ -563,6 +625,9 @@ end
 	
 class ExprLess < BinExpr
 
+	attr_accessor :op
+  	attr_accessor :type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "<"
@@ -582,6 +647,9 @@ class ExprLess < BinExpr
 end
 	
 class ExprLessEql < BinExpr
+	
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -601,6 +669,9 @@ class ExprLessEql < BinExpr
 end
 	
 class ExprMore < BinExpr
+
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -622,6 +693,9 @@ end
 	
 class ExprMoreEql < BinExpr
 
+	attr_accessor :op
+  	attr_accessor :type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = ">="
@@ -641,6 +715,9 @@ class ExprMoreEql < BinExpr
 end
 	
 class ExprEql < BinExpr
+
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -662,6 +739,9 @@ end
 	
 class ExprDiff < BinExpr
 
+	attr_accessor :op
+  	attr_accessor :type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "/="
@@ -682,6 +762,9 @@ end
 	
 class ExprVerConcat < BinExpr
 	
+	attr_accessor :op
+  	attr_accessor :type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "&"
@@ -702,6 +785,9 @@ class ExprVerConcat < BinExpr
 end
 	
 class ExprHorConcat < BinExpr
+
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -726,6 +812,8 @@ end
 
 class UnExpr < SymbolUser
 
+  	attr_accessor :subexpr1
+
 	def initialize (subexpr1)
 
 		@subexpr1 = subexpr1
@@ -740,6 +828,9 @@ end
 
 
 class ExprUnMinus < UnExpr
+
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1)
 		super
@@ -760,6 +851,9 @@ end
 	
 class ExprNot < UnExpr
 
+	attr_accessor :op
+  	attr_accessor :type
+	
 	def initialize(subexpr1)
 
 		super
@@ -779,6 +873,9 @@ class ExprNot < UnExpr
 end
 	
 class ExprTranspose < UnExpr
+
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1)
 		
@@ -801,7 +898,10 @@ end
 # Expresiones constantes
 
 class ExprParenthesis < SymbolUser
-	
+
+	attr_accessor :subexpr1
+  	attr_accessor :type
+
 	def initialize(subexpr1)
 
 		@lp = "("
@@ -822,6 +922,9 @@ end
 	
 class ExprNumber < Constant
 
+	attr_accessor :subexpr1
+  	attr_accessor :type
+
 	def initialize(subexpr1)
 
 		@subexpr1 = subexpr1
@@ -840,6 +943,9 @@ end
 
 class ExprTrue < Constant
 
+	attr_accessor :subexpr1
+  	attr_accessor :type
+
 	def initialize()
 
 		@subexpr1 = "true"
@@ -856,6 +962,9 @@ end
 	
 class ExprFalse < Constant
 
+	attr_accessor :subexpr1
+  	attr_accessor :type
+
 	def initialize()
 
 		@subexpr1 = "false"
@@ -871,6 +980,9 @@ class ExprFalse < Constant
 end
 	
 class ExprId < Constant
+
+	attr_accessor :identifier
+  	attr_accessor :type
 
 	def initialize(identifier)
 
@@ -904,6 +1016,9 @@ end
 	
 class ExprCanvas < Constant
 
+	attr_accessor :subexpr1
+  	attr_accessor :type
+
 	def initialize(canvas)
 
 		@subexpr1 = canvas
@@ -919,6 +1034,9 @@ class ExprCanvas < Constant
 end
 	
 class ExprEmptyCanvas < Constant
+
+	attr_accessor :subexpr1
+  	attr_accessor :type
 
 	def initialize()
 
