@@ -55,12 +55,12 @@ class Asign < SymbolUser
 		symboltype = @symbolTable.lookup(@identifier)
 		if symboltype.nil? then 
 			# Error: No declarado
-			@symbolTable.errors << "identifier {@identifier} is not declare"
+			@symbolTable.errors << Undeclared::new(@identifier)
 		else
 			@subexpr1.context()
 			unless symboltype.eql? @subexpr1.type then
 				# Error: Tipo
-				@symbolTable.errors << "identifier {@identifier} and subexpr {@subexpr1} are different types"
+				@symbolTable.errors << AsignError::new(@identifier,symboltype,@subexpr1.type)
 			end
 		end
 	end
@@ -104,10 +104,16 @@ class Read < SymbolUser
 	end
 
 	def context()
-		@identifier.context
-
-		unless @identifier.type.eql?0 or @identifier.type.eql?1 then
-			@symbolTable << "subexpr {@subexpr1} must be Aritmetic or Boolean"
+		
+		symboltype = @symbolTable.lookup(@identifier)
+		if symboltype.nil? then 
+			# Error: No declarado
+			@symbolTable.errors << Undeclared::new(@identifier)
+		else
+			if symboltype.eql?2 then
+				# Error: Tipo
+				@symbolTable.errors << ReadError::new(@identifier,@subexpr1.type)
+			end
 		end
 	end
 
@@ -136,7 +142,7 @@ class Write < SymbolUser
 
 		unless @subexpr1.type.eql?2 then
 			#ERROR: debe ser Canvas
-			@symbolTable << "subexpr {@subexpr1} is not Canvas"
+			@symbolTable << WriteError::new(@subexpr1.type)
 		end
 end
 
@@ -167,7 +173,7 @@ class Conditional < SymbolUser
 
 		unless @subexpr1.type.eql? 1 then
 			# Error: Debe ser de tipo booleano
-			@symbolTable << "subexpr {@subexpr1} is not boolean"
+			@symbolTable << ConditionalError::new(@subexpr1.type)
 		end
 		@instrucion1.context()
 
@@ -207,7 +213,7 @@ class Conditional2 < Conditional
 
 		unless @subexpr1.type.eql? 1 then
 			# Error: Debe ser de tipo booleano
-			@symbolTable << "subexpr {@subexpr1} is not boolean"
+			@symbolTable << ConditionalError::new(@subexpr1.type)
 		end
 		@instrucion1.context()
 		@instrucion2.context()
@@ -241,7 +247,7 @@ class IIteration < SymbolUser
 		@subexpr1.context()
 	
 		unless @subexpr1.type.eql?1 then
-			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
+			@symbolTable.errors << IIterationError::new(@subexpr1.type)
 		end
 		@instrucion1.context()
 	end
@@ -281,10 +287,10 @@ class DIteration < SymbolUser
 		@subexpr1.context()
 
 		unless @subexpr1.type.eql?0 then
-			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+			@symbolTable.errors << DIterationError::new(@subexpr1.type)
 		end
 		unless @subexpr2.type.eql?0 then
-			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
+			@symbolTable.errors << DIterationError::new(@subexpr2.type)
 		end
 
 		@instrucion1.context()
@@ -329,21 +335,21 @@ class DIteration2 < SymbolUser
 		symboltype = @symbolTable.lookup(@identifier)
 		if symboltype.nil? then 
 			# Error: No declarado
-			@symbolTable.errors << "identifier {@identifier} is not declare"
+			@symbolTable.errors << Undeclared::new(@identifier)
 		end
 		unless symboltype.eql?0 then
-			# Error: La variable debe ser del tipo aritmetica
-			@symbolTable.errors << "identifier {@identifier} is not Aritmetic"
+			# Error: La variable debe ser del tipo entero
+			@symbolTable.errors << DIteration2Error::new(symboltype)
 		end
 
 		@subexpr1.context()
 		@subexpr1.context()
 
 		unless @subexpr1.type.eql?0 then
-			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+			@symbolTable.errors << DIterationError::new(@subexpr1.type)
 		end
 		unless @subexpr2.type.eql?0 then
-			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
+			@symbolTable.errors << DIterationError::new(@subexpr2.type)
 		end
 
 		@instrucion1.context()
@@ -430,14 +436,9 @@ class ExprSum < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
-		end
-
-		unless @type.eql? @subexpr2.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
+		unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
 
 	end
@@ -455,16 +456,10 @@ class ExprSubs < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.typethen
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+		unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @type.eql? @subexpr2.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
-		end
-
 	end
 
 end
@@ -481,16 +476,10 @@ class ExprMult < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+		unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @type.eql? @subexpr2.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
-		end
-
 	end
 end
 	
@@ -506,16 +495,10 @@ class ExprDiv < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr1} is not Aritmetic}"
+		unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @type.eql? @subexpr2.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "{subexpr {@subexpr2} is not Aritmetic}"
-		end
-
 	end
 end
 	
@@ -531,16 +514,10 @@ class ExprMod < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @type.eql? @subexpr1.type then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
-		end
-
 	end
 end
 	
@@ -556,14 +533,9 @@ class ExprAnd < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.type then
+		unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
 			# ERROR: debe ser booleano
-			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
-		end
-
-		unless @type.eql? @subexpr2.type then
-			# ERROR: debe ser booleano
-			@symbolTable.errors << "subexpr {@subexpr2} is not Boolean"
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
 
 	end
@@ -581,16 +553,10 @@ class ExprOr < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.type then
+		unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
 			# ERROR: debe ser booleano
-			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @type.eql? @subexpr2.type then
-			# ERROR: debe ser booleano
-			@symbolTable.errors << "subexpr {@subexpr2} is not Boolean"
-		end
-
 	end
 
 end
@@ -608,16 +574,10 @@ class ExprLess < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		unless @subexpr1.type.eql?0 and @subexpr2.type.eql?0 then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @subexpr1.type.eql?0 then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
-		end
-
 	end
 end
 	
@@ -633,16 +593,10 @@ class ExprLessEql < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		unless @subexpr1.type.eql?0 and @subexpr2.type.eql?0 then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @subexpr1.type.eql?0 then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
-		end
-
 	end
 end
 	
@@ -659,16 +613,10 @@ class ExprMore < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		unless @subexpr1.type.eql?0 and @subexpr2.type.eql?0 then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @subexpr1.type.eql?0 then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
-		end
-
 	end
 end
 	
@@ -685,16 +633,10 @@ class ExprMoreEql < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @subexpr1.type.eql?0 then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr1} is not Aritmetic"
+		unless @subexpr1.type.eql?0 and @subexpr2.type.eql?0 then
+			# ERROR: debe ser entero
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
-		unless @subexpr1.type.eql?0 then
-			# ERROR: debe ser aritmetica
-			@symbolTable.errors << "subexpr {@subexpr2} is not Aritmetic"
-		end
-
 	end
 end
 	
@@ -711,12 +653,10 @@ class ExprEql < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless  (@subexpr1.type.eql?0 and @subexpr2.type.eql?0) or 
-			    (@type.eql? @subexpr1.type and  @type.eql? @subexpr1.type) then
-
-			@symbolTable.errors << "subexpr {@subexpr1} and subexpr {@subexpr2} wrong type"
+		unless @subexpr1.type.eql?@subexpr2.type then
+			# ERROR: debe ser del mismo tipo
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
-
 	end
 end
 	
@@ -732,10 +672,9 @@ class ExprDiff < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless  (@subexpr1.type.eql?0 and @subexpr2.type.eql?0) or 
-			    (@type.eql? @subexpr1.type and  @type.eql? @subexpr1.type) then
-
-			@symbolTable.errors << "subexpr {@subexpr1} and subexpr {@subexpr2} wrong type"
+		unless @subexpr1.type.eql?@subexpr2.type then
+			# ERROR: debe ser del mismo tipo
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
 
 	end
@@ -753,14 +692,9 @@ class ExprVerConcat < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.type then
+		unless @type.eql?@subexpr1.type and @type.eql?@subexpr2.type then
 			# ERROR: debe ser canvas
-			@symbolTable.errors << "subexpr {@subexpr1} is not Canvas"
-		end
-
-		unless @type.eql? @subexpr2.type then
-			# ERROR: debe ser canvas
-			@symbolTable.errors << "subexpr {@subexpr2} is not Canvas"
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
 
 	end
@@ -779,14 +713,9 @@ class ExprHorConcat < BinExpr
 		@subexpr1.context()
 		@subexpr2.context()
 
-		unless @type.eql? @subexpr1.type then
-			# ERROR: debe ser booleano
-			@symbolTable.errors << "subexpr {@subexpr1} is not Canvas"
-		end
-
-		unless @type.eql? @subexpr2.type then
-			# ERROR: debe ser booleano
-			@symbolTable.errors << "subexpr {@subexpr2} is not Canvas"
+		unless @type.eql?@subexpr1.type and @type.eql?@subexpr2.type then
+			# ERROR: debe ser canvas
+			@symbolTable.errors << TypeError::new(@op, @subexpr1.type, @subexpr2.type)
 		end
 
 	end
@@ -822,7 +751,7 @@ class ExprUnMinus < UnExpr
 		@subexpr1.context()
 
 		unless @type.eql? @subexpr1.type then
-			@symbolTable.errors << "subexpr {@subexpr1} is not a Aritmetic"
+			@symbolTable.errors << UnaryError::new(@op,1,2)
 			
 		end
 		
@@ -842,7 +771,7 @@ class ExprNot < UnExpr
 		@subexpr1.context()
 
 		unless @type.eql? @subexpr1.type then
-			@symbolTable.errors << "subexpr {@subexpr1} is not Boolean"
+			@symbolTable.errors << UnaryError::new(@op,0,2)
 			
 		end
 		
@@ -862,7 +791,7 @@ class ExprTranspose < UnExpr
 		@subexpr1.context()
 
 		unless @type.eql? @subexpr1.type @type then
-			@symbolTable.errors << "subexpr {@subexpr1} is not a Canvas"
+			@symbolTable.errors << UnaryError::new(@op,0,1)
 			
 		end
 		
@@ -963,7 +892,7 @@ class ExprId < Constant
 		symboltype = @symbolTable.lookup(@identifier)
 		if symboltype.nil? then 
 			# Error: No declarado
-			@symbolTable.errors << "identifier {@identifier} is not declare"
+			@symbolTable.errors << Undeclared::new(@identifier)
 		else
 			if @type.eql?3 then
 				@type = symboltype
