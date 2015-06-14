@@ -9,13 +9,13 @@ def Get_Type(code)
 
     case code
       when 0
-        type = '%'
+        type = '\'%\''
       when 1
-        type = '!'
+        type = '\'!\''
       when 2
-        type = '@'
+        type = '\'@\''
       else 3
-        type = nil
+        type = 'variable no declarada'
     end
     return type
 end
@@ -41,7 +41,7 @@ class AsignError
 	end
 
 	def to_s
-		"Error: se intenta asignar el tipo '#{@type2}'' a la varialbe '#{@identifier}' de tipo '#{@type1}'"
+		"Error: se intenta asignar el tipo #{@type2} a la variable '#{@identifier}' de tipo #{@type1}"
 	end
 end
 
@@ -53,7 +53,7 @@ class ConditionalError
 	end
 
 	def to_s
-		"Error: instrucción condicional espera tipo '!' y obtuvo '#{@type1}'"
+		"Error: instrucción condicional espera tipo '!' y obtuvo #{@type1}"
 	end
 end
 
@@ -64,7 +64,7 @@ class IIterationError
 	end
 
 	def to_s
-		"Error: instrucción de iteración espera tipo '!' y obtuvo '#{@type1}'"
+		"Error: instrucción de iteración espera tipo '!' y obtuvo #{@type1}"
 	end
 end
 
@@ -75,7 +75,7 @@ class DIterationError
 	end
 
 	def to_s
-		"Error: límite de iteración espera tipo '%' y obtuvo '#{@type1}'"
+		"Error: límite de iteración espera tipo '%' y obtuvo #{@type1}"
 	end
 end
 
@@ -86,7 +86,7 @@ class DIteration2Error
 	end
 
 	def to_s
-		"Error: variable de iteración espera tipo '%' y obtuvo '#{@type1}'"
+		"Error: variable de iteración espera tipo '%' y obtuvo #{@type1}"
 	end
 end
 
@@ -100,7 +100,7 @@ class TypeError
 	end
 
 	def to_s
-		"Error: se intenta hacer la operación '#{@op}' entre '#{@type1}' y '#{@type2}'"
+		"Error: se intenta hacer la operación '#{@op}' entre #{@type1} y #{@type2}"
 	end
 end
 
@@ -113,7 +113,7 @@ class UnaryError
 	end
 
 	def to_s
-		"Error: operador '#{@op}' no funciona con operandos '#{@type1}' y '#{@type2}'"
+		"Error: operador '#{@op}' no funciona con operandos #{@type1} y #{@type2}"
 	end
 end
 
@@ -124,7 +124,7 @@ class ReadError
 	end
 
 	def to_s
-		"Error: operación 'read' espera el tipo '%' o '!' y obtuvo '#{@type1}'"
+		"Error: operación 'read' espera el tipo '%' o '!' y obtuvo #{@type1}"
 	end
 end
 
@@ -135,7 +135,7 @@ class WriteError
 	end
 
 	def to_s
-		"Error: operación 'write' espera el tipo '@' y obtuvo '#{@type1}'"
+		"Error: operación 'write' espera el tipo '@' y obtuvo #{@type1}"
 	end
 end
 

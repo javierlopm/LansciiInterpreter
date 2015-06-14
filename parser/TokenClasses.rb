@@ -68,7 +68,7 @@ class Asign < SymbolUser
 
 			unless symboltype.eql? @subexpr1.type then
 				# Error: Tipo
-				@symbolTable.add_error(AsignError::new(@identifier,symboltype,@subexpr1.type))
+				@symbolTable.add_error(AsignError::new(@identifier.get_name,symboltype,@subexpr1.type))
 			end
 		end
 	end
@@ -312,7 +312,7 @@ end
 class DIteration2 < SymbolUser
 
 
-	def initialize(symbolTable, identifier,subexpr1, subexpr2, instrucion1)
+	def initialize(symbolTable,subexpr1, subexpr2, instrucion1)
 
 	# def initialize(identifier, subexpr1, subexpr2, instrucion1)
 
@@ -487,6 +487,9 @@ class ExprSum < BinExpr
 end
 
 class ExprSubs < BinExpr
+
+	attr_accessor:op
+	attr_accessor:type
 	
 	def initialize(subexpr1, subexpr2)
 		super
@@ -508,6 +511,9 @@ end
 
 class ExprMult < BinExpr
 
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "*"
@@ -526,7 +532,10 @@ class ExprMult < BinExpr
 end
 	
 class ExprDiv < BinExpr
-	
+
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "/"
@@ -545,7 +554,10 @@ class ExprDiv < BinExpr
 end
 	
 class ExprMod < BinExpr
-	
+
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "%"
@@ -564,6 +576,9 @@ class ExprMod < BinExpr
 end
 	
 class ExprAnd < BinExpr
+
+	attr_accessor:op
+	attr_accessor:type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -585,6 +600,9 @@ end
 	
 class ExprOr < BinExpr
 
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "\\/"
@@ -605,6 +623,9 @@ end
 	
 class ExprLess < BinExpr
 
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "<"
@@ -624,7 +645,10 @@ class ExprLess < BinExpr
 end
 	
 class ExprLessEql < BinExpr
-	
+
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "<="
@@ -668,6 +692,9 @@ end
 	
 class ExprMoreEql < BinExpr
 
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = ">="
@@ -687,6 +714,9 @@ class ExprMoreEql < BinExpr
 end
 	
 class ExprEql < BinExpr
+
+	attr_accessor:op
+	attr_accessor:type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -708,6 +738,9 @@ end
 	
 class ExprDiff < BinExpr
 
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "/="
@@ -727,7 +760,10 @@ class ExprDiff < BinExpr
 end
 	
 class ExprVerConcat < BinExpr
-	
+
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1, subexpr2)
 		super
 		@op = "&"
@@ -748,6 +784,9 @@ class ExprVerConcat < BinExpr
 end
 	
 class ExprHorConcat < BinExpr
+
+	attr_accessor:op
+	attr_accessor:type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -772,6 +811,8 @@ end
 
 class UnExpr < SymbolUser
 
+	attr_accessor:subexpr1
+
 	def initialize (subexpr1)
 
 		@subexpr1 = subexpr1
@@ -786,6 +827,9 @@ end
 
 
 class ExprUnMinus < UnExpr
+
+	attr_accessor:op
+	attr_accessor:type
 
 	def initialize(subexpr1)
 		super
@@ -806,6 +850,9 @@ end
 	
 class ExprNot < UnExpr
 	
+	attr_accessor:op
+	attr_accessor:type
+
 	def initialize(subexpr1)
 
 		super
@@ -825,6 +872,9 @@ class ExprNot < UnExpr
 end
 	
 class ExprTranspose < UnExpr
+
+	attr_accessor:op
+	attr_accessor:type
 
 	def initialize(subexpr1)
 		
@@ -847,6 +897,9 @@ end
 # Expresiones constantes
 
 class ExprParenthesis < SymbolUser
+
+	attr_accessor:subexpr1
+	attr_accessor:type
 
 	def initialize(subexpr1)
 
@@ -889,6 +942,9 @@ end
 
 class ExprTrue < Constant
 
+	attr_accessor:subexpr1
+	attr_accessor:type
+
 	def initialize()
 
 		@subexpr1 = "true"
@@ -904,6 +960,9 @@ class ExprTrue < Constant
 end
 	
 class ExprFalse < Constant
+
+	attr_accessor:subexpr1
+	attr_accessor:type
 
 	def initialize()
 
@@ -964,6 +1023,9 @@ end
 	
 class ExprCanvas < Constant
 
+	attr_accessor:subexpr1
+	attr_accessor:type
+
 	def initialize(canvas)
 
 		@subexpr1 = canvas
@@ -979,6 +1041,9 @@ class ExprCanvas < Constant
 end
 	
 class ExprEmptyCanvas < Constant
+
+	attr_accessor:op
+	attr_accessor:type
 
 	def initialize()
 

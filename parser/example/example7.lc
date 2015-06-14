@@ -2,11 +2,36 @@
 
     (hey ? write a);
     (hey ? write a : write a); 
-    [nabo | write a];
-    [nabo .. nabo |write a]    ;
-    [nabo : nabo .. nabo| write a];
+    [hey | write a];
+    [nabo .. nabo |write erga]    ;
+
     nabo = 2 ;
-    read nabo;
+    read naboer;
 read hey
-;write nabo
+ 
+;nabo = 2 + 2
+;nabo = 2 * 2 
+;nabo = 2 / 2;
+nabo = 2% 2;
+nabo = 2-1;
+nabo = nabo + nabo;
+nabo = nabo - nabo;
+nabo = nabo * nabo;
+nabo = nabo /nabo;
+nabo = nabo % nabo;
+
+{-nabo = 2 + true;
+nabo = 2 /\ true
+;-}
+hey = hey /\ true;
+hey = heyukjfhd \/ false;
+hey = 2 = 2;
+hey = false = 2
+;
+a = a&a;
+
+nabo = -2;
+a = -2;
+a = -false;
+a = -a
 }
