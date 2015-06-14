@@ -19,6 +19,10 @@ class SymbolTable
     @errors = []
   end
 
+  #########################
+  # Funciones para insertar
+  #########################
+
   def add_father(father)
     @father = father
   end
@@ -33,8 +37,7 @@ class SymbolTable
 
   def insert_symbol(identifier,content)
     if contains?identifier
-      #print "Si, mira me encontre a #{identifier}  en"
-      @errors << ReDeclared::new(identifier)
+      @errors.add_error(ReDeclared::new(identifier))
     else
       @tb[identifier] = content
     end
@@ -80,13 +83,16 @@ class SymbolTable
   end
 
   def contains?(identifier)
-    if @father.nil? then
-      return @tb.has_key?(identifier)
-    else
+    # if @father.nil? then
+      # return @tb.has_key?(identifier)
+    # else
       #No deberia haber problemas de declaraciones en diferentes niveles
-      return (@tb.has_key?(identifier) or @father.contains?(identifier))
-    end
+      # return (@tb.has_key?(identifier) or @father.contains?(identifier))
+    # end
     #res = @tb.has_key?identifier
+
+    return @tb.has_key?(identifier)
+
   end
 
   def lookup(identifier)
@@ -100,7 +106,10 @@ class SymbolTable
     #res = @tb[identifier]
   end
 
-  # METODOS DE IMPRESION
+
+  #######################
+  # Metodos de impresion
+  #######################
 
   def show_all
     puts "My father is : #{@father}"

@@ -20,9 +20,12 @@ class Program
 
 	def initialize (instrucion1,symbolTable=nil)
 		@instrucion1 = instrucion1
+
+		
 		@symbolTable = symbolTable
 		@instrucion1.add_symbols(symbolTable)
 		@instrucion1.context
+		
 	end
 
 
@@ -30,9 +33,6 @@ class Program
 		@symbolTable
 	end
 
-	def context
-		@instrucion1.context
-	end
 end
 
 
