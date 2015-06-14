@@ -35,11 +35,11 @@ class SymbolTable
     @errors << error
   end
 
-  def insert_symbol(identifier,content)
+  def insert_symbol(identifier,type,modifiable=true)
     if contains?identifier
       @errors.add_error(ReDeclared::new(identifier))
     else
-      @tb[identifier] = content
+      @tb[identifier] = {'type' => type, 'modifiable' => modifiable}
     end
   end
 
@@ -114,6 +114,28 @@ class SymbolTable
     #res = @tb[identifier]
   end
 
+  def lookup_type(identifier)
+    search = lookup(identifier)
+
+    if search.nil?
+      return nil
+    else
+      return search['type']
+    end
+
+  end
+
+  def lookup_modifiable(identifier)
+    search = lookup(identifier)
+
+    if search.nil?
+      return nil
+    else
+      return search['modifiable']
+    end
+
+  end
+
   def has_error?
     if @errors.size == 0
       @children.each do |c|
@@ -170,10 +192,10 @@ class SymbolTable
 
     @tb.each.with_index do |content,index|
       key   = content[0]
-      value = content[1]
+      type = content[1]['type']
 
 
-      case value
+      case type
         when 0
           print '%'
         when 1
