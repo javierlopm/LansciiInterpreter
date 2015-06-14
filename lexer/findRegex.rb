@@ -282,6 +282,8 @@ class FindRegex
         for i in 0..@myTokens.length-1 
             mylist[i][0] = @myTokens[i].name
             mylist[i][1] = @myTokens[i].value
+            #mylist[i][2] = 2
+            #mylist[i][3] = 3
         end
 
         return mylist

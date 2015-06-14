@@ -68,9 +68,9 @@ rule
   target: program {result = val[0]}
 
   program: LCURLY declare PIPE instruction RCURLY  {
-            val[1].show_all
+            #val[1].show_all
             result = Program::new(val[3],val[1])
-            result = val[3]
+            #result = val[3]
            }
          | LCURLY instruction RCURLY   {
           result = Program::new(val[1])
@@ -121,7 +121,6 @@ rule
              | noVarIncoporationRange
 
   assigment: IDENTIFIER EQUALS exp  = ASSIGNMENTRULE {
-                
                 identifier = ExprId::new(val[0])
                 result = Asign::new(identifier,val[2])
             }

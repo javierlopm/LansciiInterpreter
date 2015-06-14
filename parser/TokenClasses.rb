@@ -21,6 +21,10 @@ class Program
 		@symbolTable = symbolTable
 		@instrucion1.add_symbols(symbolTable)
 	end
+
+	def get_symbol_table
+		@symbolTable
+	end
 end
 
 
@@ -51,7 +55,6 @@ end
 class Secuence < SymbolUser
 
 	def initialize (instrucion1, instrucion2)
-
 		@instrucion1 = instrucion1
 		@instrucion2 = instrucion2
 	end
@@ -181,6 +184,8 @@ class DIteration < SymbolUser
 		
 	end
 
+
+
 	def print(level=0)
 		printLevel(level)
 		puts "RANGE ITERATION STATEMENT:"
@@ -201,15 +206,24 @@ end
 
 class DIteration2 < SymbolUser
 
-	def initialize(identifier, subexpr1, subexpr2, instrucion1)
+	def initialize(symbolTable, subexpr1, subexpr2, instrucion1)
 
-		@identifier  = identifier
+		@symbolTable = symbolTable
 		@subexpr1    = subexpr1
 		@subexpr2    = subexpr2
 		@instrucion1 = instrucion1
 	end
 
-		def print(level=0)
+	def add_symbols(symbolTable)
+		symbolTable.add_child(@symbolTable)
+		@symbolTable.add_father(symbolTable)
+		@instrucion1.add_symbols(@symbolTable)
+		@subexpr1.add_symbols(@symbolTable)
+		@subexpr1.add_symbols(@symbolTable)
+	end
+
+
+	def print(level=0)
 		printLevel(level)
 		puts "VARIABLE RANGE ITERATION STATEMENT:"
 		
@@ -240,6 +254,7 @@ class VarBlock < SymbolUser
 	end
 
 	def add_symbols(symbolTable)
+		symbolTable.add_child(@symbolTable)
 		@symbolTable.add_father(symbolTable)
 		@instrucion1.add_symbols(@symbolTable)
 	end

@@ -5,16 +5,68 @@
     Patricia Reinoso 11-10851
 =end
 
+def print_indentation(level)
+  puts "El tipo de lo que recibo es #{level.inspect}"
+  (0..level).each do
+      print "  " 
+  end
+end
+
 # Implementacion de tabla de simbolos
 class SymbolTable
   def initialize(father = nil)
     @tb = {}
     @father = father
+    @child  = []
     @errors = []
   end
 
   def add_father(father)
     @father = father
+  end
+
+  def add_child(child)
+    @child << child
+  end
+
+  def print_tree(level=0)
+    #si no hay errores
+
+    level.times do
+      print "    "
+    end
+    print "Nivel #{level} de variables: "
+
+    @tb.each.with_index do |content,index|
+      key   = content[0]
+      value = content[1]
+
+
+      case value
+        when 0
+          print '%'
+        when 1
+          print '!'
+        when 2
+          print '@'
+        else
+          print 'huh?'
+      end
+
+      print "#{key}"
+
+      if index == @tb.size-1
+        print "\n"
+      else
+        print ", "
+      end
+
+    end
+
+    @child.each do |c|
+      c.print_tree(level+1)
+    end
+  
   end
 
   def insert_symbol(identifier,content)
@@ -119,7 +171,7 @@ class SymbolUser                 #Jejeps no se me ocurrio otro nombre para esta 
     end
 
     if defined?@instrucion2
-      @instrucion1.add_symbols(symbolTable)
+      @instrucion2.add_symbols(symbolTable)
     end
 
   end
@@ -130,5 +182,3 @@ class Constant
   def add_symbols(symbolTable)
   end
 end
-
-
