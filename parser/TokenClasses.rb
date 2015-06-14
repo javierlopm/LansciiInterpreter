@@ -18,7 +18,7 @@ end
 
 class Program
 
-	attr_accessor :subexpr1
+	attr_accessor :instrucion1
   	attr_accessor :symbolTable
 
 	def initialize (instrucion1,symbolTable=nil)
@@ -313,7 +313,7 @@ class DIteration < SymbolUser
 	def context()
 
 		@subexpr1.context()
-		@subexpr1.context()
+		@subexpr2.context()
 
 		unless @subexpr1.type.eql?0 then
 			@symbolTable.errors << DIterationError::new(@subexpr1.type)
@@ -377,7 +377,7 @@ class DIteration2 < SymbolUser
 		end
 
 		@subexpr1.context()
-		@subexpr1.context()
+		@subexpr2.context()
 
 		unless @subexpr1.type.eql?0 then
 			@symbolTable.errors << DIterationError::new(@subexpr1.type)
@@ -414,11 +414,16 @@ class VarBlock < SymbolUser
 		@instrucion1.print(level+2)
 
 	end
+
+	def context()
+		@instrucion1.context()
+	end
+
 end
 
 class Block < SymbolUser
 
-	attr_accessor :initialize
+	attr_accessor :instrucion1
 
 	def initialize(instrucion1)
 		@instrucion1 = instrucion1
@@ -432,6 +437,10 @@ class Block < SymbolUser
 		puts "EXECUTE:"
 		@instrucion1.print(level+2)
 
+	end
+
+	def context()
+		@instrucion1.context()
 	end
 end
 
