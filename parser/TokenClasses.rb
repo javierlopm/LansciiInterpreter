@@ -57,14 +57,14 @@ class Asign < SymbolUser
 	end
 
 	def context
-		puts "hola"
-		symboltype = @symbolTable.lookup(@identifier)
-		puts symboltype
+		
+		symboltype = @symbolTable.lookup(@identifier.get_name)
+		
 		if symboltype.nil? then 
 			# Error: No declarado
-			#@symbolTable.add_error(Undeclared::new(@identifier))
+			@symbolTable.add_error(Undeclared::new(@identifier.get_name))
 		else
-			@subexpr1.context()
+			@subexpr1.context
 
 			unless symboltype.eql? @subexpr1.type then
 				# Error: Tipo
@@ -112,14 +112,15 @@ class Read < SymbolUser
 
 	def context
 		
-		symboltype = @symbolTable.lookup(@identifier)
+		symboltype = @symbolTable.lookup(@identifier.get_name)
+		
 		if symboltype.nil? then 
 			# Error: No declarado
-			#@symbolTable.add_error(Undeclared::new(@identifier))
+			@symbolTable.add_error(Undeclared::new(@identifier.get_name))
 		else
 			if symboltype.eql?2 then
 				# Error: Tipo
-				@symbolTable.add_error(ReadError::new(@identifier,@subexpr1.type))
+				@symbolTable.add_error(ReadError::new(symboltype))
 			end
 		end
 	end
@@ -311,11 +312,12 @@ end
 class DIteration2 < SymbolUser
 
 
-	def initialize(symbolTable, subexpr1, subexpr2, instrucion1)
+	def initialize(symbolTable, identifier,subexpr1, subexpr2, instrucion1)
 
 	# def initialize(identifier, subexpr1, subexpr2, instrucion1)
 
 		@symbolTable = symbolTable
+		@identifier = identifier
 		@subexpr1    = subexpr1
 		@subexpr2    = subexpr2
 		@instrucion1 = instrucion1
@@ -354,7 +356,7 @@ class DIteration2 < SymbolUser
 
 	def context
 
-		symboltype = @symbolTable.lookup(@identifier)
+		symboltype = @symbolTable.lookup(@identifier.get_name)
 		if symboltype.nil? then 
 			# Error: No declarado
 			#@symbolTable.add_error(Undeclared::new(@identifier))
@@ -480,6 +482,8 @@ class ExprSum < BinExpr
 		end
 
 	end
+
+
 end
 
 class ExprSubs < BinExpr
@@ -935,6 +939,7 @@ class ExprId < Constant
 		puts "IDENTIFIER: #{@identifier}"
 	end
 
+
 	def context
 
 		symboltype = @symbolTable.lookup(@identifier)
@@ -948,6 +953,13 @@ class ExprId < Constant
 		end
 	end
 
+	def get_name
+		return @identifier
+	end
+
+	def get_type
+		return @type
+	end
 end
 	
 class ExprCanvas < Constant
