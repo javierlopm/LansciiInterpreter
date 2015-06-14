@@ -42,13 +42,14 @@ class AsignError
 
 	def to_s
 		"Error: se intenta asignar el tipo '{@type2}'' a la varialbe '{@identifier}' de tipo '{@type1}'"
+	end
 end
 
 class ConditionalError
 
 	def initialize(type1)
 
-		@type1 = type1
+		@type1 = Get_Type(type1)
 	end
 
 	def to_s
@@ -59,7 +60,7 @@ end
 class IItearionError
 	def initialize(type1)
 
-		@type1 = type1
+		@type1 = Get_Type(type1)
 	end
 
 	def to_s
@@ -70,7 +71,7 @@ end
 class DIteracionError
 	def initialize(type1)
 
-		@type1 = type1
+		@type1 = Get_Type(type1)
 	end
 
 	def to_s
@@ -81,7 +82,7 @@ end
 class DIteracion2Error
 	def initialize(type1)
 
-		@type1 = type1
+		@type1 = Get_Type(type1)
 	end
 
 	def to_s
