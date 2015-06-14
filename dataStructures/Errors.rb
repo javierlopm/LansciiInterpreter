@@ -27,7 +27,7 @@ class Undeclared
 	end
 
 	def to_s
-		"Error: variable '{@identifier}' no existe dentro de este alcance"
+		"Error: variable '#{@identifier}' no existe dentro de este alcance"
 	end
 end
 
@@ -41,7 +41,7 @@ class AsignError
 	end
 
 	def to_s
-		"Error: se intenta asignar el tipo '{@type2}'' a la varialbe '{@identifier}' de tipo '{@type1}'"
+		"Error: se intenta asignar el tipo '#{@type2}'' a la varialbe '#{@identifier}' de tipo '#{@type1}'"
 	end
 end
 
@@ -53,40 +53,40 @@ class ConditionalError
 	end
 
 	def to_s
-		"Error: instrucción condicional espera tipo '!' y obtuvo '{@type1}'"
+		"Error: instrucción condicional espera tipo '!' y obtuvo '#{@type1}'"
 	end
 end
 
-class IItearionError
+class IIterationError
 	def initialize(type1)
 
 		@type1 = Get_Type(type1)
 	end
 
 	def to_s
-		"Error: instrucción de iteración espera tipo '!' y obtuvo '{@type1}'"
+		"Error: instrucción de iteración espera tipo '!' y obtuvo '#{@type1}'"
 	end
 end
 
-class DIteracionError
+class DIterationError
 	def initialize(type1)
 
 		@type1 = Get_Type(type1)
 	end
 
 	def to_s
-		"Error: límite de iteración espera tipo '%' y obtuvo '{@type1}'"
+		"Error: límite de iteración espera tipo '%' y obtuvo '#{@type1}'"
 	end
 end
 
-class DIteracion2Error
+class DIteration2Error
 	def initialize(type1)
 
 		@type1 = Get_Type(type1)
 	end
 
 	def to_s
-		"Error: variable de iteración espera tipo '%' y obtuvo '{@type1}'"
+		"Error: variable de iteración espera tipo '%' y obtuvo '#{@type1}'"
 	end
 end
 
@@ -100,7 +100,7 @@ class TypeError
 	end
 
 	def to_s
-		"Error: se intenta hacer la operación '{@op}'' entre '{@type1}' y '{@type2}'"
+		"Error: se intenta hacer la operación '#{@op}' entre '#{@type1}' y '#{@type2}'"
 	end
 end
 
@@ -113,7 +113,7 @@ class UnaryError
 	end
 
 	def to_s
-		"Error: operador '{@op}' no funciona con operandos '{@type1}' y '{@type2}'"
+		"Error: operador '#{@op}' no funciona con operandos '#{@type1}' y '#{@type2}'"
 	end
 end
 
@@ -124,7 +124,7 @@ class ReadError
 	end
 
 	def to_s
-		"Error: operación 'read' espera el tipo '%' o '!' y obtuvo '{@type1}'"
+		"Error: operación 'read' espera el tipo '%' o '!' y obtuvo '#{@type1}'"
 	end
 end
 
@@ -135,7 +135,7 @@ class WriteError
 	end
 
 	def to_s
-		"Error: operación 'write' espera el tipo '@' y obtuvo '{@type1}'"
+		"Error: operación 'write' espera el tipo '@' y obtuvo '#{@type1}'"
 	end
 end
 
@@ -146,6 +146,6 @@ class ReDeclare
 	end
 
 	def to_s 
-		"Error: la variable '{@identifier}' ya está declarada"
+		"Error: la variable '#{@identifier}' ya está declarada"
 	end
 end

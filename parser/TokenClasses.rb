@@ -57,13 +57,15 @@ class Asign < SymbolUser
 	end
 
 	def context
-
+		puts "hola"
 		symboltype = @symbolTable.lookup(@identifier)
+		puts symboltype
 		if symboltype.nil? then 
 			# Error: No declarado
-			@symbolTable.add_error(Undeclared::new(@identifier))
+			#@symbolTable.add_error(Undeclared::new(@identifier))
 		else
-			@subexpr1.context
+			@subexpr1.context()
+
 			unless symboltype.eql? @subexpr1.type then
 				# Error: Tipo
 				@symbolTable.add_error(AsignError::new(@identifier,symboltype,@subexpr1.type))
@@ -113,7 +115,7 @@ class Read < SymbolUser
 		symboltype = @symbolTable.lookup(@identifier)
 		if symboltype.nil? then 
 			# Error: No declarado
-			@symbolTable.add_error(Undeclared::new(@identifier))
+			#@symbolTable.add_error(Undeclared::new(@identifier))
 		else
 			if symboltype.eql?2 then
 				# Error: Tipo
@@ -355,7 +357,7 @@ class DIteration2 < SymbolUser
 		symboltype = @symbolTable.lookup(@identifier)
 		if symboltype.nil? then 
 			# Error: No declarado
-			@symbolTable.add_error(Undeclared::new(@identifier))
+			#@symbolTable.add_error(Undeclared::new(@identifier))
 		end
 		unless symboltype.eql?0 then
 			# Error: La variable debe ser del tipo entero
@@ -439,6 +441,9 @@ type = 3 ==> Cualquier tipo
 
 class BinExpr < SymbolUser
 
+	attr_accessor:subexpr1
+	attr_accessor:subexpr2
+
 	def initialize (subexpr1, subexpr2)
 
 		@subexpr1 = subexpr1
@@ -455,6 +460,9 @@ end
 
 
 class ExprSum < BinExpr
+
+	attr_accessor:op
+	attr_accessor:type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -631,6 +639,10 @@ class ExprLessEql < BinExpr
 end
 	
 class ExprMore < BinExpr
+
+
+	attr_accessor :op
+  	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -852,6 +864,9 @@ end
 	
 class ExprNumber < Constant
 
+  	attr_accessor :subexpr1
+  	attr_accessor :type
+	
 	def initialize(subexpr1)
 
 		@subexpr1 = subexpr1
@@ -901,6 +916,9 @@ class ExprFalse < Constant
 end
 	
 class ExprId < Constant
+
+  	attr_accessor :identifier
+  	attr_accessor :type
 
 	def initialize(identifier)
 
