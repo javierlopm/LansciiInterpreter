@@ -137,3 +137,14 @@ class WriteError
 		"Error: operación 'write' espera el tipo '@' y obtuvo '{@type1}'"
 	end
 end
+
+class ReDeclare
+
+	def initialize(identifier)
+		@identifier = identifier
+	end
+
+	def to_s 
+		"Error: la variable '{@identifier}' ya está declarada"
+	end
+end

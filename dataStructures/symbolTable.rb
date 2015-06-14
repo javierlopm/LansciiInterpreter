@@ -5,6 +5,8 @@
     Patricia Reinoso 11-10851
 =end
 
+require_relative "Errors"
+
 # Implementacion de tabla de simbolos
 class SymbolTable
   def initialize(father = nil)
@@ -20,7 +22,7 @@ class SymbolTable
   def insert_symbol(identifier,content)
     if contains?identifier
       #print "Si, mira me encontre a #{identifier}  en"
-      @errors << "identifier #{identifier} already declared"
+      @errors << ReDeclared::new(identifier)
     else
       @tb[identifier] = content
     end

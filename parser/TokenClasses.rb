@@ -6,6 +6,7 @@
 =end
 
 require_relative "../dataStructures/symbolTable"
+require_relative "../dataStructures/Errors"
 
 def printLevel(level)
 		
