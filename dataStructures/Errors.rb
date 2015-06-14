@@ -22,7 +22,7 @@ end
 
 class Undeclared
 
-	def def initialize(identifier)
+	def initialize(identifier)
 		@identifier = identifier	
 	end
 

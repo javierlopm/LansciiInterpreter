@@ -30,6 +30,7 @@ class Program
 
 	def get_symbol_table
 		@symbolTable
+	end
 
 	def context()
 		@instrucion1.context()
