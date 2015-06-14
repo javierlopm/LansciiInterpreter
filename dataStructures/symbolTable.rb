@@ -15,7 +15,7 @@ class SymbolTable
   def initialize(father = nil)
     @tb = {}
     @father = father
-    @child  = []
+    @children  = []
     @errors = []
   end
 
@@ -24,47 +24,11 @@ class SymbolTable
   end
 
   def add_child(child)
-    @child << child
+    @children << child
   end
 
-  def print_tree(level=0)
-    #si no hay errores
-
-    level.times do
-      print "    "
-    end
-    print "Nivel #{level} de variables: "
-
-    @tb.each.with_index do |content,index|
-      key   = content[0]
-      value = content[1]
-
-
-      case value
-        when 0
-          print '%'
-        when 1
-          print '!'
-        when 2
-          print '@'
-        else
-          print 'huh?'
-      end
-
-      print "#{key}"
-
-      if index == @tb.size-1
-        print "\n"
-      else
-        print ", "
-      end
-
-    end
-
-    @child.each do |c|
-      c.print_tree(level+1)
-    end
-  
+  def add_error(error)
+    @errors << error
   end
 
   def insert_symbol(identifier,content)
@@ -136,6 +100,8 @@ class SymbolTable
     #res = @tb[identifier]
   end
 
+  # METODOS DE IMPRESION
+
   def show_all
     puts "My father is : #{@father}"
     puts "My table  has: "
@@ -146,8 +112,79 @@ class SymbolTable
     @errors.each do |er|
       print "#{er} "
     end
-    
   end
+
+  def printTb
+    if has_error?
+      print_errors
+    else
+      print_tree
+    end
+  end
+
+  def has_error?
+    if @errors.size == 0
+      @children.each do |c|
+        if c.has_error?
+          return true
+        end
+      end
+    end
+
+    return false
+
+  end
+
+  def print_errors
+    @errors.each do |e|
+      puts "Aqui va uno"
+      e.to_s
+    end
+
+    @children.each do |c|
+      c.print_errors
+    end
+  end
+
+  def print_tree(level=0)
+    level.times do
+      print "    "
+    end
+    print "Nivel #{level} de variables: "
+
+    @tb.each.with_index do |content,index|
+      key   = content[0]
+      value = content[1]
+
+
+      case value
+        when 0
+          print '%'
+        when 1
+          print '!'
+        when 2
+          print '@'
+        else
+          print 'huh?'
+      end
+
+      print "#{key}"
+
+      if index == @tb.size-1
+        print "\n"
+      else
+        print ", "
+      end
+
+    end
+
+    @children.each do |c|
+      c.print_tree(level+1)
+    end
+  
+  end
+
+
 
 end
 
@@ -171,8 +208,8 @@ class SymbolUser                 #Jejeps no se me ocurrio otro nombre para esta 
     if defined?@instrucion2
       @instrucion2.add_symbols(symbolTable)
     end
-
   end
+
 end
 
 # Clase padre de constantes, ignora la tabla de simbolos

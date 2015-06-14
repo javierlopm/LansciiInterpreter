@@ -16,11 +16,11 @@ def main
             lexer.printOutPut
         else
             tree = Calcparser::Parser.new.parser(lexer.toList)
+            #tree.print
             st = tree.get_symbol_table
-            st.print_tree
+            st.printTb
             #puts "#{st.inspect}"
             #tree.check
-            #tree.print
         end
 
         
