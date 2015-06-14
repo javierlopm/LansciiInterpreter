@@ -23,7 +23,6 @@ class Program
 		@symbolTable = symbolTable
 		@instrucion1.add_symbols(symbolTable)
 		@instrucion1.context
-		
 	end
 
 
@@ -58,7 +57,7 @@ class Asign < SymbolUser
 
 	def context
 		
-		symboltype = @symbolTable.lookup(@identifier.get_name)
+		symboltype = @symbolTable.lookup_type(@identifier.get_name)
 		
 		if symboltype.nil? then 
 			# Error: No declarado
@@ -112,7 +111,7 @@ class Read < SymbolUser
 
 	def context
 		
-		symboltype = @symbolTable.lookup(@identifier.get_name)
+		symboltype = @symbolTable.lookup_type(@identifier.get_name)
 		
 		if symboltype.nil? then 
 			# Error: No declarado
@@ -317,10 +316,11 @@ class DIteration2 < SymbolUser
 	# def initialize(identifier, subexpr1, subexpr2, instrucion1)
 
 		@symbolTable = symbolTable
-		@identifier = identifier
+		#@identifier = identifier
 		@subexpr1    = subexpr1
 		@subexpr2    = subexpr2
 		@instrucion1 = instrucion1
+
 	end
 
 	def add_symbols(symbolTable)
@@ -328,7 +328,7 @@ class DIteration2 < SymbolUser
 		@symbolTable.add_father(symbolTable)
 		@instrucion1.add_symbols(@symbolTable)
 		@subexpr1.add_symbols(@symbolTable)
-		@subexpr1.add_symbols(@symbolTable)
+		@subexpr2.add_symbols(@symbolTable)
 	end
 
 
@@ -355,8 +355,9 @@ class DIteration2 < SymbolUser
 	end
 
 	def context
+=begin
+		symboltype = @symbolTable.lookup_type(@identifier.get_name)
 
-		symboltype = @symbolTable.lookup(@identifier.get_name)
 		if symboltype.nil? then 
 			# Error: No declarado
 			#@symbolTable.add_error(Undeclared::new(@identifier))
@@ -365,6 +366,7 @@ class DIteration2 < SymbolUser
 			# Error: La variable debe ser del tipo entero
 			@symbolTable.add_error(DIteration2Error::new(symboltype))
 		end
+=end
 
 		@subexpr1.context
 		@subexpr2.context
@@ -1000,8 +1002,7 @@ class ExprId < Constant
 
 
 	def context
-
-		symboltype = @symbolTable.lookup(@identifier)
+		symboltype = @symbolTable.lookup_type(@identifier)
 		if symboltype.nil? then 
 			# Error: No declarado
 			@symbolTable.add_error(Undeclared::new(@identifier))

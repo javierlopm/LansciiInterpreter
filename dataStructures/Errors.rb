@@ -14,7 +14,7 @@ def Get_Type(code)
         type = '\'!\''
       when 2
         type = '\'@\''
-      else 3
+      else 
         type = 'variable no declarada'
     end
     return type

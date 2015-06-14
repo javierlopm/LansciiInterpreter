@@ -69,6 +69,7 @@ rule
 
   program: LCURLY declare PIPE instruction RCURLY  {
             #val[1].show_all
+            puts "Hey la instrucion que me pasaron fue #{val[3]}"
             result = Program::new(val[3],val[1])
             #result = val[3]
            }
@@ -153,9 +154,9 @@ rule
                 }
               | LSQUARE IDENTIFIER COLON exp COMPREHENSION exp  PIPE instruction RSQUARE {
                     #Creacion de tabla
+                    #identifier = ExprId::new(val[1])
                     st = SymbolTable::new()
                     st.insert_symbol(val[1],'%',false)     #entero implicito
-                    #identifier = ExprId::new(val[1])
                     result = DIteration2::new(st,val[3],val[5],val[7])
                 }
 
