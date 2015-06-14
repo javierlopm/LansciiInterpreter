@@ -154,9 +154,9 @@ rule
               | LSQUARE IDENTIFIER COLON exp COMPREHENSION exp  PIPE instruction RSQUARE {
                     #Creacion de tabla
                     st = SymbolTable::new()
-                    st.insert_symbol(val[1],'%')     #entero implicito
+                    st.insert_symbol(val[1],'%',false)     #entero implicito
                     #identifier = ExprId::new(val[1])
-                    result     = DIteration2::new(st,val[3],val[5],val[7])
+                    result = DIteration2::new(st,val[3],val[5],val[7])
                 }
 
   varIncorporationRange:  LCURLY declare PIPE instruction RCURLY  {
