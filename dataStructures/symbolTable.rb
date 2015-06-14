@@ -5,12 +5,10 @@
     Patricia Reinoso 11-10851
 =end
 
-def print_indentation(level)
-  puts "El tipo de lo que recibo es #{level.inspect}"
-  (0..level).each do
-      print "  " 
-  end
-end
+
+
+require_relative "Errors"
+
 
 # Implementacion de tabla de simbolos
 class SymbolTable
@@ -72,7 +70,7 @@ class SymbolTable
   def insert_symbol(identifier,content)
     if contains?identifier
       #print "Si, mira me encontre a #{identifier}  en"
-      @errors << "identifier #{identifier} already declared"
+      @errors << ReDeclared::new(identifier)
     else
       @tb[identifier] = content
     end
@@ -133,7 +131,7 @@ class SymbolTable
     elsif @father.nil? then
       return nil
     else
-      @father.lookup(identifier)
+      return @father.lookup(identifier)
     end
     #res = @tb[identifier]
   end
