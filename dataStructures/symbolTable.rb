@@ -61,6 +61,10 @@ class SymbolTable
     end
   end
 
+  ##########################
+  # Metodos de modificacion
+  ##########################
+
   def delete_symbol(identifier) #el nombre se confundia
     if @tb.has_key?(identifier) then
        @tb.delete(identifier)
@@ -81,6 +85,10 @@ class SymbolTable
     end
     
   end
+
+  ######################
+  # Metodos de busqueda
+  ######################
 
   def contains?(identifier)
     # if @father.nil? then
@@ -106,6 +114,18 @@ class SymbolTable
     #res = @tb[identifier]
   end
 
+  def has_error?
+    if @errors.size == 0
+      @children.each do |c|
+        if c.has_error?
+          return true
+        end
+      end
+      return false
+    end
+
+    return true
+  end
 
   #######################
   # Metodos de impresion
@@ -131,23 +151,10 @@ class SymbolTable
     end
   end
 
-  def has_error?
-    if @errors.size == 0
-      @children.each do |c|
-        if c.has_error?
-          return true
-        end
-      end
-    end
-
-    return false
-
-  end
 
   def print_errors
     @errors.each do |e|
-      puts "Aqui va uno"
-      e.to_s
+      puts "#{e.to_s}"
     end
 
     @children.each do |c|
