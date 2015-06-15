@@ -9,7 +9,7 @@
     read naboer;
 read hey
  
-;nabo = 2 + 2
+;nabo = 2 +2
 ;nabo = 2 * 2 
 ;nabo = 2 / 2;
 nabo = 2% 2;
@@ -34,4 +34,19 @@ nabo = -2;
 a = -2;
 a = -false;
 a = -a
+ ;
+a = #;
+nabo = #
+;
+nabo = 2 + (true \/ true) * 3;
+
+a = </>&<->
+;
+{% a | 
+
+a = 2 + 2;
+a = a + nabo }
+
+ 
 }
+
