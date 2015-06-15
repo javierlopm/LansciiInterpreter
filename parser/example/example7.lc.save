@@ -1,0 +1,7 @@
+{ % nabo !hey @a|
+
+    (hey ? write a);
+    (hey ? write a : write a); 
+    
+    [hey | write a
+}

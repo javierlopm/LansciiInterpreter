@@ -62,11 +62,16 @@ class Asign < SymbolUser
 	end
 
 	def context
+	
 		symboltype = @symbolTable.lookup_type(@identifier.get_name)
-		
+		symbolmod = @symbolTable.lookup_modifiable(@identifier.get_name)
+	
 		if symboltype.nil? then 
 			# Error: No declarado
 			@symbolTable.add_error(Undeclared::new(@identifier.get_name))
+		elsif symbolmod.nil? or symbolmod.eql?false then
+			# no se debe modificar esta variable
+			@symbolTable.add_error(NotModifiable::new(@identifier.get_name))
 		else
 
 			unless symboltype.eql? @subexpr1.type then

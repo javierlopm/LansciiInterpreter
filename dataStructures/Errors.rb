@@ -149,3 +149,14 @@ class ReDeclare
 		"Error: la variable '#{@identifier}' ya está declarada"
 	end
 end
+
+class NotModifiable
+
+	def initialize(identifier)
+		@identifier = identifier
+	end
+
+	def to_s
+		"Error: la variable '#{@identifier}' no debe ser modificada"
+	end
+end
