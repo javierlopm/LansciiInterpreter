@@ -11,8 +11,8 @@ require_relative "../dataStructures/Errors"
 def printLevel(level)
 		
 	(0...level).each do
-    	$stdout.print " |  " #Believe in magic
-	end 
+		$stdout.print " |  " #Believe in magic
+	end
 	
 end
 
@@ -672,7 +672,7 @@ class ExprMore < BinExpr
 
 
 	attr_accessor :op
-  	attr_accessor :type
+	attr_accessor :type
 
 	def initialize(subexpr1, subexpr2)
 		super
@@ -992,8 +992,8 @@ class ExprId < Constant
 	end
 
 	def add_symbols(symbolTable)
-    	@symbolTable = symbolTable
-    end
+		@symbolTable = symbolTable
+	end
 
 	def print(level=0)
 		printLevel(level)

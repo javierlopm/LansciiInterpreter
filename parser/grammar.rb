@@ -69,7 +69,6 @@ rule
 
   program: LCURLY declare PIPE instruction RCURLY  {
             #val[1].show_all
-            puts "Hey la instrucion que me pasaron fue #{val[3]}"
             result = Program::new(val[3],val[1])
             #result = val[3]
            }
@@ -134,11 +133,14 @@ rule
             result     = Read::new(identifier)
         }
 
-  output: WRITE IDENTIFIER {
-            identifier = ExprId::new(val[1])
-            result = Write::new(identifier)
+  # output: WRITE IDENTIFIER {
+            # identifier = ExprId::new(val[1])
+            # result = Write::new(identifier)
+        # }  
+  output: WRITE exp {
+            #identifier = ExprId::new(val[1])
+            result = Write::new(val[1])
         }
-        # NOS FALTA QUE RECONOZCA PRINTS DE OTRAS COSAS
 
   conditional:  LPARENTHESIS exp QUESTIONMARK instruction RPARENTHESIS {
                     result = Conditional::new(val[1],val[3])

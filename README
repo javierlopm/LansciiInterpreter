@@ -5,45 +5,50 @@ Patricia Reinoso 11-10851
 Uso
 ===
 
-Para correr el proyecto (Lexer y parser) es necesario "compilar" el archivo 
-de gramaticá parse/grammar.rb, esto puede realizarse en la carpeta principal
+Para correr el proyecto, es necesario "compilar" el archivo de gramatica 
+parse/grammar.rb, esto puede realizarse en la carpeta principal
 con el comando rake compile_grammar, esta accion tambien puede realizarse 
 mediante el comando 'racc ./parser/grammar.rb -oparser/racc.rb'
 
 Luego de compilar, la ejecución se hará mediante ./lanscii [archivo a analizar] 
 esto reportará posibles errores de lexing encontrados, si no se encuentra 
-ninguno, los tokens hallados serán parseados en un árbol sintactico e impreso
-en pantalla de acuerdo al formato indicado. Si un error de sintaxis es contrado
-se reportará y terminará la ejecución.
+ninguno, los tokens hallados serán parseados en un árbol sintactico, de hallar
+errores de gramática la ejecución se detiene y se imprime el primer error, en 
+caso contrario se procede a la ejecución de los nuevos módulos de esta tercera
+entrega los cuales imprimen las tablas de símbolos y los posibles errores
+de declaración, de tipos, y de modificación de variables especiales.
 
 Con el comando rake run, se compilará la gramática y se ejecutará el parser
 reconociendo el archivo parser/example1.lc
 
-El comando rake suite ejecutará todos los ejemplos correctos de la carpeta 
+El comando rake suite ejecutará todos los ejemplos de la carpeta 
 parser/examples y colocara su salida en /salida.txt
 
-El comando rake runBadGrammar mostrará el error del ejemplo 
-parser/example/example8.lc
 
 
 
 Decisiones de implementación
 ============================
 
-Luego de realizar el diseño de gramática e implementarlo, nos encontramos con 
-una gran cantidad de shift/reduce y algunos reduce/reduce conflicts, luego de
-agregar precedencias y sentido de las asociatividades en las expresiones, estos 
-errores disminuyeron. Pero fue necesario agregar reglas de precedencia a la 
-concatenación de instrucciones y a la declaración de vairiables.
+Para esta entrega se incluyeron los siguientes módulos:
 
-Por último, para eliminar los ultimos shift/reduce conflicts encontrados
-se tuvo que reestructurar la regla "declare", inicialmente teníamos una regla
-declare -> "declare declare", pero fue modificada hasta la forma actual, la cual
-construye las diferentes declaraciones de variables mediante recursión izquierda.
+dataStructures
+    | Errors.rb
+    | context.rb
+    | symbolTable.rb
+
+Se realizaron las modificaciones recomendadas en parser/grammar.rb, y se agregó 
+código nuevo en parser/TokenClasses.rb
+
+Se intentó, en la medida de lo posible separar el código de forma modular.
+
+
+
 
 Estado actual del proyecto
 ==========================
 
+······ Falta
 Para esta nueva entrega se resolvieron los problemas de especificación como se 
 nos recomendó. Adicionalmentes e realizó la construcción de un arból sintáctico,
 en donde realizamos un pequeño bocetos en los nodos de los tipos que pueden
@@ -56,15 +61,10 @@ Comentarios
 ===========
 
 En la carpeta parser/examples se encuentran alguno ejemplos de programas.
-* example1.lc ejemplo del enunciado de la entrega 2
-* example2.lc programa ejemplo de la especificación del lenguaje
-* example3.lc ejempl de read, concatenación y ciclo determinado
-* example4.lc ejemplo de ciclo determinado sin variable con un ciclo 
-              indeterminado anidado
-* example5.lc ejemplo de los dos tipos de if anidados
-* example6.lc muestra la construccion de un árbol con expresiones aritméticas
-* example7.lc muestra un arbol de expresión correcto respecto a la gramática
-              pero equivocado respecto a la compatibilidad de tipos a analizar
-              en las próximas entregas
-* example8.lc Ejemplo con dos errores de gramática, el programa muestra el 
-              primer error.
+
+* example[1..8].lc  ejemplos de la segunda entrega
+
+* example9.lc       primer ejemplo del enunciado de la tercer entrega, fue 
+                    modificado para que sea correcto
+
+* example10.lc      segundo ejemplo de la entrega, ejemplo de errores esperados

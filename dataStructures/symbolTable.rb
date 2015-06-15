@@ -188,7 +188,7 @@ class SymbolTable
     level.times do
       print "    "
     end
-    print "Nivel #{level} de variables: "
+    print "Variable declaration level #{level}: "
 
     @tb.each.with_index do |content,index|
       key   = content[0]
