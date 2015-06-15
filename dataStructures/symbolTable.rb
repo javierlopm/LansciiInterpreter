@@ -91,16 +91,7 @@ class SymbolTable
   ######################
 
   def contains?(identifier)
-    # if @father.nil? then
-      # return @tb.has_key?(identifier)
-    # else
-      #No deberia haber problemas de declaraciones en diferentes niveles
-      # return (@tb.has_key?(identifier) or @father.contains?(identifier))
-    # end
-    #res = @tb.has_key?identifier
-
     return @tb.has_key?(identifier)
-
   end
 
   def lookup(identifier)
@@ -111,7 +102,6 @@ class SymbolTable
     else
       return @father.lookup(identifier)
     end
-    #res = @tb[identifier]
   end
 
   def lookup_type(identifier)
@@ -166,11 +156,15 @@ class SymbolTable
   end
 
   def printTb
+
+    print_tree
+
+    puts "\n"
+
     if has_error?
       print_errors
-    else
-      print_tree
     end
+
   end
 
 
@@ -193,7 +187,6 @@ class SymbolTable
     @tb.each.with_index do |content,index|
       key   = content[0]
       type = content[1]['type']
-
 
       case type
         when 0

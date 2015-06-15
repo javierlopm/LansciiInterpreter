@@ -155,7 +155,7 @@ rule
                     #Creacion de tabla
                     #identifier = ExprId::new(val[1])
                     st = SymbolTable::new()
-                    st.insert_symbol(val[1],'%',false)     #entero implicito
+                    st.insert_symbol(val[1],0,false)     #entero implicito
                     result = DIteration2::new(st,val[3],val[5],val[7])
                 }
 
