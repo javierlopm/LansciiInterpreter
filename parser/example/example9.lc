@@ -1,0 +1,12 @@
+{ %a @b !c |
+    { @d !c |
+        write d;
+            (c ?
+                a = 10 - 4 / 2)
+    };
+    
+    { !a |
+        write b;
+        { %a c d | write b }
+    }
+}

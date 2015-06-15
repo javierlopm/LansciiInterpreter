@@ -33,36 +33,48 @@ Decisiones de implementación
 Para esta entrega se incluyeron los siguientes módulos:
 
 dataStructures
-    | Errors.rb
-    | context.rb
-    | symbolTable.rb
+    |_ Errors.rb
+    |_ symbolTable.rb
 
 Se realizaron las modificaciones recomendadas en parser/grammar.rb, y se agregó 
 código nuevo en parser/TokenClasses.rb
 
 Se intentó, en la medida de lo posible separar el código de forma modular.
 
+En Errors.rb se encuentran las diferentes clases que representan todos los 
+tipos de errores posibles, cada una posee un metodo to_s para su representación
+como string.
+
+
+En symbolTable se encuentra la clase SymbolTable, la cual posee un arreglo para
+errores, una apuntadora a una posible tabla padre, una lista de posibles 
+symbolTable hijos y una tabla de hash para identificadores con sus respectivos 
+tipos y e indicador de si es modificable.
+En este archivo también se encuentran las clases Constant y SymbolUser que son
+los pasos base y recursivos respectivamente para el pase de la tabla de símbolos
+a través del árbol sintáctico.
 
 
 
 Estado actual del proyecto
 ==========================
 
-······ Falta
-Para esta nueva entrega se resolvieron los problemas de especificación como se 
-nos recomendó. Adicionalmentes e realizó la construcción de un arból sintáctico,
-en donde realizamos un pequeño bocetos en los nodos de los tipos que pueden
-recibir algunas expresiones, pero sin realizar las verificaciones pertinentes
-de la siguiente entrega, en la construcción tampoco se crean estructuras 
-relacionadas a la declaración de variables, ya que la tabla de símbolos no
-ha sido planteada todavía.
+Este proyecto cumple con los requerimientos de las dos entregas anteriores
+(parser y lexer), actualmente realizamos una impresión del arbol generado
+por las diferentes tablas de símbolos, también se hace una verificación
+del contexto en donde analizamos los tipos de las variables que se asignan,
+si estas se encuentran declaradas en la tabla de símbolos actual, en algún
+nivel superior, o simplemente no se encuentran. Por último, en la instrucción
+de iteración determinada con variable, se realiza la verificación de que en
+ninguna instrucción interna, el iterados no sea modificado.
 
 Comentarios
 ===========
 
 En la carpeta parser/examples se encuentran alguno ejemplos de programas.
 
-* example[1..8].lc  ejemplos de la segunda entrega
+* example[1..8].lc  ejemplos varios, de entregas anteriores y modificaciones
+                    nuevas
 
 * example9.lc       primer ejemplo del enunciado de la tercer entrega, fue 
                     modificado para que sea correcto
