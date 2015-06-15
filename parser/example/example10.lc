@@ -1,0 +1,6 @@
+{ %i @c !b|
+    (i ?
+        write b;
+        [i..b | write c - i; write n]
+    )
+}
