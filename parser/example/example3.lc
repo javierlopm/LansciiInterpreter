@@ -1,4 +1,4 @@
 { !boo |
     read variable;
-    [ jejeps: aqui..pekin | enCarro = enAvion ]
+    [ jejeps: aqui..pekin | jejeps = jejeps ]
 } 
