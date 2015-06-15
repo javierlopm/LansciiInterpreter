@@ -63,13 +63,13 @@ class Asign < SymbolUser
 			# Error: No declarado
 			@symbolTable.add_error(Undeclared::new(@identifier.get_name))
 		else
-			@subexpr1.context
 
 			unless symboltype.eql? @subexpr1.type then
 				# Error: Tipo
 				@symbolTable.add_error(AsignError::new(@identifier.get_name,symboltype,@subexpr1.type))
 			end
 		end
+		@subexpr1.context
 	end
 
 end
@@ -271,8 +271,6 @@ class DIteration < SymbolUser
 		@instrucion1 = instrucion1
 		
 	end
-
-
 
 	def print(level=0)
 		printLevel(level)
