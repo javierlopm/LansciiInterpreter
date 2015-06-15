@@ -230,6 +230,12 @@ end
 class SymbolUser                 #Jejeps no se me ocurrio otro nombre para esta clase
   def add_symbols(symbolTable)
     @symbolTable = symbolTable
+    
+
+
+    if defined?@identifier
+      @identifier.add_symbols(symbolTable)
+    end
 
     if defined?@subexpr1
       @subexpr1.add_symbols(symbolTable)

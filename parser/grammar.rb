@@ -68,13 +68,10 @@ rule
   target: program {result = val[0]}
 
   program: LCURLY declare PIPE instruction RCURLY  {
-            #val[1].show_all
             result = Program::new(val[3],val[1])
-            #result = val[3]
            }
          | LCURLY instruction RCURLY   {
           result = Program::new(val[1])
-          result = val[3]
          }
   
   #Declaraciones sin construccion, siguiente entrega

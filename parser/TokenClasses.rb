@@ -20,8 +20,14 @@ class Program
 
 	def initialize (instrucion1,symbolTable=nil)
 		@instrucion1 = instrucion1
-		@symbolTable = symbolTable
-		@instrucion1.add_symbols(symbolTable)
+
+		if symbolTable.nil?
+			@symbolTable = SymbolTable::new()
+		else 
+			@symbolTable = symbolTable
+		end
+		
+		@instrucion1.add_symbols(@symbolTable)
 		@instrucion1.context
 	end
 
@@ -56,7 +62,6 @@ class Asign < SymbolUser
 	end
 
 	def context
-		
 		symboltype = @symbolTable.lookup_type(@identifier.get_name)
 		
 		if symboltype.nil? then 
