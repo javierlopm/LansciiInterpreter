@@ -16,10 +16,18 @@
 
 2.-
   a.- El autómata construido está representado en instAutomata.png, se pueden
-  observar que en el estado I6 existe un conflicto shift-reduce entre la
-  reducción de la regla Instr -> Instr ; Instr y ls shifts de las demás reglas.
+  observar que en el  estado I6  existe un  conflicto  shift-reduce  entre la
+  reducción de la regla Instr -> Instr ; Instr y ls shifts de las demás reglas,
+  por consiguiente la gramática no es LR(0).
 
-  b.-
+  b.- En el caso en que en el estado I6 se elija realizar un reduce 2, se
+  estará reconociendo que los dos primeros IS encontrados son parte de la
+  regla 2 (Instr -> Instr ; Instr), esto es asociatividad a la izquierda.
+  
+  En el otro caso, luego de reconocer los dos símbolos terminales IS, 
+  con shift 4 se procede a realizar el reconocimiento del tercer terminal
+  IS, con esto, luego de llegar al símbolo $ inician las reducciones con
+  la regla 2 (i ; i)
 
 
 3.-
