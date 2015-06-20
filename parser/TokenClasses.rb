@@ -151,6 +151,11 @@ class Read < SymbolUser
     end
   end
 
+  def execute
+    value = STDIN.gets.chomp
+    # Falta verificar y asignarlo
+  end
+
 end
 
 #####################################################
@@ -182,6 +187,11 @@ class Write < SymbolUser
       #ERROR: debe ser Canvas
       @symbolTable.add_error(WriteError::new(@subexpr1.type))
     end
+  end
+
+  def execute
+    value = @subexpr1.execute
+    puts value
   end
 end
 
