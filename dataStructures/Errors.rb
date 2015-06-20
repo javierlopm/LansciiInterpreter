@@ -15,13 +15,13 @@ def Get_Type(code)
   when 2
     type = '\'@\''
   else
-    type = 'variable no declarada'
+    type = 'not declared variable'
   end
   return type
 end
 
 def is32bits?(number)
-        return number < 2**31
+    return number < 2**31
 end
 
 class Undeclared
@@ -31,7 +31,7 @@ class Undeclared
   end
 
   def to_s
-    "Error: variable '#{@identifier}' no existe dentro de este alcance"
+    "Error: variable '#{@identifier}' does not exist in this block"
   end
 end
 
@@ -45,7 +45,7 @@ class AsignError
   end
 
   def to_s
-    "Error: se intenta asignar el tipo #{@type2} a la variable '#{@identifier}' de tipo #{@type1}"
+    "Error: Lanscii is trying to asign type #{@type2} to the variable '#{@identifier}' of type #{@type1}"
   end
 end
 
@@ -57,7 +57,7 @@ class ConditionalError
   end
 
   def to_s
-    "Error: instrucción condicional espera tipo '!' y obtuvo #{@type1}"
+    "Error: conditional instruction expected type '!' but received #{@type1}"
   end
 end
 
@@ -68,7 +68,7 @@ class IIterationError
   end
 
   def to_s
-    "Error: instrucción de iteración espera tipo '!' y obtuvo #{@type1}"
+    "Error: iteration instruction expected type '!' but received #{@type1}"
   end
 end
 
@@ -79,7 +79,7 @@ class DIterationError
   end
 
   def to_s
-    "Error: límite de iteración espera tipo '%' y obtuvo #{@type1}"
+    "Error: iteration limit expected '%' but received #{@type1}"
   end
 end
 
@@ -90,7 +90,7 @@ class DIteration2Error
   end
 
   def to_s
-    "Error: variable de iteración espera tipo '%' y obtuvo #{@type1}"
+    "Error: iteration variable expected '%' but received #{@type1}"
   end
 end
 
@@ -104,7 +104,7 @@ class TypeError
   end
 
   def to_s
-    "Error: se intenta hacer la operación '#{@op}' entre #{@type1} y #{@type2}"
+    "Error: Lanscii is trying to do the operation '#{@op}' between #{@type1} and #{@type2}"
   end
 end
 
@@ -117,7 +117,7 @@ class UnaryError
   end
 
   def to_s
-    "Error: operador '#{@op}' no funciona con operandos #{@type1} y #{@type2}"
+    "Error: operator '#{@op}' does not work with operands #{@type1} and #{@type2}"
   end
 end
 
@@ -128,7 +128,7 @@ class ReadError
   end
 
   def to_s
-    "Error: operación 'read' espera el tipo '%' o '!' y obtuvo #{@type1}"
+    "Error: operation 'read' expected type '%' or '!' but received #{@type1}"
   end
 end
 
@@ -139,7 +139,7 @@ class WriteError
   end
 
   def to_s
-    "Error: operación 'write' espera el tipo '@' y obtuvo #{@type1}"
+    "Error: operation 'write' expected type '@' but received #{@type1}"
   end
 end
 
@@ -150,7 +150,7 @@ class ReDeclare
   end
 
   def to_s
-    "Error: la variable '#{@identifier}' ya está declarada"
+    "Error: variable '#{@identifier}' is already declared"
   end
 end
 
@@ -161,7 +161,7 @@ class NotModifiable
   end
 
   def to_s
-    "Error: la variable '#{@identifier}' no debe ser modificada"
+    "Error: variable '#{@identifier}' must not be modified"
   end
 end
 
@@ -178,7 +178,7 @@ class DivCero
   end
 
   def to_s
-    "Error: división por cero"
+    "Error: Lanscii is trying to divide by cero"
   end
 
 end
@@ -190,7 +190,7 @@ class Overflow
   end
 
   def to_s
-    "Error: overflow en la operación '#{@op}'"
+    "Error: overflow found in operation '#{@op}'"
   end
 
 end
@@ -202,20 +202,20 @@ class NotInitialize
   end
 
   def to_s
-    "Error: evaluación de la variable '#{@identifier}' no inicializada"
+    "Error: Lanscii is trying to evaluate not initialize variable '#{@identifier}'"
   end
 end
 
 class CanvasConcat
 
-  def initialize(identifier1, identifier2, op)
-    @identifier1 = identifier1
-    @identifier2 = identifier2
+  def initialize(subexpr1, subexpr2, op)
+    @subexpr1 = subexpr1
+    @subexpr2 = subexpr2
     @op = op
   end
 
   def to_s
-    "Error: #{@op} de lienzos incompatibles (#{@identifier1}, #{@identifier2})"
+    "Error: #{@op} uncampatible canvas (#{@subexpr1}, #{@subexpr2})"
   end
 end
 
