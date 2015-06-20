@@ -107,6 +107,12 @@ class Secuence < SymbolUser
     @instrucion1.context
     @instrucion2.context
   end
+
+  def execute
+    @instrucion1.execute
+    @instrucion2.execute
+  end
+
 end
 
 #####################################################
@@ -215,6 +221,13 @@ class Conditional < SymbolUser
     @instrucion1.context
 
   end
+
+  def execute
+    if @subexpr1.execute then
+      @instrucion1.execute
+    end
+  end
+
 end
 
 class Conditional2 < Conditional
@@ -255,6 +268,15 @@ class Conditional2 < Conditional
     @instrucion1.context
     @instrucion2.context
   end
+
+  def execute
+    if @subexpr1.execute then
+      @instrucion1.execute
+    else
+      @instrucion2.execute
+    end
+  end
+  
 end
 
 #####################################################
