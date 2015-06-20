@@ -12,7 +12,9 @@ elementos.
 
 En la primera etapa, se implementó el lexer, encargado
 de leer una secuenca de caracteres y extraer los tokens
-relevantes del lenguaje a través de expresiones regulares.Es decir que el análisis lexicográfico se realizó en la primera etapa.
+relevantes del lenguaje a través de expresiones regulares.
+Es decir que el análisis lexicográfico se realizó en la 
+primera etapa.
 
 La segunda etapa fue el desarrollo del parser, encargado
 de hacer el análisis sintáctico de programas escritos 

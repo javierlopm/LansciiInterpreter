@@ -35,11 +35,11 @@ class SymbolTable
     @errors << error
   end
 
-  def insert_symbol(identifier,type,modifiable=true)
+  def insert_symbol(identifier,type,modifiable=true,value=nil)
     if contains?identifier
       @errors.add_error(ReDeclared::new(identifier))
     else
-      @tb[identifier] = {'type' => type, 'modifiable' => modifiable}
+      @tb[identifier] = {'type' => type, 'modifiable' => modifiable, 'value' => value}
     end
   end
 
