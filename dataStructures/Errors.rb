@@ -160,3 +160,58 @@ class NotModifiable
     "Error: la variable '#{@identifier}' no debe ser modificada"
   end
 end
+
+
+#################################################
+##                Errores Dinamicos            ##
+#################################################
+
+
+class DivCero
+
+  def initialize()
+
+  end
+
+  def to_s
+    "Error: división por cero"
+  end
+
+end
+
+class Overflow
+
+  def initialize(op)
+    @op = op
+  end
+
+  def to_s
+    "Error: overflow en la operación '#{@op}'"
+  end
+
+end
+
+class NotInitialize
+
+  def initialize(identifier)
+    @identifier = identifier
+  end
+
+  def to_s
+    "Error: evaluación de la variable '#{@identifier}' no inicializada"
+  end
+end
+
+class CanvasConcat
+
+  def initialize(identifier1, identifier2, op)
+    @identifier1 = identifier1
+    @identifier2 = identifier2
+    @op = op
+  end
+
+  def to_s
+    "Error: #{@op} de lienzos incompatibles (#{@identifier1}, #{@identifier2})"
+  end
+end
+
