@@ -1232,6 +1232,10 @@ class ExprCanvas < Constant
 
   def context
   end
+
+  def execute
+    return @subexpr1
+  end
 end
 
 class ExprEmptyCanvas < Constant
@@ -1251,6 +1255,10 @@ class ExprEmptyCanvas < Constant
   end
 
   def context
+  end
+
+  def execute
+    return @subexpr1
   end
 
 end
