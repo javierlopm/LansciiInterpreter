@@ -588,6 +588,16 @@ class ExprDiv < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    div = @subexpr2.execute()
+    if div.eql?0 then
+      DivCero::new(@subexpr2)
+      return nil
+    else
+      return (@subexpr1.execute() / div)
+    end
+  end
 end
 
 class ExprMod < BinExpr

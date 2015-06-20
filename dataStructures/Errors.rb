@@ -169,8 +169,8 @@ end
 
 class DivCero
 
-  def initialize()
-
+  def initialize(subexpr1)
+    @subexpr1 = subexpr1
   end
 
   def to_s
