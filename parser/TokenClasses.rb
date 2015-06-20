@@ -38,6 +38,9 @@ class Program
 
 end
 
+#####################################################
+##                      Asign                      ##
+#####################################################
 
 class Asign < SymbolUser
 
@@ -84,6 +87,10 @@ class Asign < SymbolUser
 
 end
 
+#####################################################
+##                    SECUENCE                     ##
+#####################################################
+
 class Secuence < SymbolUser
 
   def initialize (instrucion1, instrucion2)
@@ -101,6 +108,10 @@ class Secuence < SymbolUser
     @instrucion2.context
   end
 end
+
+#####################################################
+##                      Read                       ##
+#####################################################
 
 class Read < SymbolUser
 
@@ -136,6 +147,10 @@ class Read < SymbolUser
 
 end
 
+#####################################################
+##                      WRITE                      ##
+#####################################################
+
 class Write < SymbolUser
 
   def initialize (subexpr1)
@@ -163,6 +178,10 @@ class Write < SymbolUser
     end
   end
 end
+
+######################################################
+##                  Condicionales                   ##
+######################################################
 
 class Conditional < SymbolUser
 
@@ -237,6 +256,10 @@ class Conditional2 < Conditional
     @instrucion2.context
   end
 end
+
+#####################################################
+##                    Iteraciones                  ##
+#####################################################
 
 class IIteration < SymbolUser
 
@@ -377,6 +400,11 @@ class DIteration2 < SymbolUser
   end
 end
 
+
+###############################################
+##                  BLOCK                    ##
+###############################################
+
 class VarBlock < SymbolUser
 
   def initialize(symbolTable,instrucion1)
@@ -436,7 +464,9 @@ type = 2 ==> Canvas
 type = 3 ==> Cualquier tipo
 =end
 
-# Expresiones binarias
+############################################
+##           Expresiones binarias         ##
+############################################
 
 class BinExpr < SymbolUser
 
@@ -480,6 +510,9 @@ class ExprSum < BinExpr
 
   end
 
+  def execute
+    return (@subexpr1.execute() + @subexpr2.execute())
+  end
 
 end
 
@@ -504,6 +537,9 @@ class ExprSubs < BinExpr
     end
   end
 
+  def execute
+    return (@subexpr1.execute() - @subexpr2.execute())
+  end
 end
 
 class ExprMult < BinExpr
@@ -525,6 +561,10 @@ class ExprMult < BinExpr
       # ERROR: debe ser entero
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
+  end
+
+  def execute
+    return (@subexpr1.execute() * @subexpr2.execute())
   end
 end
 
@@ -593,6 +633,11 @@ class ExprAnd < BinExpr
     end
 
   end
+
+  def execute
+    return (@subexpr1.execute() and @subexpr2.execute())
+  end
+
 end
 
 class ExprOr < BinExpr
@@ -614,6 +659,10 @@ class ExprOr < BinExpr
       # ERROR: debe ser booleano
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
+  end
+
+  def execute
+    return (@subexpr1.execute() or @subexpr2.execute())
   end
 
 end
@@ -639,6 +688,11 @@ class ExprLess < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    return (@subexpr1.execute() < @subexpr2.execute())
+  end
+
 end
 
 class ExprLessEql < BinExpr
@@ -661,6 +715,11 @@ class ExprLessEql < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    return (@subexpr1.execute() <= @subexpr2.execute())
+  end
+
 end
 
 class ExprMore < BinExpr
@@ -685,6 +744,11 @@ class ExprMore < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    return (@subexpr1.execute() > @subexpr2.execute())
+  end
+
 end
 
 class ExprMoreEql < BinExpr
@@ -708,6 +772,11 @@ class ExprMoreEql < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    return (@subexpr1.execute() >= @subexpr2.execute())
+  end
+
 end
 
 class ExprEql < BinExpr
@@ -730,6 +799,10 @@ class ExprEql < BinExpr
       # ERROR: debe ser del mismo tipo
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
+  end
+
+  def execute
+    return (@subexpr1.execute() == @subexpr2.execute())
   end
 end
 
@@ -754,6 +827,11 @@ class ExprDiff < BinExpr
     end
 
   end
+
+  def execute
+    return (@subexpr1.execute() != @subexpr2.execute())
+  end
+
 end
 
 class ExprVerConcat < BinExpr
@@ -803,8 +881,9 @@ class ExprHorConcat < BinExpr
   end
 end
 
-
-# Expresiones unarias
+###############################################
+##           Expresiones unarias             ##
+###############################################
 
 class UnExpr < SymbolUser
 
@@ -888,7 +967,9 @@ class ExprTranspose < UnExpr
   end
 end
 
-# Expresiones constantes
+#####################################################
+##             Expresiones constantes              ##
+#####################################################
 
 class ExprParenthesis < SymbolUser
 
