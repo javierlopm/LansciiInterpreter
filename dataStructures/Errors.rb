@@ -20,6 +20,10 @@ def Get_Type(code)
   return type
 end
 
+def is32bits?(number)
+        return number < 2**31
+end
+
 class Undeclared
 
   def initialize(identifier)

@@ -511,7 +511,15 @@ class ExprSum < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() + @subexpr2.execute())
+    
+    result = @subexpr1.execute() + @subexpr2.execute()
+    if is32bits?(result) then
+      return result
+    else 
+      Overflow::new(@op)
+      return nil
+    end
+
   end
 
 end
@@ -538,8 +546,16 @@ class ExprSubs < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() - @subexpr2.execute())
+  
+    result = @subexpr1.execute() - @subexpr2.execute()
+    if is32bits?(result) then
+      return result
+    else 
+      Overflow::new(@op)
+      return nil
+    end
   end
+
 end
 
 class ExprMult < BinExpr
@@ -564,7 +580,13 @@ class ExprMult < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() * @subexpr2.execute())
+    result = @subexpr1.execute() * @subexpr2.execute()
+    if is32bits?(result) then
+      return result
+    else 
+      Overflow::new(@op)
+      return nil
+    end
   end
 end
 
@@ -620,6 +642,17 @@ class ExprMod < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    div = @subexpr2.execute()
+    if div.eql?0 then
+      DivCero::new(@subexpr2)
+      return nil
+    else
+      return (@subexpr1.execute() % div)
+    end
+  end
+
 end
 
 class ExprAnd < BinExpr
@@ -1010,6 +1043,10 @@ class ExprParenthesis < SymbolUser
     end
 
   end
+
+  def context
+    return @subexpr1.execute()
+  end
 end
 
 class ExprNumber < Constant
@@ -1030,9 +1067,12 @@ class ExprNumber < Constant
 
   def context
   end
+
+  def execute
+    return Integer(@subexpr1)
+  end
+
 end
-
-
 
 class ExprTrue < Constant
 
@@ -1052,6 +1092,11 @@ class ExprTrue < Constant
 
   def context
   end
+
+  def execute
+    return true
+  end
+
 end
 
 class ExprFalse < Constant
@@ -1072,6 +1117,11 @@ class ExprFalse < Constant
 
   def context
   end
+
+  def execute
+    return false
+  end
+
 end
 
 class ExprId < Constant
@@ -1154,4 +1204,5 @@ class ExprEmptyCanvas < Constant
 
   def context
   end
+
 end
