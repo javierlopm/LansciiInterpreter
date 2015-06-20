@@ -1,0 +1,8 @@
+<<<<<<< HEAD
+%i @c !b|
+    (i ?
+        write b;
+        [i..b | write c - i; write n]
+    )
+}
+>>>>>>> 812a5fb302c1b81b1223bd351804b9925daeada0
