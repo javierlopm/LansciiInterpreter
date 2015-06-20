@@ -921,6 +921,11 @@ class ExprUnMinus < UnExpr
     end
 
   end
+
+  def execute
+    return (-@subexpr1.execute())
+  end
+
 end
 
 class ExprNot < UnExpr
@@ -941,7 +946,10 @@ class ExprNot < UnExpr
     unless @type.eql? @subexpr1.type then
       @symbolTable.add_error(UnaryError::new(@op,0,2))
     end
+  end 
 
+  def execute
+    return (not @subexpr1.execute())
   end
 end
 
