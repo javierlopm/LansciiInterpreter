@@ -276,7 +276,7 @@ class Conditional2 < Conditional
       @instrucion2.execute
     end
   end
-  
+
 end
 
 #####################################################
@@ -313,6 +313,12 @@ class IIteration < SymbolUser
       @symbolTable.add_error(IIterationError::new(@subexpr1.type))
     end
     @instrucion1.context
+  end
+
+  def execute
+    while @subexpr1.execute do
+      @instrucion1.execute
+    end
   end
 
 end
@@ -357,6 +363,12 @@ class DIteration < SymbolUser
     end
 
     @instrucion1.context
+  end
+
+  def execute
+    i = subexpr1.execute
+    j = subexpr2.execute
+
   end
 
 end
@@ -420,6 +432,10 @@ class DIteration2 < SymbolUser
 
     @instrucion1.context
   end
+
+  def execute
+    i = @subexpr1.execute
+    j = @subexpr2.execute
 end
 
 
