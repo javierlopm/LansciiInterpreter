@@ -10,9 +10,20 @@
   b.- El  tamaño de de la tablas vendrá  dada por la cantidad de símbolos 
   reconocidos (incluyendo $) por la cantidad de estados posibles. Para la 
   recursividad izquierda tendrá dimensiones 4x2 y para la  recursividad a 
-  derecha 5x2.
+  derecha 5x2. De igual manera con la tabla goto, pero con los símbolos
+  no terminales.
+
   En cuanto a la pila, se pueden agregar 6 símbolos diferentes para la recursión
-  a izquierda y 7 para la recursión a derecha
+  a izquierda y 7 para la recursión a derecha.
+  
+  Reconociendo una frase como aaa$, obtuvimos igual cantidad de pasos con 
+  ambas gramáticas (9), en el caso de recursión derecha se reconocieron 
+  mediante shifts consecutivos todas las a, y al final ocurrión un proceso de
+  reducción. En el caso de recursion a izquierda se realizaron reducciones
+  y shift intercalados.
+  Como resultados obtuvimos los siguientes pasos:
+  -Recursión izquierda: 5 reduce, 4 shifts
+  -Recursión derecha  : 6 shifts, 3 reduce 
 
 2.-
   a.- El autómata construido está representado en instAutomata.png, se pueden
