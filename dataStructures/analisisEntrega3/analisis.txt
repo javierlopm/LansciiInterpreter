@@ -27,7 +27,11 @@
   En el otro caso, luego de reconocer los dos símbolos terminales IS, 
   con shift 4 se procede a realizar el reconocimiento del tercer terminal
   IS, con esto, luego de llegar al símbolo $ inician las reducciones con
-  la regla 2 (i ; i)
+  la regla 2 (i ; i).
+
+  En reconocimientoInst.png se puede observar mejor la secuencia y la 
+  tabla de parseo  utilizadas  para el reconocimiento de la expresión
+  con la gramática dada.
 
 
 3.-
