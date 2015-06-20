@@ -1,0 +1,70 @@
+1.-
+  a.- El primer autómata de pila, el cual es recursivo a izquierda se encuentra 
+  en  lrizq.png  y el segundo  en lrder.png.  Ninguno es  lr(0) ya  que  poseen 
+  al menos un conflicto shift-reduce.
+  En el de recursión izquierda el I0 puede realizar un shift con S, o reducir 
+  mediante  la regla S -> λ.
+  En el automata de recursión a derecha de igual manera existe el conflicto
+  shift-reduce  en  I0 con la regla de reducción S -> λ y las reglas 0 y 1.
+
+  b.- El  tamaño de de la tablas vendrá  dada por la cantidad de símbolos 
+  reconocidos (incluyendo $) por la cantidad de estados posibles. Para la 
+  recursividad izquierda tendrá dimensiones 4x2 y para la  recursividad a 
+  derecha 5x2. De igual manera con la tabla goto, pero con los símbolos
+  no terminales.
+
+  En cuanto a la pila, se pueden agregar 6 símbolos diferentes para la recursión
+  a izquierda y 7 para la recursión a derecha.
+  
+  Reconociendo una frase como aaa$, obtuvimos igual cantidad de pasos con 
+  ambas gramáticas (9), en el caso de recursión derecha se reconocieron 
+  mediante shifts consecutivos todas las a, y al final ocurrión un proceso de
+  reducción. En el caso de recursion a izquierda se realizaron reducciones
+  y shift intercalados.
+  Como resultados obtuvimos los siguientes pasos:
+  -Recursión izquierda: 5 reduce, 4 shifts
+  -Recursión derecha  : 6 shifts, 3 reduce 
+
+2.-
+  a.- El autómata construido está representado en instAutomata.png, se pueden
+  observar que en el  estado I6  existe un  conflicto  shift-reduce  entre la
+  reducción de la regla Instr -> Instr ; Instr y ls shifts de las demás reglas,
+  por consiguiente la gramática no es LR(0).
+
+  b.- En el caso en que en el estado I6 se elija realizar un reduce 2, se
+  estará reconociendo que los dos primeros IS encontrados son parte de la
+  regla 2 (Instr -> Instr ; Instr), esto es asociatividad a la izquierda.
+  
+  En el otro caso, luego de reconocer los dos símbolos terminales IS, 
+  con shift 4 se procede a realizar el reconocimiento del tercer terminal
+  IS, con esto, luego de llegar al símbolo $ inician las reducciones con
+  la regla 2 (i ; i).
+
+  En reconocimientoInst.png se puede observar mejor la secuencia y la 
+  tabla de parseo  utilizadas  para el reconocimiento de la expresión
+  con la gramática dada.
+
+
+3.-
+  La  gramatica  de este  proyecto es  ambigua y  recursiva a  izquierda, las 
+  ambigüedades  de precedencia  se pueden resolver  generando nuevos simbolos 
+  no  terminales  de tal forma que una  expresion  con  un  símbolo  de mayor 
+  precedencia primero, mientras que las menores presedencias sean reconocidas 
+  en los por mayor numero de  transiciones.  Un ejemplo  que  muestra esto de 
+  una forma más  clara es  el  siguiente,  en  donde  la  precedencia  de  la
+  multiplicación sobre la suma posee ambigüedad.
+
+  EXP -> EXP * EXP
+  EXP -> EXP + EXP
+  EXP -> NUM
+
+  Puede ser transformado en:
+
+  EXP  -> EXP * EXP
+  EXP  -> EXP'
+  EXP' -> EXP + EXP
+  EXP' -> NUM
+
+  De esta forma la multiplicación es reconocida primero. El otro problema de 
+  ambigüedad existente es el de la dirección de la asociación, pero se puede
+  realizar una transformación para permitir recursiones en un solo sentido.
