@@ -376,9 +376,12 @@ class DIteration < SymbolUser
   end
 
   def execute
-    i = subexpr1.execute
-    j = subexpr2.execute
+    inf = @subexpr1.execute
+    sup = @subexpr2.execute
 
+    n = [sup - inf + 1, 0].max
+    i = inf
+    
   end
 
 end
@@ -444,8 +447,14 @@ class DIteration2 < SymbolUser
   end
 
   def execute
-    i = @subexpr1.execute
-    j = @subexpr2.execute
+    inf = @subexpr1.execute
+    sup = @subexpr2.execute
+
+    n = [sup - inf + 1, 0].max
+    i = inf
+
+  end
+
 end
 
 
@@ -478,6 +487,10 @@ class VarBlock < SymbolUser
 
   def context
     @instrucion1.context
+  end
+
+  def execute
+    @instrucion1.execute
   end
 
 end
