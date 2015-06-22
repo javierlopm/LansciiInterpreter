@@ -85,6 +85,10 @@ class Asign < SymbolUser
     @subexpr1.context
   end
 
+  def execute
+
+  end
+
 end
 
 #####################################################
@@ -381,7 +385,7 @@ class DIteration < SymbolUser
 
     n = [sup - inf + 1, 0].max
     i = inf
-    
+
   end
 
 end
