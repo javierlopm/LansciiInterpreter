@@ -39,11 +39,7 @@ class SymbolTable
     if contains?identifier
       @errors.add_error(ReDeclared::new(identifier))
     else
-      if value.nil?
-        @tb[identifier] = {'type' => type, 'modifiable' => modifiable, 'value' => "notAsigned"}
-      else
-        @tb[identifier] = {'type' => type, 'modifiable' => modifiable, 'value' => value}
-      end
+      @tb[identifier] = {'type' => type, 'modifiable' => modifiable, 'value' => value}
     end
   end
 
@@ -75,7 +71,7 @@ class SymbolTable
     if @tb.has_key?(identifier) then
        @tb.delete(identifier)
     elsif @father.nil? then
-      #skip NO SE QUE PONER AQUI 
+      return nil
     else 
       @father.delete_symbol(identifier)
     end  
@@ -85,7 +81,7 @@ class SymbolTable
     if @tb.has_key?(identifier) then
        @tb[identifier] = content
     elsif @father.nil? then
-      #skip NO SE QUE PONER AQUI
+      return nil
     else 
       @father.update_symbol(identifier)
     end
@@ -248,7 +244,7 @@ class SymbolTable
 end
 
 # Clase padre de toda instruccion y expresion
-class SymbolUser                 #Jejeps no se me ocurrio otro nombre para esta clase
+class SymbolUser 
   def add_symbols(symbolTable)
     @symbolTable = symbolTable
     
