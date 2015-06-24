@@ -39,7 +39,7 @@ class SymbolTable
     if contains?identifier
       @errors.add_error(ReDeclared::new(identifier))
     else
-      @tb[identifier] = {'type' => type, 'modifiable' => modifiable}
+      @tb[identifier] = {'type' => type, 'modifiable' => modifiable, 'value' => "notAsigned"}
     end
   end
 
@@ -60,6 +60,8 @@ class SymbolTable
       self.insert_symbol(i,code)
     end
   end
+
+
 
   ##########################
   # Metodos de modificacion
@@ -84,6 +86,16 @@ class SymbolTable
       @father.update_symbol(identifier)
     end
     
+  end
+
+  def update_value(identifier,value)
+    search = lookup(identifier)
+
+    if search.nil?
+      return nil
+    else
+      search['value'] = value
+    end
   end
 
   ######################
@@ -125,6 +137,18 @@ class SymbolTable
     end
 
   end
+
+  def lookup_value(identifier)
+    search = lookup(identifier)
+
+    if search.nil?
+      return nil
+    else
+      return search['value']
+    end
+
+  end
+
 
   def has_error?
     if @errors.size == 0
