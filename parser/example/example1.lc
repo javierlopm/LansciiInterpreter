@@ -1,4 +1,8 @@
-{ %foo bar |
-    bar = 3
+{ %foo bar @mycanvas !a|
+    a = (2 > 3);
+    bar = -2;
+    a = true^;
+    bar = 0 + bar
+
 
 }

@@ -90,10 +90,8 @@ class Asign < SymbolUser
   def execute
     puts "ASIGNACION"
     value = @subexpr1.execute
-    puts value
-    puts @identifier.get_name
     @symbolTable.update_value(@identifier.get_name, value)
-    puts @symbolTable.lookup_value(@subexpr1)
+    puts @symbolTable.lookup_value(@identifier.get_name)
   end
 
 end
@@ -593,8 +591,7 @@ class ExprSum < BinExpr
       return result
     else 
       error = Overflow::new(@op)
-      puts error 
-      exit
+      abort (error.to_s)      
     end
 
   end
@@ -629,8 +626,7 @@ class ExprSubs < BinExpr
       return result
     else 
       error = Overflow::new(@op)
-      puts error
-      exit
+      abort (error.to_s)
     end
   end
 
@@ -663,8 +659,7 @@ class ExprMult < BinExpr
       return result
     else 
       error = Overflow::new(@op)
-      puts error
-      exit
+      abort (error.to_s)
     end
   end
 end
@@ -694,8 +689,7 @@ class ExprDiv < BinExpr
     div = @subexpr2.execute()
     if div.eql?0 then
       error = DivCero::new(@subexpr2)
-      puts error
-      exit
+      abort (error.to_s)
     else
       return (@subexpr1.execute() / div)
     end
@@ -726,9 +720,8 @@ class ExprMod < BinExpr
   def execute
     div = @subexpr2.execute()
     if div.eql?0 then
-      error = DivCero::new(@subexpr2)
-      put error
-      exit
+     error = DivCero::new(@subexpr2)
+      abort (error.to_s)
     else
       return (@subexpr1.execute() % div)
     end
