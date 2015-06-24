@@ -38,6 +38,9 @@ class Program
 
 end
 
+#####################################################
+##                      Asign                      ##
+#####################################################
 
 class Asign < SymbolUser
 
@@ -82,7 +85,15 @@ class Asign < SymbolUser
     @subexpr1.context
   end
 
+  def execute
+
+  end
+
 end
+
+#####################################################
+##                    SECUENCE                     ##
+#####################################################
 
 class Secuence < SymbolUser
 
@@ -100,7 +111,17 @@ class Secuence < SymbolUser
     @instrucion1.context
     @instrucion2.context
   end
+
+  def execute
+    @instrucion1.execute
+    @instrucion2.execute
+  end
+
 end
+
+#####################################################
+##                      Read                       ##
+#####################################################
 
 class Read < SymbolUser
 
@@ -134,7 +155,16 @@ class Read < SymbolUser
     end
   end
 
+  def execute
+    value = STDIN.gets.chomp
+    # Falta verificar y asignarlo
+  end
+
 end
+
+#####################################################
+##                      WRITE                      ##
+#####################################################
 
 class Write < SymbolUser
 
@@ -162,7 +192,16 @@ class Write < SymbolUser
       @symbolTable.add_error(WriteError::new(@subexpr1.type))
     end
   end
+
+  def execute
+    value = @subexpr1.execute
+    puts value
+  end
 end
+
+######################################################
+##                  Condicionales                   ##
+######################################################
 
 class Conditional < SymbolUser
 
@@ -196,6 +235,13 @@ class Conditional < SymbolUser
     @instrucion1.context
 
   end
+
+  def execute
+    if @subexpr1.execute then
+      @instrucion1.execute
+    end
+  end
+
 end
 
 class Conditional2 < Conditional
@@ -236,7 +282,20 @@ class Conditional2 < Conditional
     @instrucion1.context
     @instrucion2.context
   end
+
+  def execute
+    if @subexpr1.execute then
+      @instrucion1.execute
+    else
+      @instrucion2.execute
+    end
+  end
+
 end
+
+#####################################################
+##                    Iteraciones                  ##
+#####################################################
 
 class IIteration < SymbolUser
 
@@ -268,6 +327,12 @@ class IIteration < SymbolUser
       @symbolTable.add_error(IIterationError::new(@subexpr1.type))
     end
     @instrucion1.context
+  end
+
+  def execute
+    while @subexpr1.execute do
+      @instrucion1.execute
+    end
   end
 
 end
@@ -312,6 +377,15 @@ class DIteration < SymbolUser
     end
 
     @instrucion1.context
+  end
+
+  def execute
+    inf = @subexpr1.execute
+    sup = @subexpr2.execute
+
+    n = [sup - inf + 1, 0].max
+    i = inf
+
   end
 
 end
@@ -375,7 +449,22 @@ class DIteration2 < SymbolUser
 
     @instrucion1.context
   end
+
+  def execute
+    inf = @subexpr1.execute
+    sup = @subexpr2.execute
+
+    n = [sup - inf + 1, 0].max
+    i = inf
+
+  end
+
 end
+
+
+###############################################
+##                  BLOCK                    ##
+###############################################
 
 class VarBlock < SymbolUser
 
@@ -402,6 +491,10 @@ class VarBlock < SymbolUser
 
   def context
     @instrucion1.context
+  end
+
+  def execute
+    @instrucion1.execute
   end
 
 end
@@ -436,7 +529,9 @@ type = 2 ==> Canvas
 type = 3 ==> Cualquier tipo
 =end
 
-# Expresiones binarias
+############################################
+##           Expresiones binarias         ##
+############################################
 
 class BinExpr < SymbolUser
 
@@ -480,6 +575,17 @@ class ExprSum < BinExpr
 
   end
 
+  def execute
+    
+    result = @subexpr1.execute() + @subexpr2.execute()
+    if is32bits?(result) then
+      return result
+    else 
+      Overflow::new(@op)
+      return nil
+    end
+
+  end
 
 end
 
@@ -501,6 +607,17 @@ class ExprSubs < BinExpr
     unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
       # ERROR: debe ser entero
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
+    end
+  end
+
+  def execute
+  
+    result = @subexpr1.execute() - @subexpr2.execute()
+    if is32bits?(result) then
+      return result
+    else 
+      Overflow::new(@op)
+      return nil
     end
   end
 
@@ -526,6 +643,16 @@ class ExprMult < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    result = @subexpr1.execute() * @subexpr2.execute()
+    if is32bits?(result) then
+      return result
+    else 
+      Overflow::new(@op)
+      return nil
+    end
+  end
 end
 
 class ExprDiv < BinExpr
@@ -546,6 +673,16 @@ class ExprDiv < BinExpr
     unless @type.eql? @subexpr1.type and @type.eql? @subexpr2.type then
       # ERROR: debe ser entero
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
+    end
+  end
+
+  def execute
+    div = @subexpr2.execute()
+    if div.eql?0 then
+      DivCero::new(@subexpr2)
+      return nil
+    else
+      return (@subexpr1.execute() / div)
     end
   end
 end
@@ -570,6 +707,17 @@ class ExprMod < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    div = @subexpr2.execute()
+    if div.eql?0 then
+      DivCero::new(@subexpr2)
+      return nil
+    else
+      return (@subexpr1.execute() % div)
+    end
+  end
+
 end
 
 class ExprAnd < BinExpr
@@ -593,6 +741,11 @@ class ExprAnd < BinExpr
     end
 
   end
+
+  def execute
+    return (@subexpr1.execute() and @subexpr2.execute())
+  end
+
 end
 
 class ExprOr < BinExpr
@@ -614,6 +767,10 @@ class ExprOr < BinExpr
       # ERROR: debe ser booleano
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
+  end
+
+  def execute
+    return (@subexpr1.execute() or @subexpr2.execute())
   end
 
 end
@@ -639,6 +796,11 @@ class ExprLess < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    return (@subexpr1.execute() < @subexpr2.execute())
+  end
+
 end
 
 class ExprLessEql < BinExpr
@@ -661,6 +823,11 @@ class ExprLessEql < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    return (@subexpr1.execute() <= @subexpr2.execute())
+  end
+
 end
 
 class ExprMore < BinExpr
@@ -685,6 +852,11 @@ class ExprMore < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    return (@subexpr1.execute() > @subexpr2.execute())
+  end
+
 end
 
 class ExprMoreEql < BinExpr
@@ -708,6 +880,11 @@ class ExprMoreEql < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
   end
+
+  def execute
+    return (@subexpr1.execute() >= @subexpr2.execute())
+  end
+
 end
 
 class ExprEql < BinExpr
@@ -730,6 +907,10 @@ class ExprEql < BinExpr
       # ERROR: debe ser del mismo tipo
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
+  end
+
+  def execute
+    return (@subexpr1.execute() == @subexpr2.execute())
   end
 end
 
@@ -754,6 +935,11 @@ class ExprDiff < BinExpr
     end
 
   end
+
+  def execute
+    return (@subexpr1.execute() != @subexpr2.execute())
+  end
+
 end
 
 class ExprVerConcat < BinExpr
@@ -803,8 +989,9 @@ class ExprHorConcat < BinExpr
   end
 end
 
-
-# Expresiones unarias
+###############################################
+##           Expresiones unarias             ##
+###############################################
 
 class UnExpr < SymbolUser
 
@@ -842,6 +1029,11 @@ class ExprUnMinus < UnExpr
     end
 
   end
+
+  def execute
+    return (-@subexpr1.execute())
+  end
+
 end
 
 class ExprNot < UnExpr
@@ -862,7 +1054,10 @@ class ExprNot < UnExpr
     unless @type.eql? @subexpr1.type then
       @symbolTable.add_error(UnaryError::new(@op,0,2))
     end
+  end 
 
+  def execute
+    return (not @subexpr1.execute())
   end
 end
 
@@ -888,7 +1083,9 @@ class ExprTranspose < UnExpr
   end
 end
 
-# Expresiones constantes
+#####################################################
+##             Expresiones constantes              ##
+#####################################################
 
 class ExprParenthesis < SymbolUser
 
@@ -911,6 +1108,10 @@ class ExprParenthesis < SymbolUser
     end
 
   end
+
+  def context
+    return @subexpr1.execute()
+  end
 end
 
 class ExprNumber < Constant
@@ -931,9 +1132,12 @@ class ExprNumber < Constant
 
   def context
   end
+
+  def execute
+    return Integer(@subexpr1)
+  end
+
 end
-
-
 
 class ExprTrue < Constant
 
@@ -953,6 +1157,11 @@ class ExprTrue < Constant
 
   def context
   end
+
+  def execute
+    return true
+  end
+
 end
 
 class ExprFalse < Constant
@@ -973,6 +1182,11 @@ class ExprFalse < Constant
 
   def context
   end
+
+  def execute
+    return false
+  end
+
 end
 
 class ExprId < Constant
@@ -1035,6 +1249,10 @@ class ExprCanvas < Constant
 
   def context
   end
+
+  def execute
+    return @subexpr1
+  end
 end
 
 class ExprEmptyCanvas < Constant
@@ -1055,4 +1273,9 @@ class ExprEmptyCanvas < Constant
 
   def context
   end
+
+  def execute
+    return @subexpr1
+  end
+
 end

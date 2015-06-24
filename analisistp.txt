@@ -1,0 +1,46 @@
+Javier López. Carnet 11-10552
+Patricia Reinoso. Carnet 11-10851
+
+Análisis Teórico - Práctico
+
+Las etapas del desarrollo del proyecto permitieron crear
+el lenguaje interpretado Lanscii.
+
+Para que un programa escrito en este lenguaje pueda ser
+entendido por la computadora, fueron necesarios varios 
+elementos.
+
+En la primera etapa, se implementó el lexer, encargado
+de leer una secuenca de caracteres y extraer los tokens
+relevantes del lenguaje a través de expresiones regulares.
+Es decir que el análisis lexicográfico se realizó en la 
+primera etapa.
+
+La segunda etapa fue el desarrollo del parser, encargado
+de hacer el análisis sintáctico de programas escritos 
+en Lanscii. PAra verificar la sintaxis, se creó la
+gramática adecuada, y se hizo una "limpieza" y se 
+definieron precedencias para evitar los conflictos 
+shift/reduce y reduce/reduce. Además se creó el árbol
+sintáctico abstracto.
+
+En este punto, ya se identifica la estructura del programa
+pero no se han hecho verificaciones de tipo o asignación 
+de valores.
+
+Seguidamente en la tercera etapa del proyecto se creó la 
+tabla de símbolos que permite almacenar las variables del
+programa. Además se hace la verificación de tipos, y 
+otros posibles errores como redeclaración de variables, 
+modificación de variables de iteración y el uso de 
+variables no declaradas. Esto forma parte del análisis de 
+contexto donde se obtiene el árbol sintactico abstracto 
+decorado.
+
+Estas tres etapas forman son realizadas en el front-end,
+aquí es donde la computadora entiende el programa. La 
+información obtenida es procesada en el back-end. En este 
+punto la información es interpreda al mismo tiempo que se 
+hacen verificaciones dinámicas. Esta constituye la cuarta 
+y última etapa.
+

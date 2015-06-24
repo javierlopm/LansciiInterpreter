@@ -12,7 +12,7 @@ task :suite => [:compile_grammar] do
 
     sh "echo 'SUITE de ejemplo' > salida.txt"
 
-    (1...8).each do |ej|
+    (1...10).each do |ej|
         a = "parser/example/example#{ej}.lc"
         puts "CORRIENDO #{a}"
         sh " echo 'CORRIENDO #{a}' >> salida.txt"
