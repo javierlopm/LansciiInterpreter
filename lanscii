@@ -22,7 +22,7 @@ def main
 
             # Crear tabla de simbolos
             st   = tree.get_symbol_table
-            st.printTb
+            #st.printTb
         end
 
         

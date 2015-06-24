@@ -29,6 +29,7 @@ class Program
 
     @instrucion1.add_symbols(@symbolTable)
     @instrucion1.context
+    @instrucion1.execute
   end
 
 
@@ -87,8 +88,12 @@ class Asign < SymbolUser
   end
 
   def execute
+    puts "ASIGNACION"
     value = @subexpr1.execute
+    puts value
+    puts @identifier.get_name
     @symbolTable.update_value(@identifier.get_name, value)
+    puts @symbolTable.lookup_value(@subexpr1)
   end
 
 end

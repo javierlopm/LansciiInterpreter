@@ -89,6 +89,7 @@ class SymbolTable
   end
 
   def update_value(identifier,value)
+    puts identifier
     search = lookup(identifier)
 
     if search.nil?
