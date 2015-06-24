@@ -86,7 +86,8 @@ class Asign < SymbolUser
   end
 
   def execute
-
+    value = @subexpr1.execute
+    @symbolTable.update_value(@identifier.get_name, value)
   end
 
 end
@@ -518,6 +519,10 @@ class Block < SymbolUser
   def context
     @instrucion1.context
   end
+
+  def execute
+    @instrucion1.execute
+  end
 end
 
 
@@ -581,8 +586,9 @@ class ExprSum < BinExpr
     if is32bits?(result) then
       return result
     else 
-      Overflow::new(@op)
-      return nil
+      error = Overflow::new(@op)
+      puts error 
+      exit
     end
 
   end
@@ -616,8 +622,9 @@ class ExprSubs < BinExpr
     if is32bits?(result) then
       return result
     else 
-      Overflow::new(@op)
-      return nil
+      error = Overflow::new(@op)
+      puts error
+      exit
     end
   end
 
@@ -649,8 +656,9 @@ class ExprMult < BinExpr
     if is32bits?(result) then
       return result
     else 
-      Overflow::new(@op)
-      return nil
+      error = Overflow::new(@op)
+      puts error
+      exit
     end
   end
 end
@@ -679,8 +687,9 @@ class ExprDiv < BinExpr
   def execute
     div = @subexpr2.execute()
     if div.eql?0 then
-      DivCero::new(@subexpr2)
-      return nil
+      error = DivCero::new(@subexpr2)
+      puts error
+      exit
     else
       return (@subexpr1.execute() / div)
     end
@@ -711,8 +720,9 @@ class ExprMod < BinExpr
   def execute
     div = @subexpr2.execute()
     if div.eql?0 then
-      DivCero::new(@subexpr2)
-      return nil
+      error = DivCero::new(@subexpr2)
+      put error
+      exit
     else
       return (@subexpr1.execute() % div)
     end
@@ -964,6 +974,9 @@ class ExprVerConcat < BinExpr
 
   end
 
+  def execute
+  end
+
 end
 
 class ExprHorConcat < BinExpr
@@ -986,6 +999,9 @@ class ExprHorConcat < BinExpr
       @symbolTable.add_error(TypeError::new(@op, @subexpr1.type, @subexpr2.type))
     end
 
+  end
+
+  def execute
   end
 end
 
@@ -1081,6 +1097,11 @@ class ExprTranspose < UnExpr
     end
 
   end
+
+  def execute
+
+  end
+
 end
 
 #####################################################
@@ -1109,7 +1130,7 @@ class ExprParenthesis < SymbolUser
 
   end
 
-  def context
+  def execute
     return @subexpr1.execute()
   end
 end
@@ -1219,6 +1240,17 @@ class ExprId < Constant
       if @type.eql?3 then
         @type = symboltype
       end
+    end
+  end
+
+  def execute
+    value = @symbolTable.lookup_value(@identifier)
+    if value.nil? then
+      error = NotInitialize::new(@identifier)
+      puts error
+      exit
+    else
+      return value
     end
   end
 
