@@ -1,8 +1,10 @@
 { %foo bar @mycanvas !a|
-    a = (2 > 3);
     bar = -2;
+    write bar;
     a = true^;
-    bar = 0 + bar
-
-
+    write a;
+    bar = 0 + bar + 3;
+    write bar;
+    read a;
+    write a
 }

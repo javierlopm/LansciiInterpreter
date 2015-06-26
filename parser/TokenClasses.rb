@@ -16,6 +16,7 @@ def printLevel(level)
 
 end
 
+
 class Program
 
   def initialize (instrucion1,symbolTable=nil)
@@ -88,10 +89,10 @@ class Asign < SymbolUser
   end
 
   def execute
-    puts "ASIGNACION"
+    #puts "ASIGNACION"
     value = @subexpr1.execute
     @symbolTable.update_value(@identifier.get_name, value)
-    puts @symbolTable.lookup_value(@identifier.get_name)
+    #puts @symbolTable.lookup_value(@identifier.get_name)
   end
 
 end
@@ -118,8 +119,8 @@ class Secuence < SymbolUser
   end
 
   def execute
-    @instrucion1.execute
-    @instrucion2.execute
+    status = @instrucion1.execute
+    status = @instrucion2.execute
   end
 
 end
@@ -163,6 +164,41 @@ class Read < SymbolUser
   def execute
     value = STDIN.gets.chomp
     # Falta verificar y asignarlo
+    case @symbolTable.get_type(@identifier)
+    
+      when 0  #Chequeo de enteros
+        res = Integer(value)
+        if res.nil?
+          puts "Error conversion a entero fallida"
+        else
+          if is32bits?(res)
+            @symbolTable.update_value(@identifier,value)
+          else
+            error = Overflow::new("Read")
+            abort (error.to_s) 
+          end
+        end
+
+      when 1  #Chequeo de booleanos
+        if    res == "true" 
+          @symbolTable.update_value(@identifier,true)
+        elsif res == "false"
+          @symbolTable.update_value(@identifier,false)
+        else
+          error = DynamicReadError::new("Bad formed boolean")
+          abort(error.to_s)
+        end
+      
+      when 2
+        if res =~ /(\/|\\|\||\_|\-|\ )*/
+          return res
+        else
+          error = DynamicReadError::new("Bad formed canvas")
+          abort(error.to_s)
+        end
+      
+    end
+      
   end
 
 end
@@ -200,6 +236,7 @@ class Write < SymbolUser
 
   def execute
     value = @subexpr1.execute
+    #Debemos generar error en caso de encontrarlo
     puts value
   end
 end
@@ -388,8 +425,12 @@ class DIteration < SymbolUser
     inf = @subexpr1.execute
     sup = @subexpr2.execute
 
-    n = [sup - inf + 1, 0].max
-    i = inf
+    # n = [sup - inf + 1, 0].max
+    # i = inf
+
+    (sup-inf+1).times do |i|
+      @instrucion1.execute
+    end 
 
   end
 
@@ -398,12 +439,12 @@ end
 class DIteration2 < SymbolUser
 
 
-  def initialize(symbolTable,subexpr1, subexpr2, instrucion1)
+  def initialize(identifier,symbolTable,subexpr1, subexpr2, instrucion1)
 
     # def initialize(identifier, subexpr1, subexpr2, instrucion1)
 
     @symbolTable = symbolTable
-    #@identifier = identifier
+    @identifier  = identifier    #jejeps... si lo necesitabamos :$
     @subexpr1    = subexpr1
     @subexpr2    = subexpr2
     @instrucion1 = instrucion1
@@ -459,8 +500,13 @@ class DIteration2 < SymbolUser
     inf = @subexpr1.execute
     sup = @subexpr2.execute
 
-    n = [sup - inf + 1, 0].max
-    i = inf
+    # n = [sup - inf + 1, 0].max
+    # i = inf
+
+    (sup-inf+1).times do |i|
+      @symbolTable.update_value(@identifier,i)
+      @instrucion1.execute
+    end 
 
   end
 
@@ -586,7 +632,7 @@ class ExprSum < BinExpr
 
   def execute
     
-    result = @subexpr1.execute() + @subexpr2.execute()
+    result = @subexpr1.execute + @subexpr2.execute
     if is32bits?(result) then
       return result
     else 
@@ -621,7 +667,7 @@ class ExprSubs < BinExpr
 
   def execute
   
-    result = @subexpr1.execute() - @subexpr2.execute()
+    result = @subexpr1.execute - @subexpr2.execute
     if is32bits?(result) then
       return result
     else 
@@ -654,7 +700,7 @@ class ExprMult < BinExpr
   end
 
   def execute
-    result = @subexpr1.execute() * @subexpr2.execute()
+    result = @subexpr1.execute * @subexpr2.execute
     if is32bits?(result) then
       return result
     else 
@@ -686,12 +732,12 @@ class ExprDiv < BinExpr
   end
 
   def execute
-    div = @subexpr2.execute()
+    div = @subexpr2.execute
     if div.eql?0 then
       error = DivCero::new(@subexpr2)
       abort (error.to_s)
     else
-      return (@subexpr1.execute() / div)
+      return (@subexpr1.execute / div)
     end
   end
 end
@@ -718,12 +764,12 @@ class ExprMod < BinExpr
   end
 
   def execute
-    div = @subexpr2.execute()
+    div = @subexpr2.execute
     if div.eql?0 then
      error = DivCero::new(@subexpr2)
       abort (error.to_s)
     else
-      return (@subexpr1.execute() % div)
+      return (@subexpr1.execute % div)
     end
   end
 
@@ -752,7 +798,7 @@ class ExprAnd < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() and @subexpr2.execute())
+    return (@subexpr1.execute and @subexpr2.execute)
   end
 
 end
@@ -779,7 +825,7 @@ class ExprOr < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() or @subexpr2.execute())
+    return (@subexpr1.execute or @subexpr2.execute)
   end
 
 end
@@ -807,7 +853,7 @@ class ExprLess < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() < @subexpr2.execute())
+    return (@subexpr1.execute < @subexpr2.execute)
   end
 
 end
@@ -834,7 +880,7 @@ class ExprLessEql < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() <= @subexpr2.execute())
+    return (@subexpr1.execute <= @subexpr2.execute)
   end
 
 end
@@ -863,7 +909,7 @@ class ExprMore < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() > @subexpr2.execute())
+    return (@subexpr1.execute > @subexpr2.execute)
   end
 
 end
@@ -891,7 +937,7 @@ class ExprMoreEql < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() >= @subexpr2.execute())
+    return (@subexpr1.execute >= @subexpr2.execute)
   end
 
 end
@@ -919,7 +965,7 @@ class ExprEql < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() == @subexpr2.execute())
+    return (@subexpr1.execute == @subexpr2.execute)
   end
 end
 
@@ -946,7 +992,7 @@ class ExprDiff < BinExpr
   end
 
   def execute
-    return (@subexpr1.execute() != @subexpr2.execute())
+    return (@subexpr1.execute != @subexpr2.execute)
   end
 
 end
@@ -1046,7 +1092,7 @@ class ExprUnMinus < UnExpr
   end
 
   def execute
-    return (-@subexpr1.execute())
+    return (-@subexpr1.execute)
   end
 
 end
@@ -1072,7 +1118,7 @@ class ExprNot < UnExpr
   end 
 
   def execute
-    return (not @subexpr1.execute())
+    return (not @subexpr1.execute)
   end
 end
 
@@ -1130,7 +1176,7 @@ class ExprParenthesis < SymbolUser
   end
 
   def execute
-    return @subexpr1.execute()
+    return @subexpr1.execute
   end
 end
 

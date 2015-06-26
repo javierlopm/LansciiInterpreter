@@ -21,7 +21,7 @@ def Get_Type(code)
 end
 
 def is32bits?(number)
-    return number < 2**31
+    return (number < 2**31 and number > -2**31)
 end
 
 class Undeclared
@@ -132,6 +132,8 @@ class ReadError
   end
 end
 
+
+
 class WriteError
 
   def initialize(type1)
@@ -170,6 +172,15 @@ end
 ##                Errores Dinamicos            ##
 #################################################
 
+class DynamicReadError
+  def initialize(msg)
+    @msg = msg
+  end
+
+  def to_s
+    "Error: Lanscii is trying to read " + @msg
+  end
+end
 
 class DivCero
 
