@@ -210,9 +210,9 @@ class SymbolTable
 
   def printTb
 
-    print_tree
+    #print_tree
 
-    puts "\n"
+    #puts "\n"
 
     if has_error?
       print_errors

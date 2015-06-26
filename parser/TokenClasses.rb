@@ -30,7 +30,10 @@ class Program
 
     @instrucion1.add_symbols(@symbolTable)
     @instrucion1.context
-    @instrucion1.execute
+    @symbolTable.printTb
+    unless @symbolTable.has_error? then
+      @instrucion1.execute
+    end
   end
 
 
@@ -254,7 +257,11 @@ class Write < SymbolUser
   def execute
     value = @subexpr1.execute
     #Debemos generar error en caso de encontrarlo
-    puts value
+    if value.eql?"#" then
+      puts ""
+    else 
+      puts value
+    end
   end
 end
 
