@@ -21,7 +21,7 @@ def Get_Type(code)
 end
 
 def is32bits?(number)
-    return (number < 2**31 and number > -2**31)
+    return (number < 2**31 and number >= -2**31)
 end
 
 class Undeclared

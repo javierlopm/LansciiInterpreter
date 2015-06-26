@@ -156,7 +156,7 @@ rule
                     #identifier = ExprId::new(val[1])
                     st = SymbolTable::new()
                     st.insert_symbol(val[1],0,false)     #entero implicito
-                    result = DIteration2::new(val[1].get_name,st,val[3],val[5],val[7])
+                    result = DIteration2::new(val[1],st,val[3],val[5],val[7])
                 }
 
   varIncorporationRange:  LCURLY declare PIPE instruction RCURLY  {
