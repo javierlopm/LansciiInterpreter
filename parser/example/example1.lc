@@ -1,11 +1,9 @@
 { %foo bar @mycanvas !a|
-    bar = 0 ;
-    [1 .. 10 | bar = bar + 1];
-        {!b |
-    b = true
-    };
-    mycanvas = <->;
-    write mycanvas;
-    bar = 2147483646 * 2;
-    write <------------->
+
+    { %d | 
+    d = 0;
+    [d .. 15 | 
+    d = 1;
+    write </>] };
+    write #
 }

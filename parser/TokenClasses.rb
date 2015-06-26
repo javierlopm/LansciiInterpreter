@@ -240,7 +240,11 @@ class Write < SymbolUser
   def execute
     value = @subexpr1.execute
     #Debemos generar error en caso de encontrarlo
-    puts value
+    if value.eql?"#" then
+      puts ""
+    else 
+      puts value
+    end
   end
 end
 
