@@ -40,6 +40,11 @@ class SymbolTable
       @errors.add_error(ReDeclared::new(identifier))
     else
       @tb[identifier] = {'type' => type, 'modifiable' => modifiable, 'value' => value}
+      
+      if type.eql?(2) #Caso unico para canvas
+        @tb[identifier]['height'] = 0
+        @tb[identifier]['width']  = 0
+      end
     end
   end
 
@@ -125,7 +130,26 @@ class SymbolTable
     else
       return search['type']
     end
+  end
 
+  def lookup_height(identifier)
+    search = lookup(identifier)
+
+    if search.nil?
+      return nil
+    else
+      return search['height']
+    end
+  end
+
+  def lookup_width(identifier)
+    search = lookup(identifier)
+
+    if search.nil?
+      return nil
+    else
+      return search['width']
+    end
   end
 
   def lookup_modifiable(identifier)
