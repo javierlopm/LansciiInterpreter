@@ -1,12 +1,9 @@
 { %foo bar @mycanvas !a|
-    bar = -2;
-    write bar;
-    a = true^;
-    write a;
-    bar = 0 + bar + 3;
-    write bar;
-    read a;
-    write a;
-    read  mycanvas;
+    bar = 0 ;
+    [1 .. 10 | bar = bar + 1];
+        {!b |
+    b = true
+    };
+    mycanvas = <->;
     write mycanvas
 }

@@ -30,7 +30,10 @@ class Program
 
     @instrucion1.add_symbols(@symbolTable)
     @instrucion1.context
-    @instrucion1.execute
+    @symbolTable.printTb
+    unless @symbolTable.has_error? then
+      @instrucion1.execute
+    end
   end
 
 
