@@ -1068,9 +1068,10 @@ class ExprVerConcat < BinExpr
         name1 = @subexpr1.class.name=="ExprId" ? @subexpr1.get_name : "CONST"
         name2 = @subexpr2.class.name=="ExprId" ? @subexpr2.get_name : "CONST"
         
-        err = NotMatchingWidth::new(name1,name2,
+        err = NotMatchingDimension::new(name1,name2,
                                     @subexpr1.get_width,@subexpr2.get_width,
-                                    @subexpr1.get_height,@subexpr2.get_height
+                                    @subexpr1.get_height,@subexpr2.get_height,
+                                    "vertical"
                                     )
         abort(err.to_s)
       end
@@ -1111,6 +1112,56 @@ class ExprHorConcat < BinExpr
   end
 
   def execute
+    value1 = @subexpr1.execute
+    value2 = @subexpr2.execute
+
+    if value1.eql?'#' and value2.eql?'#'
+      @height = 0
+      @width  = 0
+      return '#'
+    elsif value1.eql?'#' and not value2.eql?'#'
+      @height = @subexpr2.get_width
+      @width  = @subexpr2.get_height
+      return value2
+    elsif not value1.eql?'#' and value2.eql?'#'
+      @height = @subexpr1.get_width
+      @width  = @subexpr1.get_height
+      return value1
+    else
+      if @subexpr1.get_height.eql?@subexpr2.get_height
+        @width  = @subexpr1.get_width  +  @subexpr2.get_width
+        @height = @subexpr1.get_height
+
+        left  = value1.split("\n")
+        right = value2.split("\n")
+        res   = ""
+
+        @height.times do |line|
+          res += left[line] + right[line] + "\n"
+        end
+
+        return res
+      else
+        name1 = @subexpr1.class.name=="ExprId" ? @subexpr1.get_name : "CONST"
+        name2 = @subexpr2.class.name=="ExprId" ? @subexpr2.get_name : "CONST"
+        
+        err = NotMatchingDimension::new(name1,name2,
+                                    @subexpr1.get_width,@subexpr2.get_width,
+                                    @subexpr1.get_height,@subexpr2.get_height,
+                                    "horizontal"
+                                    )
+        abort(err.to_s)
+      end
+    end
+
+  end
+
+  def get_width
+    @width
+  end
+
+  def get_height
+    @height
   end
 end
 

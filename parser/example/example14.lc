@@ -1,9 +1,16 @@
-{ @capuski |
+{ @capuski barra |
 
     capuski = <    _    >;
     capuski = capuski & <   / \   >;
     capuski = capuski & <  /   \  >;
     capuski = capuski & <  -   -  >;
     capuski = capuski & <  |   |  >;
+    barra   = < |-|>;
+    barra   = barra & < |-|>;
+    barra   = barra & < |-|>;
+    barra   = barra & < |-|>;
+    barra   = barra & < |-|>;
+    capuski = capuski ~ barra;
+    write barra;
     write capuski
 }
