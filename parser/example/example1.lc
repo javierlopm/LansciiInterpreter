@@ -5,5 +5,7 @@
     b = true
     };
     mycanvas = <->;
-    write mycanvas
+    write mycanvas;
+    bar = 2147483646 * 2;
+    write <------------->
 }

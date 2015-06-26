@@ -1,0 +1,13 @@
+Javier López. 11-10552
+Patricia Reinoso. 11-10851
+
+Para la implementación de esta etapa del proyecto, se agregó una
+función "execute" en cada clase creada para la segunda etapa.
+Esta función se encarga de verificar los posibles errores dinámicos
+que se presenten y de ejecutar las acciones asociadas a la instrucción
+
+Actualmente solo se imprime por salida estándar las instrucciones "write"
+o errores. En caso de que se presente lexicográfico, no se pasa a la
+etapa de del análisis sintáctico y así sucesivamente. Esto significa que
+si existe un error de contexto, no se comenzará a la ejecución del 
+programa.
