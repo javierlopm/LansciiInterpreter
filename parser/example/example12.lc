@@ -1,0 +1,9 @@
+{ %b !a|
+    a = true;
+    b = 0;
+    [1..10| 
+            write a; 
+            b = b+1; 
+            write b ]
+    
+}

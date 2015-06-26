@@ -1,0 +1,10 @@
+{ @yoMama !b |
+    yoMama = < |-| /\/\ /\ /\/\ |-|>;
+    write yoMama;
+    [i: 1 .. 30|
+        write i;
+        write yoMama
+        ];
+    b = true;
+    [ b | write b; b = false ]
+}
