@@ -182,6 +182,23 @@ class DynamicReadError
   end
 end
 
+class NotMatchingWidth
+  def initialize(name1,name2,width1,width2,height1,height2)
+    @name1   = name1
+    @name2   = name2
+    @height1 = height1
+    @height2 = height2
+    @width1  = width1
+    @width2  = width2
+  end
+
+  def to_s
+    er  = "Error: Lanscii is trying to do vertical concat with incompatible"
+    er += " canvas (#{@name1}: #{@height1}*#{@width1},"
+    er +=          "#{@name2}: #{@height2}*#{@width2})"
+  end
+end
+
 class DivCero
 
   def initialize(subexpr1)

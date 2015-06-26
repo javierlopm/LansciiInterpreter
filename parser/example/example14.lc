@@ -1,0 +1,10 @@
+{ @capuski |
+
+    capuski = <    _    >;
+    write capuski;
+    capuski = capuski & <   / \   >;
+    capuski = capuski & <  /   \  >;
+    capuski = capuski & <  -   -  >;
+    capuski = capuski & <  |   |  >;
+    write capuski
+}

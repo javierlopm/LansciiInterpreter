@@ -93,7 +93,7 @@ class SymbolTable
     
   end
 
-  def update_value(identifier,value)
+  def update_value(identifier,value,height=nil,width=nil)
     
     search = lookup(identifier)
     
@@ -101,6 +101,10 @@ class SymbolTable
       return nil
     else
       search['value'] = value
+      if not( height.nil? or width.nil?)
+        search['height'] = height
+        search['width']  = width
+      end
     end
   end
 

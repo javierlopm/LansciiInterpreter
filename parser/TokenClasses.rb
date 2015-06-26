@@ -90,8 +90,20 @@ class Asign < SymbolUser
 
   def execute
     #puts "ASIGNACION"
-    value = @subexpr1.execute
-    @symbolTable.update_value(@identifier.get_name, value)
+    value      = @subexpr1.execute
+    identifier = @identifier.get_name
+
+    if @symbolTable.lookup_type(identifier).eql?2
+      if value.eql?'#'
+            @symbolTable.update_value(
+              identifier,value,@subexpr1.get_height,@subexpr1.get_width)
+          else
+            @symbolTable.update_value(
+              identifier,value,@subexpr1.get_height,@subexpr1.get_width)
+          end
+    else
+      @symbolTable.update_value(identifier, value)
+    end
     #puts @symbolTable.lookup_value(@identifier.get_name)
   end
 
@@ -191,7 +203,12 @@ class Read < SymbolUser
       
       when 2
         if value =~ /(\/|\\|\||\_|\-|\ )*/ #Deberiamos poder asignar # tambien?
-          @symbolTable.update_value(identifier,value)
+          if value.size.eql?0
+            value = "#"
+            @symbolTable.update_value(identifier,value,0,0)
+          else
+            @symbolTable.update_value(identifier,value,1,value.size)
+          end
         else
           error = DynamicReadError::new("Bad formed canvas")
           abort(error.to_s)
@@ -1020,6 +1037,46 @@ class ExprVerConcat < BinExpr
   end
 
   def execute
+    value1 = @subexpr1.execute
+    value2 = @subexpr2.execute
+
+    if value1.eql?'#' and value2.eql?'#'
+      @height = 0
+      @width  = 0
+      return '#'
+    elsif value1.eql?'#' and not value2.eql?'#'
+      @height = @subexpr2.get_width
+      @width  = @subexpr2.get_height
+      return value2
+    elsif not value1.eql?'#' and value2.eql?'#'
+      @height = @subexpr1.get_width
+      @width  = @subexpr1.get_height
+      return value1
+    else
+      if @subexpr1.get_width.eql?@subexpr2.get_width
+        @width  = @subexpr2.get_width
+        @height = @subexpr1.get_height + @subexpr2.get_height
+        return value1 + "\n" + value2
+      else
+        name1 = @subexpr1.class.name=="ExprId" ? @subexpr1.get_name : "CONST"
+        name2 = @subexpr2.class.name=="ExprId" ? @subexpr2.get_name : "CONST"
+        
+        err = NotMatchingWidth::new(name1,name2,
+                                    @subexpr1.get_width,@subexpr2.get_width,
+                                    @subexpr1.get_height,@subexpr2.get_height
+                                    )
+        abort(err.to_s)
+      end
+    end
+
+  end
+
+  def get_width
+    @width
+  end
+
+  def get_height
+    @height
   end
 
 end
@@ -1035,7 +1092,7 @@ class ExprHorConcat < BinExpr
     @type = 2
   end
 
-  def context ()
+  def context
     @subexpr1.context
     @subexpr2.context
 
@@ -1306,6 +1363,14 @@ class ExprId < Constant
   def get_type
     return @type
   end
+
+  def get_width
+    @symbolTable.lookup_width(@identifier)
+  end
+
+  def get_height
+    @symbolTable.lookup_height(@identifier)
+  end
 end
 
 class ExprCanvas < Constant
@@ -1330,6 +1395,15 @@ class ExprCanvas < Constant
   def execute
     return @subexpr1
   end
+
+  def get_height
+    1
+  end
+
+  def get_width
+    @subexpr1.size
+  end
+
 end
 
 class ExprEmptyCanvas < Constant
@@ -1353,6 +1427,14 @@ class ExprEmptyCanvas < Constant
 
   def execute
     return @subexpr1
+  end
+
+  def get_width
+    0
+  end
+
+  def get_height
+    0
   end
 
 end
