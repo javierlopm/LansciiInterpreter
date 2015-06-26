@@ -18,11 +18,12 @@ primera etapa.
 
 La segunda etapa fue el desarrollo del parser, encargado
 de hacer el análisis sintáctico de programas escritos 
-en Lanscii. PAra verificar la sintaxis, se creó la
-gramática adecuada, y se hizo una "limpieza" y se 
+en Lanscii. Para verificar la sintaxis, se creó una
+gramática adecuada, se hizo una "limpieza" y se 
 definieron precedencias para evitar los conflictos 
 shift/reduce y reduce/reduce. Además se creó el árbol
-sintáctico abstracto.
+sintáctico abstracto. De esta manera se puede comprobar
+que el orden de las frases corresponde al lenguaje.
 
 En este punto, ya se identifica la estructura del programa
 pero no se han hecho verificaciones de tipo o asignación 
