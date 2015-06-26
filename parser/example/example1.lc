@@ -6,5 +6,7 @@
     bar = 0 + bar + 3;
     write bar;
     read a;
-    write a
+    write a;
+    read  mycanvas;
+    write mycanvas
 }

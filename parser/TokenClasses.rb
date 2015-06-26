@@ -163,16 +163,16 @@ class Read < SymbolUser
 
   def execute
     value = STDIN.gets.chomp
-    # Falta verificar y asignarlo
-    case @symbolTable.get_type(@identifier)
-    
+    identifier = @identifier.get_name
+
+    case @symbolTable.lookup_type(identifier)
       when 0  #Chequeo de enteros
         res = Integer(value)
         if res.nil?
           puts "Error conversion a entero fallida"
         else
           if is32bits?(res)
-            @symbolTable.update_value(@identifier,value)
+            @symbolTable.update_value(identifier,value)
           else
             error = Overflow::new("Read")
             abort (error.to_s) 
@@ -180,18 +180,18 @@ class Read < SymbolUser
         end
 
       when 1  #Chequeo de booleanos
-        if    res == "true" 
-          @symbolTable.update_value(@identifier,true)
-        elsif res == "false"
-          @symbolTable.update_value(@identifier,false)
+        if    value == "true" 
+          @symbolTable.update_value(identifier,true)
+        elsif value == "false"
+          @symbolTable.update_value(identifier,false)
         else
           error = DynamicReadError::new("Bad formed boolean")
           abort(error.to_s)
         end
       
       when 2
-        if res =~ /(\/|\\|\||\_|\-|\ )*/
-          return res
+        if value =~ /(\/|\\|\||\_|\-|\ )*/ #Deberiamos poder asignar # tambien?
+          @symbolTable.update_value(identifier,value)
         else
           error = DynamicReadError::new("Bad formed canvas")
           abort(error.to_s)
